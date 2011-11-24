@@ -29,10 +29,10 @@
 
 
 /* Definicao dos tipos */
-typedef uint8_t u1;
-typedef uint16_t u2;
-typedef uint32_t u4;
-typedef uint64_t u8;
+typedef char u1;
+typedef short int u2;
+typedef int u4;
+typedef long u8;
 
 typedef struct structFloat {
 	union {
