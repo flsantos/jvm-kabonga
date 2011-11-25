@@ -204,9 +204,9 @@ char *getTag(int8_t tag) {
 }
 
 void readConstantPool(ClassFile *cf){
-	int i = 0, j = 0;
+	int i = 0, j = 0, k = (*cf).constant_pool_count-1;
 
-	for (i = 0; i<((*cf).constant_pool_count-1); i++) {
+	for (i = 0; i < k; i++) {
 				cp_info cp = (*cf).constant_pool[i];
 				cp.tag = u1Read(fp);
 
@@ -266,16 +266,19 @@ void readConstantPool(ClassFile *cf){
 					case CONSTANT_Long:
 						cp.u.Long.high_bytes = u4Read(fp);
 						cp.u.Long.low_bytes = u4Read(fp);
+						k--;
 						printf("\nhigh_bytes : %d", cp.u.Long.high_bytes);
 						printf("\nllow_bytes : %d", cp.u.Long.low_bytes);
 						break;
 					case CONSTANT_Double:
 						cp.u.Double.bytes.ud.bits= u8Read(fp);
+						k--;
 						printf("\nbytes : %f", cp.u.Double.bytes.ud.valor);
 						break;
 					default:
 						break;
 				}
+				printf("\n%d", i);
 			}
 }
 
