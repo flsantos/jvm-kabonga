@@ -213,11 +213,14 @@ char *getTag(int8_t tag) {
 		return "Erro! Tag desconhecida";
 	}
 }
+/*
+ * Ler o Pool de constantes do arquivo .class
+ */
 
 void readConstantPool(ClassFile *cf) {
 	int i = 0, j = 0;
 
-	for (i = 0; i < (*cf).constant_pool_count - 1; i++) {
+	for (i = 0; i < cf->constant_pool_count - 1; i++) {
 		cp_info cp;
 		cp.tag = u1Read();
 
@@ -292,12 +295,12 @@ void readConstantPool(ClassFile *cf) {
 			break;
 		}
 
-		(*cf).constant_pool[i] = cp;
+		cf->constant_pool[i] = cp;
 
 		printf("\n%d", i);
 		if (cp.tag == CONSTANT_Double || cp.tag == CONSTANT_Long) {
 			i++;
-			(*cf).constant_pool[i] = cp;
+			cf->constant_pool[i] = cp;
 		}
 	}
 }
@@ -306,8 +309,8 @@ void readConstantPool(ClassFile *cf) {
  * Ler access_flags do arquivo .class
  */
 void readAccessFlags(ClassFile *cf) {
-	(*cf).access_flags = u2Read();
-	printf("\naccess_flags: 0x%04X", (*cf).access_flags);
+	cf->access_flags = u2Read();
+	printf("\naccess_flags: 0x%04X", cf->access_flags);
 }
 
 /*
@@ -315,12 +318,12 @@ void readAccessFlags(ClassFile *cf) {
  * da classe do arquivo .class
  */
 void readThisClass(ClassFile *cf) {
-	(*cf).this_class = u2Read();
+	cf->this_class = u2Read();
 	printf("\n--------------------");
-	printf("\nthis_class: %d", (*cf).this_class);
+	printf("\nthis_class: %d", cf->this_class);
 	printf(
 			"\n%s",
-			(*cf).constant_pool[(*cf).constant_pool[(*cf).this_class - 1].u.Class.name_index
+			cf->constant_pool[cf->constant_pool[cf->this_class - 1].u.Class.name_index
 					- 1].u.Utf8.bytes);
 	printf("\n--------------------");
 }
@@ -330,56 +333,69 @@ void readThisClass(ClassFile *cf) {
  * da classe pai do arquivo .class
  */
 void readSuperClass(ClassFile *cf) {
-	(*cf).super_class = u2Read();
-	printf("\nsuper_class: %d", (*cf).super_class);
+	cf->super_class = u2Read();
+	printf("\nsuper_class: %d", cf->super_class);
 	printf(
 			"\n%s",
-			(*cf).constant_pool[(*cf).constant_pool[(*cf).super_class - 1].u.Class.name_index
+			cf->constant_pool[cf->constant_pool[cf->super_class - 1].u.Class.name_index
 					- 1].u.Utf8.bytes);
 	printf("\n--------------------");
 }
 
+/*
+ * Ler interfaces_count do arquivo .class
+ */
 void readInterfaceCount(ClassFile *cf) {
-	(*cf).interfaces_count = u2Read();
-	printf("\ninterfaces_count: %d", (*cf).interfaces_count);
+	cf->interfaces_count = u2Read();
+	printf("\ninterfaces_count: %d", cf->interfaces_count);
 }
 
+/*
+ * Ler as interfaces do arquivo .class
+ */
 void readInterfaces(ClassFile *cf) {
 	int i = 0;
-	(*cf).interfaces = malloc(((*cf).interfaces_count) * sizeof(u2));
-	for (i = 0; i < (*cf).interfaces_count; i++) {
-		(*cf).interfaces[i] = u2Read();
-		printf("\ninterfaces[%d]: %d", i, (*cf).interfaces[i]);
+	cf->interfaces = malloc((cf->interfaces_count) * sizeof(u2));
+	for (i = 0; i < cf->interfaces_count; i++) {
+		cf->interfaces[i] = u2Read();
+		printf("\ninterfaces[%d]: %s", i, cf->constant_pool[cf->constant_pool[cf->interfaces[i] - 1].u.Class.name_index-1].u.Utf8.bytes);
 	}
 }
 
+/*
+ * Ler fields_count do arquivo .class
+ */
+
 void readFieldsCount(ClassFile *cf) {
-	(*cf).fields_count = u2Read();
-	printf("\nfields_count: %d", (*cf).fields_count);
+	cf->fields_count = u2Read();
+	printf("\nfields_count: %d", cf->fields_count);
 }
 
+/*
+ * Ler o fields_info do arquivo .class
+ */
 void readFieldsInfo(ClassFile *cf) {
 
 	int i = 0, j = 0, k = 0;
-	(*cf).fields = malloc(((*cf).fields_count) * sizeof(field_info));
-	for (i = 0; i < (*cf).fields_count; i++) {
-		(*cf).fields[i].access_flags = u2Read();
-		(*cf).fields[i].name_index = u2Read();
-		(*cf).fields[i].descriptor_index = u2Read();
-		(*cf).fields[i].attributes_count = u2Read();
-		(*cf).fields[i].attributes = malloc(((*cf).fields[i].attributes_count) * sizeof(attribute_info));
-		for(j = 0; j < (*cf).fields[i].attributes_count; j++){
-			(*cf).fields[i].attributes[j].attribute_name_index = u2Read();
-			(*cf).fields[i].attributes[j].attribute_length = u4Read();
-			(*cf).fields[i].attributes[j].info = malloc(((*cf).fields[i].attributes[j].attribute_length) * sizeof(attribute_info));
-			for(k = 0; k < (*cf).fields[i].attributes[j].attribute_length; k++){
-				(*cf).fields[i].attributes[j].info[k] = u1Read();
+	cf->fields = malloc((cf->fields_count) * sizeof(field_info));
+	for (i = 0; i < cf->fields_count; i++) {
+		cf->fields[i].access_flags = u2Read();
+		cf->fields[i].name_index = u2Read();
+		cf->fields[i].descriptor_index = u2Read();
+		cf->fields[i].attributes_count = u2Read();
+		cf->fields[i].attributes = malloc((cf->fields[i].attributes_count) * sizeof(attribute_info));
+		for(j = 0; j < cf->fields[i].attributes_count; j++){
+			cf->fields[i].attributes[j].attribute_name_index = u2Read();
+			cf->fields[i].attributes[j].attribute_length = u4Read();
+			cf->fields[i].attributes[j].info = malloc((cf->fields[i].attributes[j].attribute_length) * sizeof(attribute_info));
+			for(k = 0; k < cf->fields[i].attributes[j].attribute_length; k++){
+				cf->fields[i].attributes[j].info[k] = u1Read();
 			}
 		}
-		printf("\nfield.access_flags: 0x%04X", (*cf).fields[i].access_flags);
-		printf("\nfield.name_index: %d", (*cf).fields[i].name_index);
-		printf("\nfield.descriptor_index: %d", (*cf).fields[i].descriptor_index);
-		printf("\nfield.attributes_count: %d", (*cf).fields[i].attributes_count);
+		printf("\n\nfield.access_flags: 0x%04X", cf->fields[i].access_flags);
+		printf("\nfield.name_index: %d", cf->fields[i].name_index);
+		printf("\nfield.descriptor_index: %d", cf->fields[i].descriptor_index);
+		printf("\nfield.attributes_count: %d", cf->fields[i].attributes_count);
 	}
 
 }
