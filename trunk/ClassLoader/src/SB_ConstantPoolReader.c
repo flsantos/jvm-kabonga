@@ -212,11 +212,11 @@ void readAccessFlags(ClassFile cf) {
  * Ler indice do constant_pool que aponta para nome
  * da classe do arquivo .class
  */
-void readThisClass(ClassFile *cf) {
-	(*cf).this_class = u2Read(fp);
+void readThisClass(ClassFile cf) {
+	cf.this_class = u2Read(fp);
 	printf("\n--------------------");
-	printf("\nthis_class: %d", (*cf).this_class);
-	//printf("\n%s", (*cf).constant_pool[(*cf).this_class].u.Utf8.bytes);
+	printf("\nthis_class: %d", cf.this_class);
+	printf("\n%s", cf.constant_pool[cf.constant_pool[cf.this_class - 1].u.Class.name_index - 1].u.Utf8.bytes);
 	printf("\n--------------------");
 }
 
@@ -224,10 +224,10 @@ void readThisClass(ClassFile *cf) {
  * Ler indice do constant_pool que aponta para nome
  * da classe pai do arquivo .class
  */
-void readSuperClass(ClassFile *cf) {
-	(*cf).super_class = u2Read(fp);
-	printf("\nsuper_class: %d", (*cf).super_class);
-	//printf("\n%s", cf.constant_pool[cf.super_class].u.Class.name_index);
+void readSuperClass(ClassFile cf) {
+	cf.super_class = u2Read(fp);
+	printf("\nsuper_class: %d", cf.super_class);
+	printf("\n%s", cf.constant_pool[cf.constant_pool[cf.super_class - 1].u.Class.name_index - 1].u.Utf8.bytes);
 	printf("\n--------------------");
 }
 
@@ -346,8 +346,8 @@ int main(int argc, char *argv[]) {
 
 			readConstantPool(&cf);
 			readAccessFlags(cf);
-			readThisClass(&cf);
-			readSuperClass(&cf);
+			readThisClass(cf);
+			readSuperClass(cf);
 
 		}else{
 			printf("oi");
