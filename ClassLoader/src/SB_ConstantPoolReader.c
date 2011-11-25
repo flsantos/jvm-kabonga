@@ -13,7 +13,6 @@
 #include <stdlib.h>
 #include <stdint.h>
 
-
 /* Definicao das constantes */
 #define CONSTANT_Class 7
 #define CONSTANT_Fieldred 9
@@ -27,6 +26,8 @@
 #define CONSTANT_NameAndType 12
 #define CONSTANT_Utf8 1
 
+/* Globals */
+FILE *fp;
 
 /* Definicao dos tipos */
 typedef uint8_t u1;
@@ -99,31 +100,28 @@ typedef struct CP_info {
 	} u;
 } cp_info;
 
-
 /*
  * Definicao da estrutura de um Classfile
  * As informacoes nao utilizadas estao comentadas
  */
 typedef struct classfile {
-	u4 				magic;
-	u2 				minor_version;
-	u2 				major_version;
-	u2 				constant_pool_count;
-	cp_info 		*constant_pool /*[constant_pool_count-1]*/;
-/*	u2 				access_flags;
-	u2 				this_class;
-	u2 				super_class;
-	u2 				interfaces_count;
-	u2 				interfaces [struct classfile.interfaces_count];
-	u2 				fields_count;
-	field_info 		fields [struct classfile.fields_count];
-	u2 				methods_count;
-	method_info 	methods [struct classfile.methods_count];
-	u2 				attributes_count;
-	attribute_info 	attributes [struct classfile.attributes_count];*/
+	u4 magic;
+	u2 minor_version;
+	u2 major_version;
+	u2 constant_pool_count;
+	cp_info *constant_pool /*[constant_pool_count-1]*/;
+	u2 access_flags;
+	u2 this_class;
+	u2 super_class;
+	u2 interfaces_count;
+/*	u2 				interfaces [struct classfile.interfaces_count];
+ u2 				fields_count;
+ field_info 		fields [struct classfile.fields_count];
+ u2 				methods_count;
+ method_info 	methods [struct classfile.methods_count];
+ u2 				attributes_count;
+ attribute_info 	attributes [struct classfile.attributes_count];*/
 } ClassFile;
-
-FILE *fp;
 
 /*
  * Funcao para ler um byte do arquivo
@@ -170,7 +168,6 @@ u8 u8Read() {
 	return toReturn;
 }
 
-
 /*
  * Funcao para retornar o nome de cada tag a partir do numero da tag
  */
@@ -203,29 +200,61 @@ char *getTag(int8_t tag) {
 	}
 }
 
-void readConstantPool(ClassFile *cf){
-	int i = 0, j = 0, k = (*cf).constant_pool_count-1;
+/*
+ * Ler access_flags do arquivo .class
+ */
+void readAccessFlags(ClassFile cf) {
+	cf.access_flags = u2Read(fp);
+	printf("\naccess_flags: %X", cf.access_flags);
+}
 
-	for (i = 0; i < k; i++) {
-				cp_info cp = (*cf).constant_pool[i];
-				cp.tag = u1Read(fp);
+/*
+ * Ler indice do constant_pool que aponta para nome
+ * da classe do arquivo .class
+ */
+void readThisClass(ClassFile *cf) {
+	(*cf).this_class = u2Read(fp);
+	printf("\n--------------------");
+	printf("\nthis_class: %d", (*cf).this_class);
+	//printf("\n%s", (*cf).constant_pool[(*cf).this_class].u.Utf8.bytes);
+	printf("\n--------------------");
+}
+
+/*
+ * Ler indice do constant_pool que aponta para nome
+ * da classe pai do arquivo .class
+ */
+void readSuperClass(ClassFile *cf) {
+	(*cf).super_class = u2Read(fp);
+	printf("\nsuper_class: %d", (*cf).super_class);
+	//printf("\n%s", cf.constant_pool[cf.super_class].u.Class.name_index);
+	printf("\n--------------------");
+}
+
+
+void readConstantPool(ClassFile *cf){
+	int i = 0, j = 0;
+
+	for (i = 0; i < (*cf).constant_pool_count-1; i++) {
+				cp_info cp;
+				cp.tag = u1Read();
 
 				printf("\n\ntag : %d (%s)", cp.tag, getTag(cp.tag));
 
 				switch(cp.tag) {
 					case CONSTANT_Class:
-						cp.u.Class.name_index = u2Read(fp);
+						cp.u.Class.name_index = u2Read();
 						printf("\nname_index : %d", cp.u.Class.name_index);
 						break;
 					case CONSTANT_Fieldred:
-						cp.u.Fieldref.class_index = u2Read(fp);
-						cp.u.Fieldref.name_and_type_index = u2Read(fp);
+						cp.u.Fieldref.class_index = u2Read();
+						cp.u.Fieldref.name_and_type_index = u2Read();
 						printf("\nclass_index : %d", cp.u.Fieldref.class_index);
 						printf("\nname_and_type_index : %d", cp.u.Fieldref.name_and_type_index);
 						break;
 					case CONSTANT_NameAndType:
-						cp.u.NameAndType.name_index = u2Read(fp);
-						cp.u.NameAndType.descriptor_index = u2Read(fp);
+						cp.u.NameAndType.name_index = u2Read();
+						cp.u.NameAndType.descriptor_index = u2Read();
 						printf("\nname_index : %d", cp.u.NameAndType.name_index);
 						printf("\ndescriptor_index : %d", cp.u.NameAndType.descriptor_index);
 						break;
@@ -233,55 +262,59 @@ void readConstantPool(ClassFile *cf){
 						cp.u.Utf8.length = u2Read(fp);
 						cp.u.Utf8.bytes = malloc(sizeof(u1) * cp.u.Utf8.length + 1);
 						for (j=0; j<cp.u.Utf8.length; j++) {
-							cp.u.Utf8.bytes[j] = u1Read(fp);
+							cp.u.Utf8.bytes[j] = u1Read();
 						}
 						cp.u.Utf8.bytes[j] = '\0';
 						printf("\nlength : %d", cp.u.Utf8.length);
 						printf("\nbytes : %s", cp.u.Utf8.bytes);
 						break;
 					case CONSTANT_Methodref:
-						cp.u.Methodref.class_index = u2Read(fp);
-						cp.u.Methodref.name_and_type_index = u2Read(fp);
+						cp.u.Methodref.class_index = u2Read();
+						cp.u.Methodref.name_and_type_index = u2Read();
 						printf("\nclass_index : %d", cp.u.Methodref.class_index);
 						printf("\nname_and_type_index : %d", cp.u.Methodref.name_and_type_index);
 						break;
 					case CONSTANT_InterfaceMethodref:
-						cp.u.InterfaceMethodref.class_index = u2Read(fp);
-						cp.u.InterfaceMethodref.name_and_type_index = u2Read(fp);
+						cp.u.InterfaceMethodref.class_index = u2Read();
+						cp.u.InterfaceMethodref.name_and_type_index = u2Read();
 						printf("\nclass_index : %d", cp.u.InterfaceMethodref.class_index);
 						printf("\nname_and_type_index : %d", cp.u.InterfaceMethodref.name_and_type_index);
 						break;
 					case CONSTANT_String:
-						cp.u.String.string_index= u2Read(fp);
+						cp.u.String.string_index= u2Read();
 						printf("\nstring_index : %d", cp.u.String.string_index);
 						break;
 					case CONSTANT_Integer:
-						cp.u.Integer.bytes = u4Read(fp);
+						cp.u.Integer.bytes = u4Read();
 						printf("\nbytes : %d", cp.u.Integer.bytes);
 						break;
 					case CONSTANT_Float:
-						cp.u.Float.bytes.uf.bits = u4Read(fp);
+						cp.u.Float.bytes.uf.bits = u4Read();
 						printf("\nbytes : %f", cp.u.Float.bytes.uf.valor);
 						break;
 					case CONSTANT_Long:
-						cp.u.Long.high_bytes = u4Read(fp);
-						cp.u.Long.low_bytes = u4Read(fp);
-						k--;
+						cp.u.Long.high_bytes = u4Read();
+						cp.u.Long.low_bytes = u4Read();
 						printf("\nhigh_bytes : %d", cp.u.Long.high_bytes);
 						printf("\nllow_bytes : %d", cp.u.Long.low_bytes);
 						break;
 					case CONSTANT_Double:
-						cp.u.Double.bytes.ud.bits= u8Read(fp);
-						k--;
+						cp.u.Double.bytes.ud.bits= u8Read();
 						printf("\nbytes : %f", cp.u.Double.bytes.ud.valor);
 						break;
 					default:
 						break;
 				}
+
+				(*cf).constant_pool[i] = cp;
+
 				printf("\n%d", i);
+				if(cp.tag == CONSTANT_Double || cp.tag == CONSTANT_Long){
+					i++;
+					(*cf).constant_pool[i] = cp;
+				}
 			}
 }
-
 
 /*
  * Funcao principal do sistema.
@@ -301,26 +334,27 @@ int main(int argc, char *argv[]) {
 		cf.major_version = u2Read(fp);
 		cf.constant_pool_count = u2Read(fp);
 
+		if (cf.magic == 0xCAFEBABE) {
+			printf("\nmagic_number : 0xCAFEBABE");
+			printf("\nminor_version : %d", cf.minor_version);
+			printf("\nmajor_version : %d", cf.major_version);
+			printf("\nconstant_pool_count : %d", cf.constant_pool_count);
 
-		if (cf.magic == 0xCAFEBABE) printf("\nmagic_number : 0xCAFEBABE");
-		printf("\nminor_version : %d", cf.minor_version);
-		printf("\nmajor_version : %d", cf.major_version);
-		printf("\nconstant_pool_count : %d", cf.constant_pool_count);
+			/* Alocacao de memoria para a constant_pool */
+			cf.constant_pool = malloc(
+					(cf.constant_pool_count - 1) * sizeof(cp_info));
 
+			readConstantPool(&cf);
+			readAccessFlags(cf);
+			readThisClass(&cf);
+			readSuperClass(&cf);
 
-		/* Alocacao de memoria para a constant_pool */
-		cf.constant_pool = malloc((cf.constant_pool_count-1) * sizeof(cp_info));
-
-		/* Esse loop itera uma vez para cada elemento da constant_pool.
-		 * Ele descobre a tag e faz um switch case para identificar o que deve ser lido do arquivo e mostrado na tela
-		 */
-		readConstantPool(&cf);
-	}
-	else {
+		}else{
+			printf("oi");
+		}
+	} else {
 		printf("O arquivo .class a ser lido deve ser passado como parametro.");
 	}
-
-
 
 	return 0;
 }
