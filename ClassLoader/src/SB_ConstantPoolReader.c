@@ -130,7 +130,8 @@ typedef struct {
 typedef struct attribute_Info {
     u2 attribute_name_index;
     u4 attribute_length;
-    union {
+    u1 *info;
+/*    union {
         struct ConstantValue_attribute {
         	u2 constantvalue_index;
         }	ConstantValue;
@@ -163,7 +164,12 @@ typedef struct attribute_Info {
         	u2 number_of_classes;
         	classes * classes;
         }	InnerClasses;
-    }	type;
+        struct Syntetic {
+        }
+        struct Default_attribute {
+        }
+    } u;*/
+
 } attribute_info;
 
 typedef struct Field {
@@ -435,17 +441,29 @@ void readInterfaces(ClassFile *cf) {
 /*
  * Ler os attributes do arquivo.class
  */
+/*
 void readAttributesInfo(ClassFile *cf, attribute_info *ai) {
 
 	ai->attribute_name_index = u2Read();
 	printf("%d", ai->attribute_name_index);
-	printf("TESTE");
+	ai->attribute_length = u4Read();
 	getchar();
+	getchar();
+	system("pause");
+	//printf("nome atributo: %s", cf->constant_pool[ai->attribute_name_index - 1].u.Utf8.bytes);
+}
+*/
+void readAttributesInfo(ClassFile *cf, attribute_info *ai){
+	int k = 0;
+
+	ai->attribute_name_index = u2Read();
 	ai->attribute_length = u4Read();
 	printf("nome atributo: %s", cf->constant_pool[ai->attribute_name_index - 1].u.Utf8.bytes);
+	ai->info = malloc((ai->attribute_length) * sizeof(attribute_info));
+	for(k = 0; k < ai->attribute_length; k++){
+		ai->info[k] = u1Read();
+	}
 }
-
-
 
 /*
  * Ler fields_count do arquivo .class
@@ -470,7 +488,7 @@ void readFieldsInfo(ClassFile *cf) {
 		cf->fields[i].attributes_count = u2Read();
 		cf->fields[i].attributes = malloc((cf->fields[i].attributes_count) * sizeof(attribute_info));
 		for(j = 0; j < cf->fields[i].attributes_count; j++){
-			readAttributesInfo(&cf, &(cf->fields[i].attributes[j]));
+			readAttributesInfo(cf, &(cf->fields[i].attributes[j]));
 /*			cf->fields[i].attributes[j].attribute_name_index = u2Read();
 			cf->fields[i].attributes[j].attribute_length = u4Read();
 			cf->fields[i].attributes[j].info = malloc((cf->fields[i].attributes[j].attribute_length) * sizeof(attribute_info));
@@ -585,8 +603,8 @@ int main(int argc, char *argv[]) {
 			readSuperClass(&cf);
 			readInterfaceCount(&cf);
 			readInterfaces(&cf);
-			//readFieldsCount(&cf);
-		//	readFieldsInfo(&cf);
+			readFieldsCount(&cf);
+			readFieldsInfo(&cf);
 			//readMethodsCount(&cf);
 			//readMethodsInfo(&cf);
 			//readAttributesCount(&cf);
