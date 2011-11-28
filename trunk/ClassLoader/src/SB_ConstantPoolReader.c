@@ -114,6 +114,14 @@ typedef struct Field {
 	attribute_info *attributes;
 } field_info;
 
+typedef struct Method {
+	u2 access_flags;
+	u2 name_index;
+	u2 descriptor_index;
+	u2 attributes_count;
+	attribute_info *attributes;
+} method_info;
+
 /*
  * Definicao da estrutura de um Classfile
  * As informacoes nao utilizadas estao comentadas
@@ -131,8 +139,8 @@ typedef struct classfile {
 	u2 *interfaces;
 	u2 fields_count;
 	field_info *fields;
-	//u2 methods_count;
-	//method_info methods [struct classfile.methods_count];
+	u2 methods_count;
+	method_info *methods /*[struct classfile.methods_count]*/;
 	u2 attributes_count;
 	attribute_info	*attributes ;
 } ClassFile;
@@ -401,6 +409,69 @@ void readFieldsInfo(ClassFile *cf) {
 }
 
 /*
+ * Ler methods_count do arquivo .class
+ */
+void readMethodsCount(ClassFile *cf) {
+	cf->methods_count = u2Read();
+	printf("\nmethods_count: %d", cf->methods_count);
+}
+
+/*
+ * Ler o methods_info do arquivo .class
+ */
+void readMethodsInfo(ClassFile *cf) {
+
+	int i = 0, j = 0, k = 0;
+	cf->methods = malloc((cf->methods_count) * sizeof(method_info));
+	for (i = 0; i < cf->methods_count; i++) {
+		cf->methods[i].access_flags = u2Read();
+		cf->methods[i].name_index = u2Read();
+		cf->methods[i].descriptor_index = u2Read();
+		cf->methods[i].attributes_count = u2Read();
+		cf->methods[i].attributes = malloc((cf->methods[i].attributes_count) * sizeof(attribute_info));
+		for(j = 0; j < cf->methods[i].attributes_count; j++){
+			cf->methods[i].attributes[j].attribute_name_index = u2Read();
+			cf->methods[i].attributes[j].attribute_length = u4Read();
+			cf->methods[i].attributes[j].info = malloc((cf->methods[i].attributes[j].attribute_length) * sizeof(attribute_info));
+			for(k = 0; k < cf->methods[i].attributes[j].attribute_length; k++){
+				cf->methods[i].attributes[j].info[k] = u1Read();
+			}
+		}
+		printf("\n\nfield.access_flags: 0x%04X", cf->methods[i].access_flags);
+		printf("\nfield.name_index: %d", cf->methods[i].name_index);
+		printf("\nfield.descriptor_index: %d", cf->methods[i].descriptor_index);
+		printf("\nfield.attributes_count: %d", cf->methods[i].attributes_count);
+	}
+
+}
+
+/*
+ * Ler attributes_count do arquivo .class
+ */
+void readAttributesCount(ClassFile *cf) {
+	cf->attributes_count = u2Read();
+	printf("\nattributes_count: %d", cf->attributes_count);
+}
+
+/*
+ * Ler attributes_count do arquivo .class
+ */
+
+void readAttributesInfo(ClassFile *cf){
+	int j = 0, k = 0;
+
+	cf->attributes = malloc((cf->attributes_count) * sizeof(attribute_info));
+	for(j = 0; j < cf->attributes_count; j++){
+		cf->attributes[j].attribute_name_index = u2Read();
+		cf->attributes[j].attribute_length = u4Read();
+		cf->attributes[j].info = malloc((cf->attributes[j].attribute_length) * sizeof(attribute_info));
+		for(k = 0; k < cf->attributes[j].attribute_length; k++){
+			cf->attributes[j].info[k] = u1Read();
+		}
+	}
+}
+
+/*
  * Funcao principal do sistema.
  *
  * Essa funcao abre o arquivo .class e vai lendo seu conteudo.
@@ -436,6 +507,10 @@ int main(int argc, char *argv[]) {
 			readInterfaces(&cf);
 			readFieldsCount(&cf);
 			readFieldsInfo(&cf);
+			readMethodsCount(&cf);
+			readMethodsInfo(&cf);
+			readAttributesCount(&cf);
+			readAttributesInfo(&cf);
 
 		} else {
 			printf("O magic number esta incorreto. Nao foi dessa vez que voce conseguiu bugar o meu programa.");
