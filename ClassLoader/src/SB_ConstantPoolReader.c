@@ -7,6 +7,10 @@
  * Nome: Fernando Leandro dos Santos
  * Matrícula: 09/0006038
  *
+ *
+ * Nome: Frederico Gouveia Neves Ferreira
+ * Matrícula: 09/94812
+ *
  */
 
 #include <stdio.h>
@@ -501,7 +505,6 @@ void readAttributeSynthetic(attribute_info *ai) {
 
 void readAttributeDefault(attribute_info *ai){
 	int k;
-	printf("\nDados Ignorados");
 	ai->u.Default.info = malloc((ai->attribute_length) * sizeof(u1));
 	for (k = 0; k < ai->attribute_length; k++) {
 		ai->u.Default.info[k] = u1Read();
@@ -626,10 +629,10 @@ int main(int argc, char *argv[]) {
 
 			cf.minor_version = u2Read();
 			cf.major_version = u2Read();
-			//if (cf.major_version < 45 || cf.major_version> 46 || (cf.major_version == 46 && cf.minor_version > 0)) {
-			//	printf("Versão nao suportada.");
-			//	return 1;
-			//}
+			if (cf.major_version < 45 || cf.major_version> 46 || (cf.major_version == 46 && cf.minor_version > 0)) {
+				printf("Versão nao suportada.");
+				return 1;
+			}
 			cf.constant_pool_count = u2Read();
 			printf("\nmagic_number : 0xCAFEBABE");
 			printf("\nminor_version : %d", cf.minor_version);
