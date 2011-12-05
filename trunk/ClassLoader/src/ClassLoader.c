@@ -13,14 +13,7 @@
 #include <stdint.h>
 #include <string.h>
 
-#define LOAD
 #include "ClassLoader.h"
-#undef LOAD
-
-#ifndef ESTRUTURAS
-#define ESTRUTURAS
-#include "Estruturas.h"
-#endif
 
 /* Definicao das co nstantes */
 #define CONSTANT_Class 7
