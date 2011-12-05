@@ -9,11 +9,10 @@
 #include <string.h>
 
 #include "ClassLoader.h"
-#include "Estruturas.h"
 
 
 
-int iniciaExecucaoJVM(char nomeClassFile[], int numParametros, char *parametrosJava[]) {
+void iniciaExecucaoJVM(char nomeClassFile[], int numParametros, char *parametrosJava[]) {
 //	ClassFile cf;
 
 	strcat(nomeClassFile, ".class");
@@ -29,7 +28,6 @@ int iniciaExecucaoJVM(char nomeClassFile[], int numParametros, char *parametrosJ
  *
  */
 int main(int argc, char *argv[]) {
-	int i = 0;
 	char *nomeClassFile;
 	char **parametros;
 
