@@ -12,14 +12,14 @@ typedef uint16_t u2;
 typedef uint32_t u4;
 typedef uint64_t u8;
 
-typedef struct structFloat {
+typedef struct UFLOAT {
 	union {
 		u4 bits;
 		float valor;
 	} uf;
 } uFloat;
 
-typedef struct structDouble {
+typedef struct UDOUBLE {
 	union {
 		u8 bits;
 		double valor;
@@ -31,7 +31,7 @@ typedef struct structDouble {
  * A estrutura e composta por uma tag e por uma union.
  * A union e composta por cada uma das possiveis tags.
  */
-typedef struct CP_info {
+typedef struct CP_INFO {
 	u1 tag;
 	union {
 		struct {
@@ -77,19 +77,19 @@ typedef struct CP_info {
 	} u;
 } cp_info;
 
-typedef struct {
+typedef struct EXCEPTION_TABLE{
 	u2 start_pc;
 	u2 end_pc;
 	u2 handler_pc;
 	u2 catch_type;
 } exception_table;
 
-typedef struct {
+typedef struct LINE_NUMBER_TABLE{
 	u2 start_pc;
 	u2 line_number;
 } line_number_table;
 
-typedef struct {
+typedef struct LOCAL_VARIABLE_TABLE{
 	u2 start_pc;
 	u2 length;
 	u2 name_index;
@@ -97,14 +97,14 @@ typedef struct {
 	u2 index;
 } local_variable_table;
 
-typedef struct {
+typedef struct CLASSES{
 	u2 inner_class_info_index;
 	u2 outer_class_info_index;
 	u2 inner_name_index;
 	u2 inner_class_access_flags;
 } classes;
 
-typedef struct attribute_Info {
+typedef struct ATTRIBUTE_INFO {
 	u2 attribute_name_index;
 	u4 attribute_length;
 	//u1 *info;
@@ -120,7 +120,7 @@ typedef struct attribute_Info {
 			u2 exception_table_length;
 			exception_table * exception_table;
 			u2 attributes_count;
-			struct attribute_Info * attributes;
+			struct ATTRIBUTE_INFO * attributes;
 		} Code;
 		struct Exceptions_attribute {
 			u2 number_of_exceptions;
@@ -141,7 +141,7 @@ typedef struct attribute_Info {
 
 } attribute_info;
 
-typedef struct Field {
+typedef struct FIELD_INFO {
 	u2 access_flags;
 	u2 name_index;
 	u2 descriptor_index;
@@ -149,7 +149,7 @@ typedef struct Field {
 	attribute_info *attributes;
 } field_info;
 
-typedef struct Method {
+typedef struct METHOD_INFO {
 	u2 access_flags;
 	u2 name_index;
 	u2 descriptor_index;
@@ -161,7 +161,7 @@ typedef struct Method {
  * Definicao da estrutura de um Classfile
  * As informacoes nao utilizadas estao comentadas
  */
-typedef struct classfile {
+typedef struct  CLASSFILE{
 	u4 magic;
 	u2 minor_version;
 	u2 major_version;
