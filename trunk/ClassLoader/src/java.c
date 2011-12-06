@@ -13,10 +13,10 @@
 
 
 void iniciaExecucaoJVM(char nomeClassFile[], int numParametros, char *parametrosJava[]) {
-//	ClassFile cf;
+	ClassFile cf;
 
 	strcat(nomeClassFile, ".class");
-	//cf = lerClassFile(nomeClassFile);
+	cf = lerClassFile(nomeClassFile);
 
 	//Agora tem que ver se dentro desse cf existe a funcao main.
 	printf("\n\nFim");
@@ -41,6 +41,5 @@ int main(int argc, char *argv[]) {
 			   "Ex: java Teste.class");
 		return 1;
 	}
-
 	return 0;
 }
