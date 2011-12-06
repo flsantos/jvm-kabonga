@@ -12,13 +12,14 @@
 
 
 
-void iniciaExecucaoJVM(char nomeClassFile[], int numParametros, char *parametrosJava[]) {
+void iniciaExecucaoJVM(char nomeClassFile[]) {
 	ClassFile cf;
 
 	strcat(nomeClassFile, ".class");
 	cf = lerClassFile(nomeClassFile);
 
 	//Agora tem que ver se dentro desse cf existe a funcao main.
+
 	printf("\n\nFim");
 }
 
@@ -29,12 +30,10 @@ void iniciaExecucaoJVM(char nomeClassFile[], int numParametros, char *parametros
  */
 int main(int argc, char *argv[]) {
 	char *nomeClassFile;
-	char **parametros;
 
 	if (argc >= 2) {
 		nomeClassFile= argv[1];
-		parametros = &argv[2];
-		iniciaExecucaoJVM(nomeClassFile, argc-2, parametros);
+		iniciaExecucaoJVM(nomeClassFile, "main", "([LJava/lang/String;)V");
 	}
 	else {
 		printf("O nome do arquivo .class deve ser passado como parametro.\nFavor verificar documentacao.\n"
