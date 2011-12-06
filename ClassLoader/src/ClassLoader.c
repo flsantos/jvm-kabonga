@@ -477,10 +477,10 @@ ClassFile lerClassFile(char *nomeArquivo) {
 
 		cf.minor_version = u2Read();
 		cf.major_version = u2Read();
-		if (cf.major_version < 45 || cf.major_version> 46 || (cf.major_version == 46 && cf.minor_version > 0)) {
-			printf("Versão nao suportada.");
-			exit(1);
-		}
+//		if (cf.major_version < 45 || cf.major_version> 46 || (cf.major_version == 46 && cf.minor_version > 0)) {
+//			printf("Versão nao suportada.");
+//			exit(1);
+//		}
 		cf.constant_pool_count = u2Read();
 		printf("\nmagic_number : 0xCAFEBABE");
 		printf("\nminor_version : %d", cf.minor_version);

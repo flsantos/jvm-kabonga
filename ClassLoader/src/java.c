@@ -12,9 +12,10 @@
 
 
 
-void iniciaExecucaoJVM(char nomeClassFile[]) {
+void iniciaExecucaoJVM(char nomeClassFile[], char *nomeMetodo, char *descritor) {
 	ClassFile cf;
 
+	nomeMetodo = realloc(nomeMetodo, (strlen(nomeMetodo) + 7) * sizeof(char));
 	strcat(nomeClassFile, ".class");
 	cf = lerClassFile(nomeClassFile);
 
