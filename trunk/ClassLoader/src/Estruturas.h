@@ -179,3 +179,9 @@ typedef struct  CLASSFILE{
 	u2 attributes_count;
 	attribute_info *attributes;
 } ClassFile;
+
+typedef struct LIST_CLASSFILE{
+	char *class_name;
+	ClassFile *cf;
+	struct LIST_CLASSFILE *next;
+}List_Classfile;
