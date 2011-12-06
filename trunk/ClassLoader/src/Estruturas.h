@@ -183,5 +183,14 @@ typedef struct  CLASSFILE{
 typedef struct LIST_CLASSFILE{
 	char *class_name;
 	ClassFile *cf;
-	struct LIST_CLASSFILE *next;
+	struct LIST_CLASSFILE *prox;
 }List_Classfile;
+
+
+
+
+typedef struct FRAME{
+	ClassFile *cf;
+
+
+}Frame;
