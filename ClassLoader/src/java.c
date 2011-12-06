@@ -10,14 +10,58 @@
 
 #include "ClassLoader.h"
 
+/*
+ * Adiciona uma nova classe a lista de classes
+ * */
+void adicionaClasse (ClassFile *cf, List_Classfile **lcf){
+	List_Classfile *aux;
 
+	if ((*lcf) == NULL){
+		(*lcf) = malloc(sizeof(List_Classfile));
+		(*lcf)->cf = NULL;
+		(*lcf)->class_name = NULL;
+		(*lcf)->prox = NULL;
+		(*lcf)->cf = cf;
+		(*lcf)->class_name = malloc(sizeof(cf->constant_pool[cf->constant_pool[cf->this_class -1].u.Class.name_index -1].u.Utf8.length));
+		(*lcf)->class_name = cf->constant_pool[cf->constant_pool[cf->this_class -1].u.Class.name_index -1].u.Utf8.bytes;
+
+	}
+	else{
+		aux = malloc(sizeof(List_Classfile));
+		aux->cf = NULL;
+		aux->class_name = NULL;
+		aux->prox = (*lcf);
+		aux->cf = cf;
+		aux->class_name = malloc(sizeof(cf->constant_pool[cf->constant_pool[cf->this_class -1].u.Class.name_index -1].u.Utf8.length));
+		aux->class_name = cf->constant_pool[cf->constant_pool[cf->this_class -1].u.Class.name_index -1].u.Utf8.bytes;
+	}
+
+}
 
 void iniciaExecucaoJVM(char nomeClassFile[], char *nomeMetodo, char *descritor) {
 	ClassFile cf;
+	List_Classfile *lcf = NULL;
+	u2 i = 0;
+	//Frame frame;
 
 	nomeMetodo = realloc(nomeMetodo, (strlen(nomeMetodo) + 7) * sizeof(char));
 	strcat(nomeClassFile, ".class");
 	cf = lerClassFile(nomeClassFile);
+
+
+	adicionaClasse(&cf, &lcf);
+	//printf("A classe eh %s\n", lcf->class_name);
+
+	for (i=0; i<cf.methods_count; i++) {
+		if (strcmp("main",cf.constant_pool[cf.methods[i].name_index].u.Utf8.bytes) == 0 ) {
+			/* Cria frame para executar o metodo porque as vezes agente vai chamar outro e passar isso por parametrs*/
+			/*frame = iniciarFrame(indice_classe,indice_metodo,(numero_argumentos(indice_classe,indice_metodo)));
+			executar_metodo(frame);
+			free(frame);
+			break;*/
+
+		}
+	}
 
 	//Agora tem que ver se dentro desse cf existe a funcao main.
 
