@@ -30,3 +30,11 @@ method_info retornaMetodoPorNome(ClassFile *cf, char *nomeMetodo, char *nomeDesc
 			}
 		}
 }
+
+char * retornaNomeMetodo(ClassFile *cf, method_info *mi){
+	return retornaUtf8(cf, mi->name_index);
+}
+
+char * retornaNomeClasse (ClassFile *cf){
+	return retornaUtf8(cf, cf->constant_pool[cf->this_class-1].u.Class.name_index);
+}
