@@ -181,16 +181,29 @@ typedef struct  CLASSFILE{
 } ClassFile;
 
 typedef struct LIST_CLASSFILE{
-	char *class_name;
+	u1 *class_name;
 	ClassFile *cf;
 	struct LIST_CLASSFILE *prox;
 }List_Classfile;
 
 
-
+typedef union TIPO{
+	u1 tipo_byte;
+	unsigned char tipo_char;
+	double tipo_double;
+	float tipo_float;
+	int tipo_int;
+	u4 tipo_long;
+	u2 tipo_short;
+	char tipo_boolean;
+	void *tipo_referencia;
+	u1 *tipo_retorno;
+} tipo;
 
 typedef struct FRAME{
-	ClassFile *cf;
+	u4 code_length;
+	u1 *code;
+	cp_info *constant_pool;
+	tipo *pilhaOperandos;
+} Frame;
 
-
-}Frame;
