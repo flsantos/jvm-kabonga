@@ -9,6 +9,7 @@
 #include <string.h>
 
 #include "ClassLoader.h"
+#include "Util.h"
 
 /*
  * Adiciona uma nova classe a lista de classes
@@ -52,8 +53,12 @@ void iniciaExecucaoJVM(char nomeClassFile[], char *nomeMetodo, char *descritor) 
 	adicionaClasse(&cf, &lcf);
 	//printf("A classe eh %s\n", lcf->class_name);
 
-	for (i=0; i<cf.methods_count; i++) {
-		if (strcmp("main",cf.constant_pool[cf.methods[i].name_index].u.Utf8.bytes) == 0 ) {
+	method_info mi;
+	mi = retornaMetodoPorNome(&cf, "multiplica", "()I");
+	printf("***\n\nmethod info %s\n\n", cf.constant_pool[mi.name_index -1].u.Utf8.bytes);
+
+	for (i=0; i<cf.methods_count ; i++) {
+		if (strcmp("main",cf.constant_pool[cf.methods[i].name_index -1].u.Utf8.bytes) == 0 ) {
 			/* Cria frame para executar o metodo porque as vezes agente vai chamar outro e passar isso por parametrs*/
 			/*frame = iniciarFrame(indice_classe,indice_metodo,(numero_argumentos(indice_classe,indice_metodo)));
 			executar_metodo(frame);
