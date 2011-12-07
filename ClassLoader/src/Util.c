@@ -18,17 +18,18 @@ char * retornaUtf8(ClassFile *cf, u2 index){
 	return cf->constant_pool[index-1].u.Utf8.bytes;
 }
 
-method_info retornaMetodoPorNome(ClassFile *cf, char *nomeMetodo, char *nomeDescritor ){
+method_info *retornaMetodoPorNome(ClassFile *cf, char *nomeMetodo, char *nomeDescritor ){
 	int i=0;
 	for (i=0; i<cf->methods_count; i++) {
-			if (strcmp(nomeMetodo, retornaUtf8(cf, cf->methods[i].name_index)) == 0
-					&&
-					strcmp(nomeDescritor, retornaUtf8(cf, cf->methods[i].descriptor_index)) == 0) {
-				printf("\n\n%d \n", i );
-				return cf->methods[i];
-
-			}
+		if (strcmp(nomeMetodo, retornaUtf8(cf, cf->methods[i].name_index)) == 0
+				&&
+				strcmp(nomeDescritor, retornaUtf8(cf, cf->methods[i].descriptor_index)) == 0) {
+			return &(cf->methods[i]) ;
 		}
+	}
+	if (i == cf->methods_count) {
+		return NULL;
+	}
 }
 
 char * retornaNomeMetodo(ClassFile *cf, method_info *mi){
@@ -38,3 +39,4 @@ char * retornaNomeMetodo(ClassFile *cf, method_info *mi){
 char * retornaNomeClasse (ClassFile *cf){
 	return retornaUtf8(cf, cf->constant_pool[cf->this_class-1].u.Class.name_index);
 }
+
