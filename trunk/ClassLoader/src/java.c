@@ -53,10 +53,11 @@ void iniciaExecucaoJVM(char nomeClassFile[], char *nomeMetodo, char *descritor) 
 	adicionaClasse(&cf, &lcf);
 	//printf("A classe eh %s\n", lcf->class_name);
 
-	method_info mi;
+	method_info *mi;
 	mi = retornaMetodoPorNome(&cf, "multiplica", "()I");
-	printf("***\n\nmethod info %s\n\n", retornaNomeMetodo(&cf, &mi));
+	printf("***\n\nmethod info %s\n\n", retornaNomeMetodo(&cf, mi));
 	printf("\n%s \n ", retornaNomeClasse(&cf));
+	printf("\nmethod name : %s\n", retornaUtf8(&cf, mi->name_index));
 //a
 	for (i=0; i<cf.methods_count ; i++) {
 		if (strcmp("main",cf.constant_pool[cf.methods[i].name_index -1].u.Utf8.bytes) == 0 ) {
@@ -74,6 +75,15 @@ void iniciaExecucaoJVM(char nomeClassFile[], char *nomeMetodo, char *descritor) 
 	printf("\n\nFim");
 }
 
+void iniciaClasse(char nomeClassFile[], List_Classfile *lcf) {
+	ClassFile cf;
+
+	nomeClassFile = realloc(nomeClassFile, (strlen(nomeClassFile) + 7) * sizeof(char));
+	strcat(nomeClassFile, ".class");
+	cf = lerClassFile(nomeClassFile);
+
+	adicionaClasse(&cf, &lcf);
+}
 
 /*
  * Funcao inicial da JVM
