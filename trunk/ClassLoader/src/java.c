@@ -55,8 +55,9 @@ void iniciaExecucaoJVM(char nomeClassFile[], char *nomeMetodo, char *descritor) 
 
 	method_info mi;
 	mi = retornaMetodoPorNome(&cf, "multiplica", "()I");
-	printf("***\n\nmethod info %s\n\n", cf.constant_pool[mi.name_index -1].u.Utf8.bytes);
-
+	printf("***\n\nmethod info %s\n\n", retornaNomeMetodo(&cf, &mi));
+	printf("\n%s \n ", retornaNomeClasse(&cf));
+//a
 	for (i=0; i<cf.methods_count ; i++) {
 		if (strcmp("main",cf.constant_pool[cf.methods[i].name_index -1].u.Utf8.bytes) == 0 ) {
 			/* Cria frame para executar o metodo porque as vezes agente vai chamar outro e passar isso por parametrs*/
