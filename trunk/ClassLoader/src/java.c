@@ -36,65 +36,54 @@ void adicionaClasse (ClassFile *cf, List_Classfile **lcf){
 		aux->class_name = malloc(sizeof(cf->constant_pool[cf->constant_pool[cf->this_class -1].u.Class.name_index -1].u.Utf8.length));
 		aux->class_name = cf->constant_pool[cf->constant_pool[cf->this_class -1].u.Class.name_index -1].u.Utf8.bytes;
 	}
-
 }
 
-void iniciaExecucaoJVM(char nomeClassFile[], char *nomeMetodo, char *descritor) {
-	ClassFile cf;
-	List_Classfile *lcf = NULL;
-	u2 i = 0;
-	//Frame frame;
+Frame criaFrame(ClassFile *cf, char *nomeMetodo, char *descritor){
+	Frame frame;
+	method_info *metodo;
+	int i;
 
-	nomeMetodo = realloc(nomeMetodo, (strlen(nomeMetodo) + 7) * sizeof(char));
-	strcat(nomeClassFile, ".class");
-	cf = lerClassFile(nomeClassFile);
-
-
-	adicionaClasse(&cf, &lcf);
-	//printf("A classe eh %s\n", lcf->class_name);
-
-	method_info *mi;
-	mi = retornaMetodoPorNome(&cf, "multiplica", "()I");
-	printf("***\n\nmethod info %s\n\n", retornaNomeMetodo(&cf, mi));
-	printf("\n%s \n ", retornaNomeClasse(&cf));
-	printf("\nmethod name : %s\n", retornaUtf8(&cf, mi->name_index));
-//a
-	for (i=0; i<cf.methods_count ; i++) {
-		if (strcmp("main",cf.constant_pool[cf.methods[i].name_index -1].u.Utf8.bytes) == 0 ) {
-			/* Cria frame para executar o metodo porque as vezes agente vai chamar outro e passar isso por parametrs*/
-			/*frame = iniciarFrame(indice_classe,indice_metodo,(numero_argumentos(indice_classe,indice_metodo)));
-			executar_metodo(frame);
-			free(frame);
-			break;*/
-
+	metodo = retornaMetodoPorNome(cf, nomeMetodo, descritor);
+	for(i = 0; i < metodo->attributes_count; i++){
+		if(strcmp((char*) retornaUtf8(cf, metodo->attributes[i].attribute_name_index), "Code") == 0){ //TODO Usar metodo criado
+			frame.code_length = metodo->attributes[i].u.Code.code_length;
+			frame.code = metodo->attributes[i].u.Code.code;
+			break;
 		}
 	}
+	frame.constant_pool = cf->constant_pool;
+	frame.pilhaOperandos = malloc(/*maxPilha() * */sizeof(tipo));
+	return frame;
+}
 
-	//Agora tem que ver se dentro desse cf existe a funcao main.
+void iniciaExecucaoMetodo(ClassFile *cf, List_Classfile *lcf, char *nomeMetodo, char *descritor) {
+	Frame frame;
+
+	frame = criaFrame(cf, nomeMetodo, descritor);
 
 	printf("\n\nFim");
 }
 
-void iniciaClasse(char nomeClassFile[], List_Classfile *lcf) {
+void iniciaClasse(char nomeClassFile[], List_Classfile *lcf, char *nomeMetodo, char *descritor) {
 	ClassFile cf;
 
-	nomeClassFile = realloc(nomeClassFile, (strlen(nomeClassFile) + 7) * sizeof(char));
 	strcat(nomeClassFile, ".class");
 	cf = lerClassFile(nomeClassFile);
-
 	adicionaClasse(&cf, &lcf);
+	iniciaExecucaoMetodo(&cf, lcf, nomeMetodo, descritor);
 }
+
 
 /*
  * Funcao inicial da JVM
  *
  */
 int main(int argc, char *argv[]) {
+	List_Classfile *lcf = NULL;
 	char *nomeClassFile;
-
 	if (argc >= 2) {
-		nomeClassFile= argv[1];
-		iniciaExecucaoJVM(nomeClassFile, "main", "([LJava/lang/String;)V");
+		nomeClassFile = argv[1];
+		iniciaClasse(nomeClassFile, lcf, "main", "([Ljava/lang/String;)V");
 	}
 	else {
 		printf("O nome do arquivo .class deve ser passado como parametro.\nFavor verificar documentacao.\n"
