@@ -39,3 +39,8 @@ u1 * retornaNomeClasse (ClassFile *cf){
 	return retornaUtf8(cf, cf->constant_pool[cf->this_class-1].u.Class.name_index);
 }
 
+u2 retornaTamanhoPilha (attribute_info *ai){
+	return ai->u.Code.max_stack;
+}
+
+
