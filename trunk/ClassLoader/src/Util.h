@@ -17,3 +17,5 @@ method_info *retornaMetodoPorNome(ClassFile *cf, char *nomeMetodo, char *nomeDes
 u1 * retornaNomeMetodo(ClassFile *cf, method_info *mi);
 
 u1 * retornaNomeClasse (ClassFile *cf);
+
+u2 retornaTamanhoPilha (attribute_info *ai);

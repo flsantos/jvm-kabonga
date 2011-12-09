@@ -1,9 +1,10 @@
-
+#ifndef ESTRUTURAS_H_
+#define ESTRUTURAS_H_
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
-
+#include <string.h>
 
 /* Definicao dos tipos */
 
@@ -11,6 +12,11 @@ typedef uint8_t u1;
 typedef uint16_t u2;
 typedef uint32_t u4;
 typedef uint64_t u8;
+
+typedef int8_t i1;
+typedef int16_t i2;
+typedef int32_t i4;
+typedef int64_t i8;
 
 typedef struct UFLOAT {
 	union {
@@ -189,21 +195,29 @@ typedef struct LIST_CLASSFILE{
 
 typedef union TIPO{
 	u1 tipo_byte;
-	unsigned char tipo_char;
-	double tipo_double;
-	float tipo_float;
-	int tipo_int;
-	u4 tipo_long;
 	u2 tipo_short;
-	char tipo_boolean;
+	u4 tipo_int;
+	float tipo_float;
+	double tipo_double;
+	long tipo_long;
 	void *tipo_referencia;
 	u1 *tipo_retorno;
-} tipo;
+} Tipo;
 
 typedef struct FRAME{
+	u4 pc;
+	i2 sp;
 	u4 code_length;
 	u1 *code;
 	cp_info *constant_pool;
-	tipo *pilhaOperandos;
+	Tipo *pilhaOperandos;
+	Tipo *pilha;
+	struct FRAME *frameAnterior;
 } Frame;
 
+typedef struct AMBIENTEEXECUCAO{
+	Frame *pFrame;
+	List_Classfile *pClassHeap;
+}AmbienteExecucao;
+
+#endif
