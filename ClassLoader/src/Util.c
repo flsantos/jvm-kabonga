@@ -14,6 +14,12 @@
 #include "Util.h"
 #include <string.h>
 
+
+
+/*
+ * Funcoes de busca no pool de constantes
+ */
+
 u1 * retornaUtf8(ClassFile *cf, u2 index){
 	return cf->constant_pool[index-1].u.Utf8.bytes;
 }
@@ -43,4 +49,22 @@ u2 retornaTamanhoPilha (attribute_info *ai){
 	return ai->u.Code.max_stack;
 }
 
+u2 retornaTamanhoVariaveisLocais(attribute_info *ai) {
+	return ai->u.Code.max_locals;
+}
 
+
+/*
+ * Funcoes uteis para pilha de operandos
+ */
+
+
+void empilhaOperando(Frame *frame, char *tipo, void *operando) {
+	frame->pilhaOperandos.sp++;
+}
+
+//ver se a pilha ta vazia
+//push
+//pop
+//transferir pilha pra lista de variaveis locais
+//transferir da lista de variaveis locais para a pilha

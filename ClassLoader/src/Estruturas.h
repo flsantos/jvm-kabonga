@@ -204,14 +204,19 @@ typedef union TIPO{
 	u1 *tipo_retorno;
 } Tipo;
 
-typedef struct FRAME{
-	u4 pc;
+typedef struct PILHA{
 	i2 sp;
+	Tipo *elementos;
+} Pilha;
+
+typedef struct FRAME{
+	int enderecoPC;
+	u4 pc;
 	u4 code_length;
 	u1 *code;
 	cp_info *constant_pool;
-	Tipo *pilhaOperandos;
-	Tipo *pilha;
+	Pilha pilhaOperandos;
+	Pilha pilhaVariaveisLocais;
 	struct FRAME *frameAnterior;
 } Frame;
 
