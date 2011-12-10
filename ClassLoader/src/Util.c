@@ -61,33 +61,57 @@ u2 retornaTamanhoVariaveisLocais(attribute_info *ai) {
 
 void empilhaOperando(Frame *frame, char *tipo, void *operando) {
 	i2 sp = 0;
-	frame->pilhaOperandos.sp++;
+	frame->pilhaOperandos->sp++;
 
 
-	sp = frame->pilhaOperandos.sp;
+	sp = frame->pilhaOperandos->sp;
 
-	frame->pilhaOperandos.tipo[sp] = tipo;
+	frame->pilhaOperandos->tipo[sp] = tipo;
 
 	if (strcmp("B", tipo)) {
-		frame->pilhaOperandos.elementos[sp].tipo_byte = *((i1 *)operando);
+		frame->pilhaOperandos->elementos[sp].tipo_byte = *((i1 *)operando);
 	}else if (strcmp("C", tipo)) {
-		frame->pilhaOperandos.elementos[sp].tipo_char = *((u1 *)operando);
+		frame->pilhaOperandos->elementos[sp].tipo_char = *((u1 *)operando);
 	}else if (strcmp("D", tipo)) {
-		frame->pilhaOperandos.elementos[sp].tipo_double = *((double *)operando);
+		frame->pilhaOperandos->elementos[sp].tipo_double = *((double *)operando);
 	}else if (strcmp("F", tipo)) {
-		frame->pilhaOperandos.elementos[sp].tipo_float = *((float *)operando);
+		frame->pilhaOperandos->elementos[sp].tipo_float = *((float *)operando);
 	}else if (strcmp("I", tipo)) {
-		frame->pilhaOperandos.elementos[sp].tipo_int = *((u4 *)operando);
+		frame->pilhaOperandos->elementos[sp].tipo_int = *((u4 *)operando);
 	}else if (strcmp("J", tipo)) {
-		frame->pilhaOperandos.elementos[sp].tipo_long = *((long *)operando);
+		frame->pilhaOperandos->elementos[sp].tipo_long = *((long *)operando);
 	}else if (strcmp("L", tipo)) {
-		frame->pilhaOperandos.elementos[sp].tipo_referencia = operando;
+		frame->pilhaOperandos->elementos[sp].tipo_referencia = operando;
 	}else if (strcmp("S", tipo)) {
-		frame->pilhaOperandos.elementos[sp].tipo_short = *((u2 *)operando);
+		frame->pilhaOperandos->elementos[sp].tipo_short = *((u2 *)operando);
 	}else if (strcmp("Z", tipo)) {
-		frame->pilhaOperandos.elementos[sp].tipo_boolean = *((char *)operando);
+		frame->pilhaOperandos->elementos[sp].tipo_boolean = *((char *)operando);
 	}else if (strcmp("[", tipo)) {
-		frame->pilhaOperandos.elementos[sp].tipo_retorno = *((u1 *)operando);
+		frame->pilhaOperandos->elementos[sp].tipo_retorno = *((u1 *)operando);
+	}
+}
+
+PilhaOperandos desempilhaOperando(Frame *frame) {
+	i2 sp = 0;
+	PilhaOperandos operando;
+	sp = frame->pilhaOperandos->sp;
+
+	if (sp > -1) {
+
+		operando.elementos = malloc(sizeof(Tipo));
+		operando.tipo = malloc(sizeof(char *));
+
+		operando.elementos[0] = frame->pilhaOperandos->elementos[sp];
+		operando.tipo = frame->pilhaOperandos->tipo[sp];
+
+
+		frame->pilhaOperandos->sp--;
+
+
+		return operando;
+	}
+	else {
+		printf("\nErro! Pilha vazia.");
 	}
 }
 
