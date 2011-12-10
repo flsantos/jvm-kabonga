@@ -238,39 +238,42 @@ int invokespecial(AmbienteExecucao *ae) {
 	t_method_about *method_about;
 	int arg_count;
 
-	method_about = find_method_info(interpreter->current_frame->class_file, index);
+	method_about = find_method_info(interpreter->current_frame->class_file,
+			index);
 
-	if((strcmp(method_about->className, "java/lang/StringBuffer") == 0 || strcmp(method_about->className, "java/lang/StringBuilder") == 0) &&
-	   strcmp(method_about->methodName, "<init>") == 0) {
+	if ((strcmp(method_about->className, "java/lang/StringBuffer") == 0
+			|| strcmp(method_about->className, "java/lang/StringBuilder") == 0)
+			&& strcmp(method_about->methodName, "<init>") == 0) {
 		opstack_pop(&(interpreter->current_frame->opstack));
 		return 0;
 	}
 
 	arg_count = arguments_count(method_about->type) + 1;
 
-	jump(interpreter, method_about->className, method_about->methodName, method_about->type, arg_count);
-
+	jump(interpreter, method_about->className, method_about->methodName,
+			method_about->type, arg_count);
 
 	return 0;
 }
 
-int dup(AmbienteExecucao *ae){
+int dup(AmbienteExecucao *ae) {
 
 	//t_opstack *a = opstack_pop((&interpreter->current_frame->opstack));
 	PilhaOperandos *a = desempilhaOperando(ae->pFrame);
-	if(( *(a->tipo[0])=='J' ) || ( *(a->tipo[0])=='D' )){
-		printf(stderr,"Instrucao 'dup' nao permitida para valores 'double' ou 'long'.\n");
+	if ((*(a->tipo[0]) == 'J') || (*(a->tipo[0]) == 'D')) {
+		printf(
+				stderr,
+				"Instrucao 'dup' nao permitida para valores 'double' ou 'long'.\n");
 		exit(1);
 	}
 
 	//opstack_push_data(&(interpreter->current_frame->opstack),a->type,a->data);
-	empilhaOperando(ae->pFrame,a->tipo[0],a->elementos[a->sp]);
+	empilhaOperando(ae->pFrame, a->tipo[0], a->elementos[a->sp]);
 	//opstack_push_data(&(interpreter->current_frame->opstack),a->type,a->data);
-	empilhaOperando(ae->pFrame,a->tipo[0],a->elementos[a->sp]);
+	empilhaOperando(ae->pFrame, a->tipo[0], a->elementos[a->sp]);
 
 	return 0;
 }
-
 
 int new_(AmbienteExecucao *ae) {
 	u2 indice = lerU2doPc(ae->pFrame);
@@ -280,9 +283,9 @@ int new_(AmbienteExecucao *ae) {
 
 	classname = retornaNomeClasse(&(ae->pFrame->cf[indice]));
 
-
 	/* ajustando para o caso da StringBuffer */
-	if((strcmp(classname, "java/lang/StringBuffer") == 0 || strcmp(classname, "java/lang/StringBuilder") == 0)) {
+	if ((strcmp(classname, "java/lang/StringBuffer") == 0
+			|| strcmp(classname, "java/lang/StringBuilder") == 0)) {
 		char * strvazia;
 		strvazia = calloc(1, sizeof(char));
 		*strvazia = '\0';
@@ -292,11 +295,10 @@ int new_(AmbienteExecucao *ae) {
 	}
 
 	//class_file = leitura_class_file(interpreter, classname);
-	cf = iniciaClasse(classname, ae,"<init>","()V");
+	cf = iniciaClasse(classname, ae, "<init>", "()V");
 
 	//TODO esperando o capuleto para o objeto
 	//object = instanciate_object(class_file, interpreter);
-
 
 	//opstack_push(&(interpreter->current_frame->opstack), "L", object);
 	empilhaOperandos(ae->pFrame, "L", objeto);
@@ -305,7 +307,7 @@ int new_(AmbienteExecucao *ae) {
 
 }
 
-int if_icmplt(AmbienteExecucao *ae){
+int if_icmplt(AmbienteExecucao *ae) {
 	u2 branchoffset = lerU2doPc(ae->pFrame);
 
 	int a, b;
@@ -314,18 +316,18 @@ int if_icmplt(AmbienteExecucao *ae){
 	b = desempilhaOperandos(ae->pFrame)->elementos.tipo_int;
 	a = desempilhaOperandos(ae->pFrame)->elementos.tipo_int;
 
-	if (a < b){
+	if (a < b) {
 		//interpreter->current_frame->pc += branchoffset -3;
-		ae->pFrame->pc += branchoffset -3;
+		ae->pFrame->pc += branchoffset - 3;
 		//interpreter->current_frame->pc_address += branchoffset -3;
-		ae->pFrame->enderecoPC += branchoffset -3;
+		ae->pFrame->enderecoPC += branchoffset - 3;
 
 	}
 
 	return 0;
 }
 
-int iinc(AmbienteExecucao *ae){
+int iinc(AmbienteExecucao *ae) {
 	u1 indice = lerU1doPc(ae->pFrame);
 	u1 const_ = lerU1doPc(ae->pFrame);
 
@@ -334,21 +336,21 @@ int iinc(AmbienteExecucao *ae){
 	return 0;
 }
 
-int ireturn(AmbienteExecucao *ae){
+int ireturn(AmbienteExecucao *ae) {
 	//TODO: retornar para o frame anterior
 
 }
 
-int ifne(AmbienteExecucao *ae){
+int ifne(AmbienteExecucao *ae) {
 	int a;
 	u2 branchoffset = lerU2doPc(ae->pFrame);
 	a = desempilhaOperando(ae->pFrame)->Tipo.tipo_int;
 
-	if (a != 0){
+	if (a != 0) {
 		//interpreter->current_frame->pc += branchoffset -3;
-		ae->pFrame->pc += branchoffset -3;
+		ae->pFrame->pc += branchoffset - 3;
 		//interpreter->current_frame->pc_address += branchoffset -3;
-		ae->pFrame->enderecoPc += branchoffset -3;
+		ae->pFrame->enderecoPc += branchoffset - 3;
 	}
 
 	return 0;
@@ -365,17 +367,17 @@ int irem(AmbienteExecucao *ae) {
 	a = desempilhaOperandos(ae->pFrame)->Tipo.tipo_int;
 	b = desempilhaOperandos(ae->pFrame)->Tipo.tipo_int;
 
-	rem = b%a;
+	rem = b % a;
 
 	opstack_push(ae->pFrame, "I", &rem);
 
 	return 0;
 }
 
-int goto_(AmbienteExecucao *ae){
+int goto_(AmbienteExecucao *ae) {
 	u2 branchoffset = lerU2doPc(ae->pFrame);
 
-	ae->pFrame->pc += branchoffset -3;
+	ae->pFrame->pc += branchoffset - 3;
 
 	return 0;
 }
@@ -383,37 +385,240 @@ int goto_(AmbienteExecucao *ae){
 int istore(AmbienteExecucao *ae) {
 	u1 pos = lerU1doPc(ae->pFrame);
 
-	transferePilha2Variavel(ae->pFrame , pos);
+	transferePilha2Variavel(ae->pFrame, pos);
 	return 0;
 }
 
 int iconst(AmbienteExecucao *ae, int valor) {
 
-	unsigned char instrucao = (unsigned char)lerInstrucao(ae->pFrame);
-	switch(instrucao) {
-		case ICONST_M1:
-			valor = -1;
-			break;
-		case ICONST_0:
-			valor = 0;
-			break;
-		case ICONST_1:
-			valor = 1;
-			break;
-		case ICONST_2:
-			valor = 2;
-			break;
-		case ICONST_3:
-			valor = 3;
-			break;
-		case ICONST_4:
-			valor = 4;
-			break;
-		case ICONST_5:
-			valor = 5;
-			break;
+	unsigned char instrucao = (unsigned char) lerInstrucao(ae->pFrame);
+	switch (instrucao) {
+	case ICONST_M1:
+		valor = -1;
+		break;
+	case ICONST_0:
+		valor = 0;
+		break;
+	case ICONST_1:
+		valor = 1;
+		break;
+	case ICONST_2:
+		valor = 2;
+		break;
+	case ICONST_3:
+		valor = 3;
+		break;
+	case ICONST_4:
+		valor = 4;
+		break;
+	case ICONST_5:
+		valor = 5;
+		break;
+	}
 
 	empilhaOperandos(ae->pFrame, "I", &valor);
+
+	return 0;
+}
+
+int invokevirtual(AmbienteExecucao *interpreter) {
+	/* TODO: este invoke virtual nao esta pronto. so foi feito invoke
+	 * virtual de excecao para o println, apenas!
+	 */
+	int cp_index = Leru2doPC(interpreter->pFrame);
+	//TODO: t_method_about *method_about;
+	PilhaOperandos *data;
+	char *tipo;
+	char *string1, *string2;
+	int result_strcmp;
+	char *string_to_append, *string_appended, *string_append;
+
+	method_about = find_method_info(interpreter->pFrame->cf, cp_index);
+
+	if (strcmp(method_about->className, "java/io/PrintStream") == 0
+			&& (strcmp(method_about->methodName, "println") == 0
+					|| strcmp(method_about->methodName, "print") == 0)) {
+		/* realiza o println */
+		if (interpreter->pFrame->pilhaOperandos->tipo[0] != '#') {
+			data = DesempilhaOperando(interpreter->pFrame);
+			tipo = data->tipo;
+			if (tipo[0] == 'B') {
+				printf("%d", data->elementos[0].tipo_byte);
+			} else if (tipo[0] == 'C') {
+				printf("%c", (unsigned char) data->elementos[0].tipo_char);
+			} else if (tipo[0] == 'D') {
+				printf("%f", data->elementos[0].tipo_double);
+			} else if (tipo[0] == 'F') {
+				printf("%f", data->elementos[0].tipo_float);
+			} else if (tipo[0] == 'I') {
+				printf("%d", data->elementos[0].tipo_int);
+			} else if (tipo[0] == 'J') {
+				printf("%lld", data->elementos[0].tipo_long);
+			} else if (tipo[0] == 'L') {
+				printf("Impressao de um objeto?! Não implementado!");
+			} else if (tipo[0] == 'S') {
+				printf("%d", data->elementos[0].tipo_short);
+			} else if (tipo[0] == 'Z') {
+				printf("%d", data->elementos[0].tipo_boolean);
+			} else if (tipo[0] == '[') {
+				printf("%s", (char*) data->elementos[0].tipo_referencia);
+			} else if (tipo[0] == 'r') {
+				printf("Impressao de uma referencia. Arrumar.");
+			}
+		}
+		desempilhaOperando(&(interpreter->pFrame->pilhaOperandos));
+
+		if ((strcmp(method_about->methodName, "println") == 0)) {
+			printf("\n");
+		}
+	} else if (strcmp(method_about->className, "java/lang/String") == 0
+			&& strcmp(method_about->methodName, "equals") == 0) {
+		string1 =
+				(char*) desempilhaOperando(
+						(&interpreter->pFrame->pilhaOperandos))->elementos[0].tipo_referencia;
+		string2 =
+				(char*) desempilhaOperando(
+						(&interpreter->pFrame->pilhaOperandos))->elementos[0].tipo_referencia;
+
+		if (strcmp(string1, string2) == 0) {
+			result_strcmp = 1;
+			pilhaOperandos_push(&(interpreter->pFrame->pilhaOperandos), "I",
+					&result_strcmp);
+			return 0;
+		} else {
+			result_strcmp = 0;
+			pilhaOperandos_push(&(interpreter->pFrame->pilhaOperandos), "I",
+					&result_strcmp);
+			return 0;
+		}
+	} else if ((strcmp(method_about->className, "java/lang/StringBuffer") == 0
+			|| strcmp(method_about->className, "java/lang/StringBuilder") == 0)
+			&& strcmp(method_about->methodName, "append") == 0) {
+		string_append = calloc(50, sizeof(char));
+		data = desempilhaOperando(&(interpreter->pFrame->pilhaOperandos));
+		tipo = data->tipo;
+		string_to_append =
+				(char*) desempilhaOperando(
+						&(interpreter->pFrame->pilhaOperandos))->elementos[0].tipo_referencia;
+		if (tipo[0] == 'B') {
+			sprintf(string_append, "%d", data->elementos[0].tipo_byte);
+		} else if (tipo[0] == 'C') {
+			sprintf(string_append, "%c",
+					(unsigned char) data->elementos[0].tipo_char);
+		} else if (tipo[0] == 'D') {
+			sprintf(string_append, "%f", data->elementos[0].tipo_double);
+		} else if (tipo[0] == 'F') {
+			sprintf(string_append, "%f", data->elementos[0].tipo_float);
+		} else if (tipo[0] == 'I') {
+			sprintf(string_append, "%d", data->elementos[0].tipo_int);
+		} else if (tipo[0] == 'J') {
+			sprintf(string_append, "%lld", data->elementos[0].tipo_long);
+		} else if (tipo[0] == 'L') {
+			sprintf(string_append, "Impressao de um objeto?!");
+		} else if (tipo[0] == 'S') {
+			sprintf(string_append, "%d", data->elementos[0].tipo_short);
+		} else if (tipo[0] == 'Z') {
+			sprintf(string_append, "%d", data->elementos[0].tipo_boolean);
+		} else if (tipo[0] == '[') {
+			string_append = (char*) data->elementos[0].tipo_referencia;
+		} else if (tipo[0] == 'r') {
+			sprintf(string_append, "Impressao de uma referencia. Arrumar.");
+		}
+
+		string_appended = calloc(
+				strlen(string_append) + strlen(string_to_append) + 1,
+				sizeof(char));
+		*string_appended = '\0';
+		strcat(string_appended, string_to_append);
+		strcat(string_appended, string_append);
+
+		pilhaOperandos_push(&(interpreter->pFrame->pilhaOperandos), "[C",
+				string_appended);
+		return 0;
+
+	} else if ((strcmp(method_about->className, "java/lang/StringBuffer") == 0
+			|| strcmp(method_about->className, "java/lang/StringBuilder") == 0)
+			&& strcmp(method_about->methodName, "toString") == 0) {
+		return 0;
+	} else if (strcmp(method_about->className, "java/lang/String") == 0
+			&& strcmp(method_about->methodName, "length") == 0) {
+		int len;
+		string1 =
+				(char*) desempilhaOperando(
+						(&interpreter->pFrame->pilhaOperandos))->elementos[0].tipo_referencia;
+
+		len = strlen(string1);
+
+		pilhaOperandos_push(&(interpreter->pFrame->pilhaOperandos), "I", &len);
+
+		return 0;
+	} else if (strcmp(method_about->className, "java/lang/String") == 0
+			&& strcmp(method_about->methodName, "compareTo") == 0) {
+		int strcm;
+		string1 =
+				(char*) desempilhaOperando(
+						(&interpreter->pFrame->pilhaOperandos))->elementos[0].tipo_referencia;
+		string2 =
+				(char*) desempilhaOperando(
+						(&interpreter->pFrame->pilhaOperandos))->elementos[0].tipo_referencia;
+
+		strcm = strcmp(string1, string2);
+
+		pilhaOperandos_push(&(interpreter->pFrame->pilhaOperandos), "I",
+				&strcm);
+
+		return 0;
+	} else if (strcmp(method_about->className, "java/lang/String") == 0
+			&& strcmp(method_about->methodName, "indexOf") == 0
+			&& strcmp(method_about->tipo, "(Ljava/lang/String;)I") == 0) {
+		int strstr_value;
+		char *strstr_char;
+		string1 =
+				(char*) desempilhaOperando(
+						(&interpreter->pFrame->pilhaOperandos))->elementos[0].tipo_referencia;
+		string2 =
+				(char*) desempilhaOperando(
+						(&interpreter->pFrame->pilhaOperandos))->elementos[0].tipo_referencia;
+
+		strstr_char = strstr(string1, string2);
+		strstr_value = strstr_char - string1;
+
+		pilhaOperandos_push(&(interpreter->pFrame->pilhaOperandos), "I",
+				&strstr_value);
+
+		return 0;
+	} else if (strcmp(method_about->className, "java/lang/String") == 0
+			&& strcmp(method_about->methodName, "startsWith") == 0
+			&& strcmp(method_about->tipo, "(Ljava/lang/String;)Z") == 0) {
+		char bool_return;
+		char *strstr_char;
+		string1 = (char*)DesempilhaOperandos((&interpreter->pFrame->pilhaOperandos->elementos[0].tipo_referencia;
+		string2 =
+				(char*) DesempilhaOperandos(
+						(&interpreter->pFrame->pilhaOperandos))->elementos[0].tipo_referencia;
+
+		strstr_char = strstr(string1, string2);
+		bool_return = (strstr_char - string1 == 0) ? 1 : 0;
+
+		pilhaOperandos_push(
+				&(interpreter->pFrame->pilhaOperandos), "Z",
+				&bool_return);
+
+		return 0;
+
+	} else {
+		t_method_about *method_about;
+		int arg_count;
+
+		method_about = find_method_info(
+				interpreter->pFrame->class_file, cp_index);
+
+		arg_count = arguments_count(method_about->tipo) + 1;
+
+		jump(interpreter, method_about->className,
+				method_about->methodName, method_about->tipo,
+				arg_count);
+	}
 
 	return 0;
 }
