@@ -61,6 +61,29 @@ u2 retornaTamanhoVariaveisLocais(attribute_info *ai) {
 
 void empilhaOperando(Frame *frame, char *tipo, void *operando) {
 	frame->pilhaOperandos.sp++;
+	if (strcmp("B", tipo)) {
+
+	}else if (strcmp("B", tipo)) {
+
+	}else if (strcmp("C", tipo)) {
+
+	}else if (strcmp("D", tipo)) {
+
+	}else if (strcmp("F", tipo)) {
+
+	}else if (strcmp("I", tipo)) {
+
+	}else if (strcmp("J", tipo)) {
+
+	}else if (strcmp("L", tipo)) {
+
+	}else if (strcmp("S", tipo)) {
+
+	}else if (strcmp("Z", tipo)) {
+
+	}else if (strcmp("[", tipo)) {
+
+	}
 }
 
 //ver se a pilha ta vazia

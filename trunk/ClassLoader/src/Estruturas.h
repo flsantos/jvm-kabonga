@@ -217,6 +217,7 @@ typedef struct FRAME{
 	cp_info *constant_pool;
 	Pilha pilhaOperandos;
 	Pilha pilhaVariaveisLocais;
+	ClassFile *cf;
 	struct FRAME *frameAnterior;
 } Frame;
 
