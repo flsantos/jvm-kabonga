@@ -227,4 +227,14 @@ typedef struct AMBIENTEEXECUCAO{
 	List_Classfile *pClassHeap;
 }AmbienteExecucao;
 
+
+/*
+ * Estrutura do Objeto a ser instanciado
+ */
+typedef struct OBJETO {
+	char *nomeClasse;
+	int fields_count;
+	field_info *fields;
+} Objeto;
+
 #endif
