@@ -205,9 +205,10 @@ typedef union TIPO{
 } Tipo;
 
 typedef struct PILHA{
+	char * tipo[];
 	i2 sp;
 	Tipo *elementos;
-} Pilha;
+} PilhaOperandos, PilhaVariaveisLocais;
 
 typedef struct FRAME{
 	int enderecoPC;
@@ -215,8 +216,8 @@ typedef struct FRAME{
 	u4 code_length;
 	u1 *code;
 	cp_info *constant_pool;
-	Pilha pilhaOperandos;
-	Pilha pilhaVariaveisLocais;
+	PilhaOperandos pilhaOperandos;
+	PilhaVariaveisLocais pilhaVariaveisLocais;
 	ClassFile *cf;
 	struct FRAME *frameAnterior;
 } Frame;
