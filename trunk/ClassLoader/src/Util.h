@@ -19,3 +19,13 @@ u1 * retornaNomeMetodo(ClassFile *cf, method_info *mi);
 u1 * retornaNomeClasse (ClassFile *cf);
 
 u2 retornaTamanhoPilha (attribute_info *ai);
+
+void empilhaOperando(Frame *frame, char *tipo, void *operando);
+
+PilhaOperandos desempilhaOperando(Frame *frame);
+
+int pilhaOperandosVazia(Frame *frame);
+
+void transferePilhaOperandosParaVariavelLocal(Frame *frame, int indiceVariavel);
+
+void transfereVariavelLocalParaPilhaOperandos(Frame *frame, int indiceVariavel);
