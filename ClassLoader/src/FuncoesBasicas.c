@@ -118,7 +118,7 @@ Objeto * instanciaObjeto(ClassFile *cf, AmbienteExecucao *ae) {
  * novo como o novo frame. A partir dai retorna e continua com o ambiente de execucao conforme ja ocorria.
  * Caso nao tenha nenhum frame na pilha de frames, este e o primeiro metodo a ser executado pelo ambiente de execucao.
  *
- * @param ambienteexecucao a variavel do ambiente de execucao
+ * @param ae a variavel do ambiente de execucao
  * @param classPath o caminho da classe
  * @param methodName  nome do metodo
  * @param descriptor o descritor do metodo
@@ -128,15 +128,15 @@ Objeto * instanciaObjeto(ClassFile *cf, AmbienteExecucao *ae) {
  *
  */
 
-//void jump(AmbienteExecucao *ambienteexecucao, char *classPath, char *methodName, char *descriptor, int n_arguments) {
+//void jump(AmbienteExecucao *ae, char *classPath, char *methodName, char *descriptor, int n_arguments) {
 //	t_class_file *class_file;
 //	t_method_and_class *metclass;
 //	Frame *frame_novo;
 //	int i;
 //	u2 mask = 0x0100;
 //
-//	class_file = leitura_class_file(ambienteexecucao, classPath);
-//	metclass = find_method_by_name(class_file, methodName, descriptor, ambienteexecucao);
+//	class_file = leitura_class_file(ae, classPath);
+//	metclass = find_method_by_name(class_file, methodName, descriptor, ae);
 //	if((metclass->method_info->acess_flags & mask) == 0x0100) {
 //		printf("Metodos nativos nao suportados\n");
 //		exit(1);
@@ -151,15 +151,15 @@ Objeto * instanciaObjeto(ClassFile *cf, AmbienteExecucao *ae) {
 //	frame_novo->local_variables = calloc(find_method_attribute_by_name(metclass->class_file, metclass->method_info, "Code")->_info.code.max_locals, sizeof(t_local_variable_list));
 //
 //
-//	frame_stack_push(&(ambienteexecucao->frame_stack), ambienteexecucao->current_frame);
-//	if(ambienteexecucao->current_frame != NULL) {
+//	frame_stack_push(&(ae->frame_stack), ae->current_frame);
+//	if(ae->current_frame != NULL) {
 //
 //		for(i=(n_arguments-1); i!= -1; i--) {
-//			transfer_opstack_to_localvar(&(ambienteexecucao->current_frame->opstack),&(frame_novo->local_variables), i);
+//			transfer_opstack_to_localvar(&(ae->current_frame->opstack),&(frame_novo->local_variables), i);
 //		}
 //	}
 //
-//	ambienteexecucao->current_frame = frame_novo;
+//	ae->current_frame = frame_novo;
 //}
 /**
  * Jumpback faz o contrario do jump - ele retorna o ambiente de execucao para o frame que esta no topo da pilha
@@ -168,22 +168,22 @@ Objeto * instanciaObjeto(ClassFile *cf, AmbienteExecucao *ae) {
  * A funcao jumpback tem como objetivo retornar o ambiente de execucao para o frame que esta no topo da pilha de frames, alem de
  * passar a variavel de retorno para o frame do topo da pilha, se houver.
  *
- * @param ambienteexecucao a variavel do ambiente de execucao
+ * @param ae a variavel do ambiente de execucao
  * @param n_return o numero de retorno. Pode ser 0 ou 1 (ainda que a funcao seja generica e aceite n retornos)
  */
 
-int jumpback(AmbienteExecucao *ambienteexecucao, int n_return) {
+int jumpback(AmbienteExecucao *ae, int n_return) {
 	int i;
 	PilhaOperandos *pilhaoperandos;
 	Frame *frame;
-	frame = ambienteexecucao->pFrame;
+	frame = ae->pFrame;
 
-	if (ambienteexecucao->pFrame->frameAnterior != NULL) {
-		ambienteexecucao->pFrame = ambienteexecucao->pFrame->frameAnterior;
+	if (ae->pFrame->frameAnterior != NULL) {
+		ae->pFrame = ae->pFrame->frameAnterior;
 
 		for (i = 0; i < n_return; i++) {
 			pilhaoperandos = desempilhaOperando(frame);
-			empilhaOperando(ambienteexecucao->pFrame,
+			empilhaOperando(ae->pFrame,
 					pilhaoperandos->tipo[0], &(pilhaoperandos->elementos[0]));
 		}
 

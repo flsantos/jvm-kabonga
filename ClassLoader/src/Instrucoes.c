@@ -465,6 +465,9 @@ int irem(AmbienteExecucao *ae) {
 	return 0;
 }
 
+int lrem(AmbienteExecucao *ae) {
+}
+
 int goto_(AmbienteExecucao *ae) {
 	u2 branchoffset = leU2doPC(ae->pFrame);
 
@@ -1158,73 +1161,286 @@ int getstatic(AmbienteExecucao *ae) {
 }
 
 int dadd(AmbienteExecucao *ae) {
+	double a, b, sum;
+	a = desempilhaOperando(ae->pFrame)->elementos->tipo_double;
+	b = desempilhaOperando(ae->pFrame)->elementos->tipo_double;
+	sum = a + b;
+
+	empilhaOperando(ae->pFrame, "D", &sum);
+
 	return 0;
 }
+
 int dsub(AmbienteExecucao *ae) {
+	double a, b, sub;
+	a = desempilhaOperando(ae->pFrame)->elementos->tipo_double;
+	b = desempilhaOperando(ae->pFrame)->elementos->tipo_double;
+	sub = b - a;
+
+	empilhaOperando(ae->pFrame, "D", &sub);
+
 	return 0;
 }
-int fadd(AmbienteExecucao *ae) {
+
+int fadd(AmbienteExecucao *ae){
+	float a, b, sum;
+	a = desempilhaOperando(ae->pFrame)->elementos->tipo_double;
+	b = desempilhaOperando(ae->pFrame)->elementos->tipo_double;
+	sum = a + b;
+
+	empilhaOperando(ae->pFrame,"F", &sum);
+
 	return 0;
 }
+
 int fsub(AmbienteExecucao *ae) {
+	float a, b, sub;
+	a = desempilhaOperando(ae->pFrame)->elementos->tipo_float;
+	b = desempilhaOperando(ae->pFrame)->elementos->tipo_float;
+	sub = b - a;
+
+	empilhaOperando(ae->pFrame, "F", &sub);
+
 	return 0;
 }
+
 int isub(AmbienteExecucao *ae) {
+	int a, b, sub;
+	a = desempilhaOperando(ae->pFrame)->elementos->tipo_int;
+	b = desempilhaOperando(ae->pFrame)->elementos->tipo_int;
+	sub = b - a;
+
+	empilhaOperando(ae->pFrame, "I", &sub);
+
 	return 0;
 }
-int ladd(AmbienteExecucao *ae) {
+
+int ladd(AmbienteExecucao *ae){
+	long long a, b, sum;
+	a = desempilhaOperando(ae->pFrame)->elementos->tipo_long;
+	b = desempilhaOperando(ae->pFrame)->elementos->tipo_long;
+	sum = a + b;
+
+	empilhaOperando(ae->pFrame,"J", &sum);
+
 	return 0;
 }
+
 int lsub(AmbienteExecucao *ae) {
+	long long a, b, sub;
+	a = desempilhaOperando(ae->pFrame)->elementos->tipo_long;
+	b = desempilhaOperando(ae->pFrame)->elementos->tipo_long;
+	sub = b - a;
+
+	empilhaOperando(ae->pFrame, "J", &sub);
+
 	return 0;
 }
 
-int iand(AmbienteExecucao *ae) {
-	return 0;
-}
-int ineg(AmbienteExecucao *ae) {
-	return 0;
-}
-int ior(AmbienteExecucao *ae) {
-	return 0;
-}
-int ixor(AmbienteExecucao *ae) {
-	return 0;
-}
-int land(AmbienteExecucao *ae) {
-	return 0;
-}
-int lneg(AmbienteExecucao *ae) {
-	return 0;
-}
-int lor(AmbienteExecucao *ae) {
-	return 0;
-}
-int lxor(AmbienteExecucao *ae) {
-	return 0;
-}
-int dneg(AmbienteExecucao *ae) {
-	return 0;
-}
-int fneg(AmbienteExecucao *ae) {
-	return 0;
-}
-int ldiv_(AmbienteExecucao *ae) {
-	return 0;
-}
-int lrem(AmbienteExecucao *ae) {
+int iand(AmbienteExecucao *ae){
+	int a, b, and;
+	a = desempilhaOperando(ae->pFrame)->elementos->tipo_int;
+	b = desempilhaOperando(ae->pFrame)->elementos->tipo_int;
+	and = a & b;
+
+	empilhaOperando(ae->pFrame, "I", &and);
+
 	return 0;
 }
 
-int fcmpg(AmbienteExecucao *ae) {
+
+int ineg(AmbienteExecucao *ae){
+	int a, neg;
+	a = desempilhaOperando(ae->pFrame)->elementos->tipo_int;
+	neg = -a;
+
+	empilhaOperando(ae->pFrame, "I", &neg);
+
 	return 0;
 }
-int fcmpl(AmbienteExecucao *ae) {
+
+
+int ior(AmbienteExecucao *ae){
+	int a, b, or;
+	a = desempilhaOperando(ae->pFrame)->elementos->tipo_int;
+	b = desempilhaOperando(ae->pFrame)->elementos->tipo_int;
+	or = a | b;
+
+	empilhaOperando(ae->pFrame, "I", &or);
+
 	return 0;
 }
-int lcmp(AmbienteExecucao *ae) {
+
+int ixor(AmbienteExecucao *ae){
+	int a, b, xor;
+	a = desempilhaOperando(ae->pFrame)->elementos->tipo_int;
+	b = desempilhaOperando(ae->pFrame)->elementos->tipo_int;
+	xor = a ^ b;
+
+	empilhaOperando(ae->pFrame, "I", &xor);
+
 	return 0;
 }
+
+int land(AmbienteExecucao *ae){
+	long long a, b, and;
+	a = desempilhaOperando(ae->pFrame)->elementos->tipo_long;
+	b = desempilhaOperando(ae->pFrame)->elementos->tipo_long;
+	and = a & b;
+
+	empilhaOperando(ae->pFrame, "J", &and);
+
+	return 0;
+}
+
+int lneg(AmbienteExecucao *ae){
+	long long a, neg;
+	a = desempilhaOperando(ae->pFrame)->elementos->tipo_long;
+	neg = -a;
+
+	empilhaOperando(ae->pFrame, "J", &neg);
+
+	return 0;
+}
+
+int lor(AmbienteExecucao *ae){
+	long long a, b, or;
+	a = desempilhaOperando(ae->pFrame)->elementos->tipo_long;
+	b = desempilhaOperando(ae->pFrame)->elementos->tipo_long;
+	or = a | b;
+
+	empilhaOperando(ae->pFrame, "J", &or);
+
+	return 0;
+}
+
+int lxor(AmbienteExecucao *ae){
+	long long a, b, xor;
+	a = desempilhaOperando(ae->pFrame)->elementos->tipo_long;
+	b = desempilhaOperando(ae->pFrame)->elementos->tipo_long;
+	xor = a ^ b;
+
+	empilhaOperando(ae->pFrame, "J", &xor);
+
+	return 0;
+}
+
+int dneg(AmbienteExecucao *ae){
+	double a, neg;
+	a = desempilhaOperando(ae->pFrame)->elementos->tipo_double;
+	neg = -a;
+
+	empilhaOperando(ae->pFrame, "D", &neg);
+
+	return 0;
+}
+
+int fneg(AmbienteExecucao *ae){
+	float a, neg;
+	a = desempilhaOperando(ae->pFrame)->elementos->tipo_float;
+	neg = -a;
+
+	empilhaOperando(ae->pFrame, "F", &neg);
+
+	return 0;
+}
+
+int dcmpg(AmbienteExecucao *ae){
+	double a, b;
+	int pushval;
+	a = desempilhaOperando(ae->pFrame)->elementos->tipo_double;
+	b = desempilhaOperando(ae->pFrame)->elementos->tipo_double;
+
+	if (a > b)
+		pushval = 1;
+	else if (a == b) {
+		pushval = 0;
+	} else if(a < b) {
+		pushval = -1;
+	} else {
+		pushval = 1;
+	}
+
+
+	empilhaOperando(ae->pFrame, "I", &pushval);
+	return (0);
+}
+
+int dcmpl(AmbienteExecucao *ae){
+	double a, b;
+	int pushval;
+	a = desempilhaOperando(ae->pFrame)->elementos->tipo_double;
+	b = desempilhaOperando(ae->pFrame)->elementos->tipo_double;
+	if (a > b)
+		pushval = 1;
+	else if (a == b) {
+		pushval = 0;
+	} else if(a < b) {
+		pushval = -1;
+	} else {
+		pushval = -1;
+	}
+
+
+	empilhaOperando(ae->pFrame, "I", &pushval);
+	return (0);
+}
+
+
+int fcmpg(AmbienteExecucao *ae){
+	float a, b;
+	int pushval;
+	a = desempilhaOperando(ae->pFrame)->elementos->tipo_float;
+	b = desempilhaOperando(ae->pFrame)->elementos->tipo_float;
+	if (a > b)
+		pushval = 1;
+	else if (a == b) {
+		pushval = 0;
+	} else if(a < b) {
+		pushval = -1;
+	} else {
+		pushval = 1;
+	}
+	empilhaOperando(ae->pFrame, "I", &pushval);
+	return (0);
+}
+
+int fcmpl(AmbienteExecucao *ae){
+	float a, b;
+	int pushval;
+	a = desempilhaOperando(ae->pFrame)->elementos->tipo_float;
+	b = desempilhaOperando(ae->pFrame)->elementos->tipo_float;
+	if (a > b)
+		pushval = 1;
+	else if (a == b) {
+		pushval = 0;
+	} else if(a < b) {
+		pushval = -1;
+	} else {
+		pushval = -1;
+	}
+	empilhaOperando(ae->pFrame, "I", &pushval);
+	return (0);
+}
+
+
+int lcmp(AmbienteExecucao *ae){
+	signed long long a, b;
+	int pushval;
+	a = desempilhaOperando(ae->pFrame)->elementos->tipo_long;
+	b = desempilhaOperando(ae->pFrame)->elementos->tipo_long;
+	if (a > b)
+		pushval = 1;
+	else {
+		if (a == b)
+			pushval = 0;
+		else
+			pushval = -1;
+	}
+	empilhaOperando(ae->pFrame, "J", &pushval);
+	return (0);
+}
+
 int frem(AmbienteExecucao *ae) {
 	float a, b, rem;
 	b = desempilhaOperando(ae->pFrame)->elementos[0].tipo_float;
@@ -1305,6 +1521,10 @@ int iastore(AmbienteExecucao *ae) {
 }
 
 int idiv_(AmbienteExecucao *ae) {
+	return 0;
+}
+
+int ldiv_(AmbienteExecucao *ae) {
 	return 0;
 }
 
@@ -1432,13 +1652,6 @@ int fdiv(AmbienteExecucao *ae) {
 	return 0;
 }
 int ddiv(AmbienteExecucao *ae) {
-	return 0;
-}
-
-int dcmpl(AmbienteExecucao *ae) {
-	return 0;
-}
-int dcmpg(AmbienteExecucao *ae) {
 	return 0;
 }
 
