@@ -11,6 +11,7 @@
 #include "Util.h"
 #include "Frame.h"
 #include "Heap.h"
+#include "RotinaExecucao.h"
 
 
 
@@ -26,6 +27,7 @@ void iniciaExecucaoMetodo(ClassFile *cf, AmbienteExecucao *ae, char *nomeMetodo,
 		ae->pFrame = frame;
 	}
 	printf("\n\nFrame");
+	execute_iteration(ae);
 }
 
 void iniciaClasse(char nomeClassFile[], AmbienteExecucao *ae, char *nomeMetodo, char *descritor) {

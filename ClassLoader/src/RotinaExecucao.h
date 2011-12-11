@@ -11,5 +11,6 @@
 u1 leU1doPC(Frame *frame);
 u2 leU2doPC(Frame *frame);
 u4 leU4doPC(Frame *frame);
+int execute_iteration(AmbienteExecucao *ae);
 
 #endif /* ROTINAEXECUCAO_H_ */
