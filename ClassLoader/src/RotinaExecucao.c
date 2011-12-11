@@ -24,7 +24,7 @@ u1 leU1doPC(Frame *frame) {
  * Le dois bytes do PC.
  * @param frame a variavel do frame atual
  */
-u1 leU2doPC(Frame *frame) {
+u2 leU2doPC(Frame *frame) {
 	u1 part1, part2;
 	u2 valor;
 	part1 = *(frame->pc);
@@ -34,7 +34,7 @@ u1 leU2doPC(Frame *frame) {
 
 	frame->enderecoPC += 2;
 
-	valor = (part1 << sizeof(u1)*8 + part2);
+	valor = (part1 << sizeof(u1)*8) + part2;
 
 	return valor;
 }
@@ -43,7 +43,7 @@ u1 leU2doPC(Frame *frame) {
  * Le quatro bytes do PC.
  * @param frame a variavel do frame atual
  */
-int leU4doPC(Frame *frame) {
+u4 leU4doPC(Frame *frame) {
 	u1 part4, part3, part2, part1;
 	u8 value;
 	part4 = *(frame->pc);
@@ -57,6 +57,6 @@ int leU4doPC(Frame *frame) {
 
 	frame->enderecoPC += 4;
 
-    value = part4 << 3*sizeof(u1)*8 + part3 << 2*sizeof(u1)*8 + part2 << 1*sizeof(u1)*8 + part1;
+    value = (part4 << 3*sizeof(u1)*8) + (part3 << 2*sizeof(u1)*8) + (part2 << 1*sizeof(u1)*8) + part1;
 	return value;
 }
