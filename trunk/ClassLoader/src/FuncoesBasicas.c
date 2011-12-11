@@ -15,22 +15,21 @@
  * esteja na lista de Classes, ele é criado e adicionado a lista.
  */
 ClassFile * verificarClassFile(AmbienteExecucao *ae, char *nomeClasse) {
-	ClassFile *classFile;
+	ClassFile *classFile = NULL;
 	char *nomeArquivo;
 
 	nomeArquivo = nomeClasse;
 	strcat(nomeArquivo, ".class");
 	classFile = buscarClassePorNome(ae->pClassHeap, nomeClasse);
 	if (classFile == NULL) {
-		classFile = lerClassFile(nomeArquivo);
-		adicionaClasse(classFile, ae->pClassHeap);
+		classFile = malloc(sizeof(ClassFile));
+		classFile[0] = lerClassFile(nomeArquivo);
+		adicionaClasse(classFile, &(ae->pClassHeap));
 	}
-	/* TODO Fazer criar ClassFile de classes de outros packages
+	// TODO Fazer criar ClassFile de classes de outros packages
 
 	return classFile;
 }
-
-
 
 /*
  * Retorna uma lista de Classes contendo as super classes do ClassFile passado.
@@ -42,18 +41,16 @@ List_Classfile *retornaSuperClasses(AmbienteExecucao *ae, ClassFile *cf) {
 	p1 = cf;
 
 	while (p1->super_class != 0) {
-		p1 = verificarClassFile(ae, retornaNomeClasse(p1->super_class));
+		p1 = verificarClassFile(ae, (char *)retornaNomeClasse(p1->super_class));
 		adicionaClasse(p1, &listaClasses);
 	}
 	return listaClasses;
 }
 
-
-
 /*
  * Cria e retorna uma struct Objeto.
  */
-Objeto * instanciaObjeto( ClassFile *cf, ) {
+Objeto * instanciaObjeto(ClassFile *cf, AmbienteExecucao *ae) {
 	Objeto *newObjeto;
 	List_Classfile *superClasses, *p1;
 	tipo_info *ti;
@@ -75,37 +72,37 @@ Objeto * instanciaObjeto( ClassFile *cf, ) {
 	}
 
 	newObjeto->tipos_count = tiposCount;
-	newObjeto->tipos = malloc(tiposCount*sizeof(tipo_info));
+	newObjeto->tipos = malloc(tiposCount * sizeof(tipo_info));
 	ti = newObjeto->tipos;
-	newObjeto->nomeClasse = retornaNomeClasse(cf);
+	newObjeto->nomeClasse = (char *)retornaNomeClasse(cf);
 	pFieldInfo = cf->fields;
 
 	tiposIndex = 0;
 	count = cf->fields_count;
-	for (i=0; i<count; i++) {
+	for (i = 0; i < count; i++) {
 
-		index = cf->fields[i]->name_index;
+		index = cf->fields[i].name_index;
 		index--;
-		newObjeto->tipos[tiposIndex]->nome = retornaUtf8(cf, index);
+		newObjeto->tipos[tiposIndex].nome = (char *)retornaUtf8(cf, index);
 
-		index = cf->fields[i]->descriptor_index;
+		index = cf->fields[i].descriptor_index;
 		index--;
-		newObjeto->tipos[tiposIndex]->tipo = retornaUtf8(cf, index);
+		newObjeto->tipos[tiposIndex].tipo = (char *)retornaUtf8(cf, index);
 
 		tiposIndex++;
 	}
 
 	p1 = superClasses;
-	while(p1 != NULL) {
+	while (p1 != NULL) {
 		count = p1->cf->fields_count;
-		for (i=0; i<count; i++) {
-			index = p1->cf->fields[i]->name_index;
+		for (i = 0; i < count; i++) {
+			index = p1->cf->fields[i].name_index;
 			index--;
-			newObjeto->tipos[tiposIndex]->nome = retornaUtf8(cf, index);
+			newObjeto->tipos[tiposIndex].nome = (char *)retornaUtf8(cf, index);
 
-			index = p1->cf->fields[i]->descriptor_index;
+			index = p1->cf->fields[i].descriptor_index;
 			index--;
-			newObjeto->tipos[tiposIndex]->tipo = retornaUtf8(cf, index);
+			newObjeto->tipos[tiposIndex].tipo = (char *)retornaUtf8(cf, index);
 
 			tiposIndex++;
 		}
@@ -114,7 +111,6 @@ Objeto * instanciaObjeto( ClassFile *cf, ) {
 
 	return newObjeto;
 }
-
 
 /**
  * Funcao de jump. Funcao responsavel por desviar o contexto do ambiente de execucao para outro metodo determinado.
@@ -168,9 +164,6 @@ Objeto * instanciaObjeto( ClassFile *cf, ) {
 //
 //	ambienteexecucao->current_frame = frame_novo;
 //}
-
-
-
 /**
  * Jumpback faz o contrario do jump - ele retorna o ambiente de execucao para o frame que esta no topo da pilha
  * de frames, ou seja, o frame anterior.
@@ -188,16 +181,17 @@ int jumpback(AmbienteExecucao *ambienteexecucao, int n_return) {
 	Frame *frame;
 	frame = ambienteexecucao->pFrame;
 
-	if(ambienteexecucao->pFrame->frameAnterior != NULL) {
-		ambienteexecucao->pFrame = desempilhaFrame(&(ambienteexecucao->pFrame->frameAnterior));
+	if (ambienteexecucao->pFrame->frameAnterior != NULL) {
+		ambienteexecucao->pFrame = ambienteexecucao->pFrame->frameAnterior;
 
-		for(i=0; i< n_return; i++) {
-			pilhaoperandos = desempilhaOperando(&frame);
-			empilhaOperando(&(ambienteexecucao->pFrame), pilhaoperandos->tipo[0], pilhaoperandos->elementos[0]);
+		for (i = 0; i < n_return; i++) {
+			pilhaoperandos = desempilhaOperando(frame);
+			empilhaOperando(ambienteexecucao->pFrame,
+					pilhaoperandos->tipo[0], &(pilhaoperandos->elementos[0]));
 		}
 
 		return 0;
-	} else {
-		return -1;
 	}
+	return -1;
+
 }

@@ -207,22 +207,15 @@ typedef union TIPO{
 } Tipo;
 
 typedef struct PILHA{
-	char * tipo[];
 	i2 sp;
 	Tipo *elementos;
+	char **tipo;
 } PilhaOperandos, PilhaVariaveisLocais;
-
-typedef struct opstack {
-	char *type;
-	t_data_union data;
-	struct opstack *next;
-} t_opstack,  t_local_variable_list, t_array_list;
 
 typedef struct FRAME{
 	int enderecoPC;
-	u4 pc;
+	u4 *pc;
 	u4 code_length;
-	u1 *code;
 	cp_info *constant_pool;
 	PilhaOperandos *pilhaOperandos;
 	PilhaVariaveisLocais *pilhaVariaveisLocais;
