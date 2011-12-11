@@ -174,3 +174,73 @@ void transfereVariavelLocalParaPilhaOperandos(Frame *frame, u1 indiceVariavel) {
 	empilhaOperando(frame, frame->pilhaVariaveisLocais->tipo[indiceVariavel], &(frame->pilhaVariaveisLocais->elementos[indiceVariavel]));
 }
 
+
+int retornaContadorArgumentos(char *descriptor) {
+	char *c1;
+	int count;
+	int add_counter;
+
+	count = 0;
+	add_counter = 0;
+
+	c1 = descriptor;
+	while(*c1 != '\0') {
+		switch(*c1) {
+		case 'B' :
+			if(add_counter)
+				count++;
+			break;
+		case 'C':
+			if(add_counter)
+				count++;
+			break;
+		case 'D':
+			if(add_counter)
+				count++;
+			break;
+		case 'F':
+			if(add_counter)
+				count++;
+			break;
+		case 'I':
+			if(add_counter)
+				count++;
+			break;
+		case 'J':
+			if(add_counter)
+				count++;
+			break;
+		case 'L':
+			if(add_counter) {
+				count++;
+				add_counter = 0;
+			}
+			break;
+		case 'S':
+			if(add_counter)
+				count++;
+			break;
+		case 'Z':
+			if(add_counter)
+				count++;
+			break;
+		case '[':
+			break;
+		case '(':
+			add_counter = 1;
+			break;
+		case ')':
+			add_counter = 0;
+			break;
+		case ';':
+			add_counter = 1;
+			break;
+
+		default:
+			break;
+		}
+		c1++;
+
+	}
+	return count;
+}
