@@ -22,7 +22,7 @@ u2 retornaTamanhoPilha (attribute_info *ai);
 
 void empilhaOperando(Frame *frame, char *tipo, void *operando);
 
-PilhaOperandos desempilhaOperando(Frame *frame);
+PilhaOperandos *desempilhaOperando(Frame *frame);
 
 int pilhaOperandosVazia(Frame *frame);
 

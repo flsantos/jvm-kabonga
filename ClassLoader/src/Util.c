@@ -93,17 +93,20 @@ void empilhaOperando(Frame *frame, char *tipo, void *operando) {
 
 PilhaOperandos desempilhaOperando(Frame *frame) {
 	i2 sp = 0;
-	PilhaOperandos operando;
+	PilhaOperandos *operando;
 	sp = frame->pilhaOperandos->sp;
+
+	operando = malloc(sizeof(PilhaOperandos));
 
 	if (sp > -1) {
 
-		operando.elementos = malloc(sizeof(Tipo));
-		operando.tipo = malloc(sizeof(char *));
+		operando->elementos = malloc(sizeof(Tipo));
+		operando->tipo = malloc(sizeof(char *));
 
-		operando.elementos[0] = frame->pilhaOperandos->elementos[sp];
-		operando.tipo = frame->pilhaOperandos->tipo[sp];
+		operando->elementos[0] = frame->pilhaOperandos->elementos[sp];
+		operando->tipo = frame->pilhaOperandos->tipo[sp];
 
+		operando->sp = 1;
 
 		frame->pilhaOperandos->sp--;
 	}
