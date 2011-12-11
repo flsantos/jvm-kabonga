@@ -79,7 +79,7 @@ DadosMetodo *retornaDadosMetodo(ClassFile *cf, int n) {
 	dadosMetodo = malloc(sizeof(DadosMetodo));
 
 	dadosMetodo->nomeClasse = retornaClassInfo(cf, (cf->constant_pool[n-1]).u.Fieldref.class_index);
-	dadosNameAndType = retornaNameAndTypeInfo(cf, (cf->constant_pool[n-1]).u.Fieldref.name_and_type_index);
+	dadosNameAndType = retornaDadosNameAndTypeInfo(cf, (cf->constant_pool[n-1]).u.Fieldref.name_and_type_index);
 	dadosMetodo->nomeMetodo = dadosNameAndType->nome;
 	dadosMetodo->tipo = dadosNameAndType->tipo;
 
@@ -128,7 +128,7 @@ void empilhaOperando(Frame *frame, char *tipo, void *operando) {
 
 PilhaOperandos *desempilhaOperando(Frame *frame) {
 	i2 sp = 0;
-	PilhaOperandos *operando;
+	PilhaOperandos *operando = NULL;
 	sp = frame->pilhaOperandos->sp;
 
 	operando = malloc(sizeof(PilhaOperandos));
@@ -160,7 +160,7 @@ int pilhaOperandosVazia(Frame *frame) {
 }
 
 
-void transferePilhaOperandosParaVariavelLocal(Frame *frame, int indiceVariavel) {
+void transferePilhaOperandosParaVariavelLocal(Frame *frame, u1 indiceVariavel) {
 	PilhaOperandos *op;
 
 	op = desempilhaOperando(frame);
@@ -170,7 +170,7 @@ void transferePilhaOperandosParaVariavelLocal(Frame *frame, int indiceVariavel) 
 }
 
 
-void transfereVariavelLocalParaPilhaOperandos(Frame *frame, int indiceVariavel) {
+void transfereVariavelLocalParaPilhaOperandos(Frame *frame, u1 indiceVariavel) {
 	empilhaOperando(frame, frame->pilhaVariaveisLocais->tipo[indiceVariavel], &(frame->pilhaVariaveisLocais->elementos[indiceVariavel]));
 }
 
