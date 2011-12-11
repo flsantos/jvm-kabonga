@@ -106,13 +106,12 @@ PilhaOperandos desempilhaOperando(Frame *frame) {
 
 
 		frame->pilhaOperandos->sp--;
-
-
-		return operando;
 	}
 	else {
 		printf("\nErro! Pilha vazia.");
+		exit(1);
 	}
+	return operando;
 }
 
 int pilhaOperandosVazia(Frame *frame) {
