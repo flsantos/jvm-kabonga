@@ -10,210 +10,211 @@
 #include "Util.h"
 #include "RotinaExecucao.h"
 #include "java.h"
+#include "FuncoesBasicas.h"
 
 int (*vetFunc[])(AmbienteExecucao *p) = {
-	"nop",
-	"aconst_null",
-	"iconst_m1",
-	"iconst_0",
-	"iconst_1",
-	"iconst_2",
-	"iconst_3",
-	"iconst_4",
-	"iconst_5",
-	"lconst_0",
-	"lconst_1",
-	"fconst_0",
-	"fconst_1",
-	"fconst_2",
-	"dconst_0",
-	"dconst_1",
-	"bipush",
-	"sipush",
-	"ldc",
-	"ldc_w",
-	"ldc2_w",
-	"iload",
-	"lload",
-	"fload",
-	"dload",
-	"aload",
-	"iload_0",
-	"iload_1",
-	"iload_2",
-	"iload_3",
-	"lload_0",
-	"lload_1",
-	"lload_2",
-	"lload_3",
-	"fload_0",
-	"fload_1",
-	"fload_2",
-	"fload_3",
-	"dload_0",
-	"dload_1",
-	"dload_2",
-	"dload_3",
-	"aload_0",
-	"aload_1",
-	"aload_2",
-	"aload_3",
-	"iaload",
-	"laload",
-	"faload",
-	"daload",
-	"aaload",
-	"baload",
-	"caload",
-	"saload",
-	"istore",
-	"lstore",
-	"fstore",
-	"dstore",
-	"astore",
-	"istore_0",
-	"istore_1",
-	"istore_2",
-	"istore_3",
-	"lstore_0",
-	"lstore_1",
-	"lstore_2",
-	"lstore_3",
-	"fstore_0",
-	"fstore_1",
-	"fstore_2",
-	"fstore_3",
-	"dstore_0",
-	"dstore_1",
-	"dstore_2",
-	"dstore_3",
-	"astore_0",
-	"astore_1",
-	"astore_2",
-	"astore_3",
-	"iastore",
-	"lastore",
-	"fastore",
-	"dastore",
-	"aastore",
-	"bastore",
-	"castore",
-	"sastore",
-	"pop",
-	"pop2",
-	"dup",
-	"dup_x1",
-	"dup_x2",
-	"dup2",
-	"dup2_x1",
-	"dup2_x2",
-	"swap",
-	"iadd",
-	"ladd",
-	"fadd",
-	"dadd",
-	"isub",
-	"lsub",
-	"fsub",
-	"dsub",
-	"imul",
-	"lmul",
-	"fmul",
-	"dmul",
-	"idiv",
-	"ldiv",
-	"fdiv",
-	"ddiv",
-	"irem",
-	"lrem",
-	"frem",
-	"drem",
-	"ineg",
-	"lneg",
-	"fneg",
-	"dneg",
-	"ishl",
-	"lshl",
-	"ishr",
-	"lshr",
-	"iushr",
-	"lushr",
-	"iand",
-	"land",
-	"ior",
-	"lor",
-	"ixor",
-	"lxor",
-	"iinc",
-	"i2l",
-	"i2f",
-	"i2d",
-	"l2i",
-	"l2f",
-	"l2d",
-	"f2i",
-	"f2l",
-	"f2d",
-	"d2i",
-	"d2l",
-	"d2f",
-	"i2b",
-	"i2c",
-	"i2s",
-	"lcmp",
-	"fcmpl",
-	"fcmpg",
-	"dcmpl",
-	"dcmpg",
-	"ifeq",
-	"ifne",
-	"iflt",
-	"ifge",
-	"ifgt",
-	"ifle",
-	"if_icmpeq",
-	"if_icmpne",
-	"if_icmplt",
-	"if_icmpge",
-	"if_icmpgt",
-	"if_icmple",
-	"if_acmpeq",
-	"if_acmpne",
-	"goto",
-	"jsr",
-	"ret",
-	"tableswitch",
-	"lookupswitch",
-	"ireturn",
-	"lreturn",
-	"freturn",
-	"dreturn",
-	"areturn",
-	"return",
-	"getstatic",
-	"putstatic",
-	"getfield",
-	"putfield",
-	"invokevirtual",
-	"invokespecial",
-	"invokestatic",
-	"invokeinterface",
-	"",
-	"new",
-	"newarray",
-	"anewarray",
-	"arraylength",
-	"athrow",
-	"checkcast",
-	"instanceof",
-	"monitorenter",
-	"monitorexit",
-	"wide",
-	"multianewarray",
-	"ifnull",
-	"ifnonnull",
-	"goto_w",
-	"jsr_w"
+	nop,
+	aconst_null,
+	iconst,
+	iconst,
+	iconst,
+	iconst,
+	iconst,
+	iconst,
+	iconst,
+	lconst,
+	lconst,
+	fconst,
+	fconst,
+	fconst,
+	dconst,
+	dconst,
+	bipush,
+	sipush,
+	ldc,
+	ldc,
+	ldc,
+	iload,
+	lload,
+	fload,
+	dload,
+	aload,
+	iload,
+	iload,
+	iload,
+	iload,
+	lload,
+	lload,
+	lload,
+	lload,
+	fload,
+	fload,
+	fload,
+	fload,
+	dload,
+	dload,
+	dload,
+	dload,
+	aload,
+	aload,
+	aload,
+	aload,
+	iaload,
+	laload,
+	faload,
+	daload,
+	aaload,
+	baload,
+	caload,
+	saload,
+	istore,
+	lstore,
+	fstore,
+	dstore,
+	astore,
+	istore,
+	istore,
+	istore,
+	istore,
+	lstore,
+	lstore,
+	lstore,
+	lstore,
+	fstore,
+	fstore,
+	fstore,
+	fstore,
+	dstore,
+	dstore,
+	dstore,
+	dstore,
+	astore,
+	astore,
+	astore,
+	astore,
+	iastore,
+	lastore,
+	fastore,
+	dastore,
+	aastore,
+	bastore,
+	castore,
+	sastore,
+	pop,
+	pop2,
+	dup,
+	dup_x1,
+	dup_x2,
+	dup2,
+	dup2_x1,
+	dup2_x2,
+	swap,
+	iadd,
+	ladd,
+	fadd,
+	dadd,
+	isub,
+	lsub,
+	fsub,
+	dsub,
+	imul,
+	lmul,
+	fmul,
+	dmul,
+	idiv_,
+	ldiv_,
+	fdiv,
+	ddiv,
+	irem,
+	lrem,
+	frem,
+	drem_,
+	ineg,
+	lneg,
+	fneg,
+	dneg,
+	ishl,
+	lshl,
+	ishr,
+	lshr,
+	iushr,
+	lushr,
+	iand,
+	land,
+	ior,
+	lor,
+	ixor,
+	lxor,
+	iinc,
+	i2l,
+	i2f,
+	i2d,
+	l2i,
+	l2f,
+	l2d,
+	f2i,
+	f2l,
+	f2d,
+	d2i,
+	d2l,
+	d2f,
+	i2b,
+	i2c,
+	i2s,
+	lcmp,
+	fcmpl,
+	fcmpg,
+	dcmpl,
+	dcmpg,
+	ifeq,
+	ifne,
+	iflt,
+	ifge,
+	ifgt,
+	ifle,
+	if_icmpeq,
+	if_icmpne,
+	if_icmplt,
+	if_icmpge,
+	if_icmpgt,
+	if_icmple,
+	if_acmpeq,
+	if_acmpne,
+	goto_,
+	jsr,
+	ret,
+	tableswitch,
+	lookupswitch,
+	return1,
+	return1,
+	return1,
+	return1,
+	return1,
+	return0,
+	getstatic,
+	putstatic,
+	getfield,
+	putfield,
+	invokevirtual,
+	invokespecial,
+	invokestatic,
+	nop, //TODO: invokeinterface,
+		nop,//TODO: Mudar para vazio
+		new_,
+		newarray,
+		anewarray,
+		arraylength,
+		athrow,
+		checkcast,
+		instanceof,
+		nop,//TODO: monitorenter,
+		nop,//TODO: monitorexit,
+		wide,
+		multianewarray,
+		ifnull,
+		ifnonnull,
+		goto_w,
+		jsr_w
 };
 
 int ireturn(AmbienteExecucao *ae) {
@@ -245,7 +246,6 @@ int istore(AmbienteExecucao *ae) {
 }
 
 int invokespecial(AmbienteExecucao *ae) {
-	char *nomeClasse, *nomeMetodo;
 	u2 indice = leU2doPC(ae->pFrame);
 	DadosMetodo *dadosMetodo;
 	int arg_count;
@@ -255,15 +255,16 @@ int invokespecial(AmbienteExecucao *ae) {
 	if ((strcmp(dadosMetodo->nomeClasse, "java/lang/StringBuffer") == 0
 			|| strcmp(dadosMetodo->nomeClasse, "java/lang/StringBuilder") == 0)
 			&& strcmp(dadosMetodo->nomeMetodo, "<init>") == 0) {
-		desempilhaOperando(&(ae->pFrame));
+		desempilhaOperando(ae->pFrame);
 		return 0;
 	}
 
 	arg_count = retornaContadorArgumentos(dadosMetodo->tipo) + 1;
 
 	/*jump(ae, dadosMetodo->nomeClasse, dadosMetodo->nomeMetodo,
-			dadosMetodo->tipo, arg_count);*/
-	iniciaClasse(dadosMetodo->nomeClasse, ae, dadosMetodo->nomeMetodo, dadosMetodo->tipo);
+	 dadosMetodo->tipo, arg_count);*/
+	iniciaClasse(dadosMetodo->nomeClasse, ae, dadosMetodo->nomeMetodo,
+			dadosMetodo->tipo);
 
 	return 0;
 }
@@ -273,16 +274,14 @@ int dup(AmbienteExecucao *ae) {
 	//t_opstack *a = desempilhaOperando((&interpreter->current_frame->opstack));
 	PilhaOperandos *a = desempilhaOperando(ae->pFrame);
 	if ((*(a->tipo[0]) == 'J') || (*(a->tipo[0]) == 'D')) {
-		printf(
-				stderr,
-				"Instrucao 'dup' nao permitida para valores 'double' ou 'long'.\n");
+		printf("Instrucao 'dup' nao permitida para valores 'double' ou 'long'.\n");
 		exit(1);
 	}
 
 	//empilhaOperando_data(&(interpreter->current_frame->opstack),a->type,a->data);
 	empilhaOperando(ae->pFrame, a->tipo[0], &(a->elementos[a->sp]));
 	//empilhaOperando_data(&(interpreter->current_frame->opstack),a->type,a->data);
-	empilhaOperando(ae->pFrame, a->tipo[0],&(a->elementos[a->sp]));
+	empilhaOperando(ae->pFrame, a->tipo[0], &(a->elementos[a->sp]));
 
 	return 0;
 }
@@ -292,7 +291,7 @@ int new_(AmbienteExecucao *ae) {
 	char *nomeClasse;
 	Objeto *objeto;
 
-	nomeClasse = retornaClassInfo(ae->pFrame->cf, indice);
+	nomeClasse = (char *)retornaClassInfo(ae->pFrame->cf, indice);
 
 	/* ajustando para o caso da StringBuffer */
 	if ((strcmp(nomeClasse, "java/lang/StringBuffer") == 0
@@ -308,8 +307,7 @@ int new_(AmbienteExecucao *ae) {
 	//class_file = leitura_class_file(interpreter, nomeClasse);
 	iniciaClasse(nomeClasse, ae, "<init>", "()V");
 
-	//TODO esperando o capuleto para o objeto
-	//object = instanciate_object(class_file, interpreter);
+	objeto = instanciaObjeto(ae->pFrame->cf, ae);
 
 	//empilhaOperando(&(interpreter->current_frame->opstack), "L", object);
 	empilhaOperando(ae->pFrame, "L", objeto);
@@ -440,9 +438,9 @@ int invokevirtual(AmbienteExecucao *ae) {
 			&& (strcmp(dadosMetodo->nomeMetodo, "println") == 0
 					|| strcmp(dadosMetodo->nomeMetodo, "print") == 0)) {
 		/* realiza o println */
-		if (ae->pFrame->pilhaOperandos->tipo[0] != '#') {
+		if (ae->pFrame->pilhaOperandos->tipo[ae->pFrame->pilhaOperandos->sp][0] != '#') {
 			data = desempilhaOperando(ae->pFrame);
-			tipo = data->tipo;
+			tipo = data->tipo[ae->pFrame->pilhaOperandos->sp];
 			if (tipo[0] == 'B') {
 				printf("%d", data->elementos[0].tipo_byte);
 			} else if (tipo[0] == 'C') {
@@ -454,7 +452,7 @@ int invokevirtual(AmbienteExecucao *ae) {
 			} else if (tipo[0] == 'I') {
 				printf("%d", data->elementos[0].tipo_int);
 			} else if (tipo[0] == 'J') {
-				printf("%lld", data->elementos[0].tipo_long);
+				printf("%d", data->elementos[0].tipo_long);
 			} else if (tipo[0] == 'L') {
 				printf("Impressao de um objeto?! Não implementado!");
 			} else if (tipo[0] == 'S') {
@@ -467,7 +465,7 @@ int invokevirtual(AmbienteExecucao *ae) {
 				printf("Impressao de uma referencia. Arrumar.");
 			}
 		}
-		desempilhaOperando(&(ae->pFrame->pilhaOperandos));
+		desempilhaOperando(ae->pFrame);
 
 		if ((strcmp(dadosMetodo->nomeMetodo, "println") == 0)) {
 			printf("\n");
@@ -475,29 +473,27 @@ int invokevirtual(AmbienteExecucao *ae) {
 	} else if (strcmp(dadosMetodo->nomeClasse, "java/lang/String") == 0
 			&& strcmp(dadosMetodo->nomeMetodo, "equals") == 0) {
 		string1 =
-				(char*) desempilhaOperando((&ae->pFrame->pilhaOperandos))->elementos[0].tipo_referencia;
+				(char*) desempilhaOperando(ae->pFrame)->elementos[0].tipo_referencia;
 		string2 =
-				(char*) desempilhaOperando((&ae->pFrame->pilhaOperandos))->elementos[0].tipo_referencia;
+				(char*) desempilhaOperando(ae->pFrame)->elementos[0].tipo_referencia;
 
 		if (strcmp(string1, string2) == 0) {
 			result_strcmp = 1;
-			empilhaOperando(&(ae->pFrame->pilhaOperandos), "I",
-					&result_strcmp);
+			empilhaOperando(ae->pFrame, "I", &result_strcmp);
 			return 0;
 		} else {
 			result_strcmp = 0;
-			empilhaOperando(&(ae->pFrame->pilhaOperandos), "I",
-					&result_strcmp);
+			empilhaOperando(ae->pFrame, "I", &result_strcmp);
 			return 0;
 		}
 	} else if ((strcmp(dadosMetodo->nomeMetodo, "java/lang/StringBuffer") == 0
 			|| strcmp(dadosMetodo->nomeMetodo, "java/lang/StringBuilder") == 0)
 			&& strcmp(dadosMetodo->nomeMetodo, "append") == 0) {
 		string_append = calloc(50, sizeof(char));
-		data = desempilhaOperando(&(ae->pFrame->pilhaOperandos));
-		tipo = data->tipo;
+		data = desempilhaOperando(ae->pFrame);
+		tipo = data->tipo[ae->pFrame->pilhaOperandos->sp];
 		string_to_append = (char*) desempilhaOperando(
-				&(ae->pFrame->pilhaOperandos))->elementos[0].tipo_referencia;
+				ae->pFrame)->elementos[0].tipo_referencia;
 		if (tipo[0] == 'B') {
 			sprintf(string_append, "%d", data->elementos[0].tipo_byte);
 		} else if (tipo[0] == 'C') {
@@ -510,7 +506,7 @@ int invokevirtual(AmbienteExecucao *ae) {
 		} else if (tipo[0] == 'I') {
 			sprintf(string_append, "%d", data->elementos[0].tipo_int);
 		} else if (tipo[0] == 'J') {
-			sprintf(string_append, "%lld", data->elementos[0].tipo_long);
+			sprintf(string_append, "%d", data->elementos[0].tipo_long);
 		} else if (tipo[0] == 'L') {
 			sprintf(string_append, "Impressao de um objeto?!");
 		} else if (tipo[0] == 'S') {
@@ -530,8 +526,7 @@ int invokevirtual(AmbienteExecucao *ae) {
 		strcat(string_appended, string_to_append);
 		strcat(string_appended, string_append);
 
-		empilhaOperando(&(ae->pFrame->pilhaOperandos), "[C",
-				string_appended);
+		empilhaOperando(ae->pFrame, "[C", string_appended);
 		return 0;
 
 	} else if ((strcmp(dadosMetodo->nomeClasse, "java/lang/StringBuffer") == 0
@@ -542,24 +537,24 @@ int invokevirtual(AmbienteExecucao *ae) {
 			&& strcmp(dadosMetodo->nomeMetodo, "length") == 0) {
 		int len;
 		string1 =
-				(char*) desempilhaOperando((&ae->pFrame->pilhaOperandos))->elementos[0].tipo_referencia;
+				(char*) desempilhaOperando(ae->pFrame)->elementos[0].tipo_referencia;
 
 		len = strlen(string1);
 
-		empilhaOperando(&(ae->pFrame->pilhaOperandos), "I", &len);
+		empilhaOperando(ae->pFrame, "I", &len);
 
 		return 0;
 	} else if (strcmp(dadosMetodo->nomeClasse, "java/lang/String") == 0
 			&& strcmp(dadosMetodo->nomeMetodo, "compareTo") == 0) {
 		int strcm;
 		string1 =
-				(char*) desempilhaOperando((&ae->pFrame->pilhaOperandos))->elementos[0].tipo_referencia;
+				(char*) desempilhaOperando(ae->pFrame)->elementos[0].tipo_referencia;
 		string2 =
-				(char*) desempilhaOperando((&ae->pFrame->pilhaOperandos))->elementos[0].tipo_referencia;
+				(char*) desempilhaOperando(ae->pFrame)->elementos[0].tipo_referencia;
 
 		strcm = strcmp(string1, string2);
 
-		empilhaOperando(&(ae->pFrame->pilhaOperandos), "I", &strcm);
+		empilhaOperando(ae->pFrame, "I", &strcm);
 
 		return 0;
 	} else if (strcmp(dadosMetodo->nomeMetodo, "java/lang/String") == 0
@@ -568,14 +563,14 @@ int invokevirtual(AmbienteExecucao *ae) {
 		int strstr_value;
 		char *strstr_char;
 		string1 =
-				(char*) desempilhaOperando((&ae->pFrame->pilhaOperandos))->elementos[0].tipo_referencia;
+				(char*) desempilhaOperando(ae->pFrame)->elementos[0].tipo_referencia;
 		string2 =
-				(char*) desempilhaOperando((&ae->pFrame->pilhaOperandos))->elementos[0].tipo_referencia;
+				(char*) desempilhaOperando(ae->pFrame)->elementos[0].tipo_referencia;
 
 		strstr_char = strstr(string1, string2);
 		strstr_value = strstr_char - string1;
 
-		empilhaOperando(&(ae->pFrame->pilhaOperandos), "I", &strstr_value);
+		empilhaOperando(ae->pFrame, "I", &strstr_value);
 
 		return 0;
 	} else if (strcmp(dadosMetodo->nomeMetodo, "java/lang/String") == 0
@@ -583,34 +578,477 @@ int invokevirtual(AmbienteExecucao *ae) {
 			&& strcmp(dadosMetodo->tipo, "(Ljava/lang/String;)Z") == 0) {
 		char bool_return;
 		char *strstr_char;
-		string1 = (char*)desempilhaOperando(ae->pFrame)->elementos[0].tipo_referencia;
-				string2 =
-						(char*) desempilhaOperando(
-								(&ae->pFrame->pilhaOperandos))->elementos[0].tipo_referencia;
+		string1 =
+				(char*) desempilhaOperando(ae->pFrame)->elementos[0].tipo_referencia;
+		string2 =
+				(char*) desempilhaOperando(ae->pFrame)->elementos[0].tipo_referencia;
 
-				strstr_char = strstr(string1, string2);
-				bool_return = (strstr_char - string1 == 0) ? 1 : 0;
+		strstr_char = strstr(string1, string2);
+		bool_return = (strstr_char - string1 == 0) ? 1 : 0;
 
-				empilhaOperando(&(ae->pFrame->pilhaOperandos), "Z",
-						&bool_return);
+		empilhaOperando(ae->pFrame, "Z", &bool_return);
 
-				return 0;
+		return 0;
 
-			} else {
-				DadosMetodo *dadosMetodo;
-				int arg_count;
+	} else {
+		DadosMetodo *dadosMetodo;
+		int arg_count;
 
-				dadosMetodo = retornaDadosMetodo(ae->pFrame->cf, cp_indice);
+		dadosMetodo = retornaDadosMetodo(ae->pFrame->cf, cp_indice);
 
-				arg_count = retornaContadorArgumentos(dadosMetodo->tipo) + 1;
+		arg_count = retornaContadorArgumentos(dadosMetodo->tipo) + 1;
 
 //				jump(ae, dadosMetodo->nomeClasse, dadosMetodo->nomeMetodo,
 //						dadosMetodo->tipo, arg_count);
 
-				iniciaClasse(dadosMetodo->nomeClasse, ae, dadosMetodo->nomeMetodo, dadosMetodo->tipo);
-			}
+		iniciaClasse(dadosMetodo->nomeClasse, ae, dadosMetodo->nomeMetodo,
+				dadosMetodo->tipo);
+	}
 
-			return 0;
+	return 0;
 
-		}
+}
 
+int nop(AmbienteExecucao *ae) {
+	return 0;
+}
+int bipush(AmbienteExecucao *ae) {
+	return 0;
+}
+int aconst_null(AmbienteExecucao *ae) {
+	return 0;
+}
+
+int iadd(AmbienteExecucao *ae) {
+	return 0;
+}
+
+int i2d(AmbienteExecucao *ae) {
+	return 0;
+}
+
+int dstore(AmbienteExecucao *ae) {
+	return 0;
+}
+
+int ldc(AmbienteExecucao *ae) {
+	return 0;
+}
+
+int fstore(AmbienteExecucao *ae) {
+	return 0;
+}
+
+int fload(AmbienteExecucao *ae) {
+	return 0;
+}
+
+int f2l(AmbienteExecucao *ae) {
+	return 0;
+}
+
+int lstore(AmbienteExecucao *ae) {
+	return 0;
+}
+
+int dload(AmbienteExecucao *ae) {
+	return 0;
+}
+
+int d2i(AmbienteExecucao *ae) {
+	return 0;
+}
+int lload(AmbienteExecucao *ae) {
+	return 0;
+}
+
+int l2i(AmbienteExecucao *ae) {
+	return 0;
+}
+
+int lconst(AmbienteExecucao *ae) {
+	return 0;
+}
+
+int fconst(AmbienteExecucao *ae) {
+	return 0;
+}
+
+int dconst(AmbienteExecucao *ae) {
+	return 0;
+}
+
+int sipush(AmbienteExecucao *ae) {
+	return 0;
+}
+
+int pop(AmbienteExecucao *ae) {
+	return 0;
+}
+
+int pop2(AmbienteExecucao *ae) {
+	return 0;
+}
+
+int d2f(AmbienteExecucao *ae) {
+	return 0;
+}
+
+int d2l(AmbienteExecucao *ae) {
+	return 0;
+}
+
+int f2d(AmbienteExecucao *ae) {
+	return 0;
+}
+
+int f2i(AmbienteExecucao *ae) {
+	return 0;
+}
+
+int i2b(AmbienteExecucao *ae) {
+	return 0;
+}
+
+int i2c(AmbienteExecucao *ae) {
+	return 0;
+}
+
+int i2f(AmbienteExecucao *ae) {
+	return 0;
+}
+
+int i2l(AmbienteExecucao *ae) {
+	return 0;
+}
+
+int i2s(AmbienteExecucao *ae) {
+	return 0;
+}
+
+int l2d(AmbienteExecucao *ae) {
+	return 0;
+}
+
+int l2f(AmbienteExecucao *ae) {
+	return 0;
+}
+
+int dmul(AmbienteExecucao *ae) {
+	return 0;
+}
+
+int fmul(AmbienteExecucao *ae) {
+	return 0;
+}
+
+int imul(AmbienteExecucao *ae) {
+	return 0;
+}
+
+int lmul(AmbienteExecucao *ae) {
+	return 0;
+}
+
+int getstatic(AmbienteExecucao *ae) {
+	return 0;
+}
+
+int dadd(AmbienteExecucao *ae) {
+	return 0;
+}
+int dsub(AmbienteExecucao *ae) {
+	return 0;
+}
+int fadd(AmbienteExecucao *ae) {
+	return 0;
+}
+int fsub(AmbienteExecucao *ae) {
+	return 0;
+}
+int isub(AmbienteExecucao *ae) {
+	return 0;
+}
+int ladd(AmbienteExecucao *ae) {
+	return 0;
+}
+int lsub(AmbienteExecucao *ae) {
+	return 0;
+}
+
+int iand(AmbienteExecucao *ae) {
+	return 0;
+}
+int ineg(AmbienteExecucao *ae) {
+	return 0;
+}
+int ior(AmbienteExecucao *ae) {
+	return 0;
+}
+int ixor(AmbienteExecucao *ae) {
+	return 0;
+}
+int land(AmbienteExecucao *ae) {
+	return 0;
+}
+int lneg(AmbienteExecucao *ae) {
+	return 0;
+}
+int lor(AmbienteExecucao *ae) {
+	return 0;
+}
+int lxor(AmbienteExecucao *ae) {
+	return 0;
+}
+int dneg(AmbienteExecucao *ae) {
+	return 0;
+}
+int fneg(AmbienteExecucao *ae) {
+	return 0;
+}
+int ldiv_(AmbienteExecucao *ae) {
+	return 0;
+}
+int lrem(AmbienteExecucao *ae) {
+	return 0;
+}
+
+int fcmpg(AmbienteExecucao *ae) {
+	return 0;
+}
+int fcmpl(AmbienteExecucao *ae) {
+	return 0;
+}
+int lcmp(AmbienteExecucao *ae) {
+	return 0;
+}
+int frem(AmbienteExecucao *ae) {
+	return 0;
+}
+int drem_(AmbienteExecucao *ae) {
+	return 0;
+}
+int ishl(AmbienteExecucao *ae) {
+	return 0;
+}
+int ishr(AmbienteExecucao *ae) {
+	return 0;
+}
+int iushr(AmbienteExecucao *ae) {
+	return 0;
+}
+int lshl(AmbienteExecucao *ae) {
+	return 0;
+}
+int lshr(AmbienteExecucao *ae) {
+	return 0;
+}
+int lushr(AmbienteExecucao *ae) {
+	return 0;
+}
+int swap(AmbienteExecucao *ae) {
+	return 0;
+}
+
+int dup2(AmbienteExecucao *ae) {
+	return 0;
+}
+int dup_x1(AmbienteExecucao *ae) {
+	return 0;
+}
+int dup2_x2(AmbienteExecucao *ae) {
+	return 0;
+}
+int dup_x2(AmbienteExecucao *ae) {
+	return 0;
+}
+int dup2_x1(AmbienteExecucao *ae) {
+	return 0;
+}
+
+int goto_w(AmbienteExecucao *ae) {
+	return 0;
+}
+
+int jsr(AmbienteExecucao *ae) {
+	return 0;
+}
+int jsr_w(AmbienteExecucao *ae) {
+	return 0;
+}
+
+int newarray(AmbienteExecucao *ae) {
+	return 0;
+}
+int aaload(AmbienteExecucao *ae) {
+	return 0;
+}
+int iaload(AmbienteExecucao *ae) {
+	return 0;
+}
+int aastore(AmbienteExecucao *ae) {
+	return 0;
+}
+int iastore(AmbienteExecucao *ae) {
+	return 0;
+}
+
+int idiv_(AmbienteExecucao *ae) {
+	return 0;
+}
+
+int if_acmpeq(AmbienteExecucao *ae) {
+	return 0;
+}
+int if_acmpne(AmbienteExecucao *ae) {
+	return 0;
+}
+int if_icmpeq(AmbienteExecucao *ae) {
+	return 0;
+}
+int if_icmpne(AmbienteExecucao *ae) {
+	return 0;
+}
+
+int if_icmple(AmbienteExecucao *ae) {
+	return 0;
+}
+int if_icmpgt(AmbienteExecucao *ae) {
+	return 0;
+}
+int if_icmpge(AmbienteExecucao *ae) {
+	return 0;
+}
+int ifeq(AmbienteExecucao *ae) {
+	return 0;
+}
+
+int iflt(AmbienteExecucao *ae) {
+	return 0;
+}
+int ifle(AmbienteExecucao *ae) {
+	return 0;
+}
+int ifgt(AmbienteExecucao *ae) {
+	return 0;
+}
+int ifge(AmbienteExecucao *ae) {
+	return 0;
+}
+int ifnonnull(AmbienteExecucao *ae) {
+	return 0;
+}
+int ifnull(AmbienteExecucao *ae) {
+	return 0;
+}
+
+int fastore(AmbienteExecucao *ae) {
+	return 0;
+}
+int faload(AmbienteExecucao *ae) {
+	return 0;
+}
+int daload(AmbienteExecucao *ae) {
+	return 0;
+}
+int dastore(AmbienteExecucao *ae) {
+	return 0;
+}
+int caload(AmbienteExecucao *ae) {
+	return 0;
+}
+int castore(AmbienteExecucao *ae) {
+	return 0;
+}
+int laload(AmbienteExecucao *ae) {
+	return 0;
+}
+int lastore(AmbienteExecucao *ae) {
+	return 0;
+}
+int saload(AmbienteExecucao *ae) {
+	return 0;
+}
+int sastore(AmbienteExecucao *ae) {
+	return 0;
+}
+int baload(AmbienteExecucao *ae) {
+	return 0;
+}
+int bastore(AmbienteExecucao *ae) {
+	return 0;
+}
+
+int arraylength(AmbienteExecucao *ae) {
+	return 0;
+}
+
+int return0(AmbienteExecucao *ae) {
+	return 0;
+}
+int return1(AmbienteExecucao *ae) {
+	return 0;
+}
+
+int athrow(AmbienteExecucao *ae) {
+	return 0;
+}
+
+int ret(AmbienteExecucao *ae) {
+	return 0;
+}
+
+int multianewarray(AmbienteExecucao *ae) {
+	return 0;
+}
+
+int anewarray(AmbienteExecucao *ae) {
+	return 0;
+}
+
+int wide(AmbienteExecucao *ae) {
+	return 0;
+}
+
+int putfield(AmbienteExecucao *ae) {
+	return 0;
+}
+int getfield(AmbienteExecucao *ae) {
+	return 0;
+}
+
+int fdiv(AmbienteExecucao *ae) {
+	return 0;
+}
+int ddiv(AmbienteExecucao *ae) {
+	return 0;
+}
+
+int dcmpl(AmbienteExecucao *ae) {
+	return 0;
+}
+int dcmpg(AmbienteExecucao *ae) {
+	return 0;
+}
+
+int checkcast(AmbienteExecucao *ae) {
+	return 0;
+}
+int instanceof(AmbienteExecucao *ae) {
+	return 0;
+}
+
+int invokestatic(AmbienteExecucao *ae) {
+	return 0;
+}
+
+int putstatic(AmbienteExecucao *ae) {
+	return 0;
+}
+
+int lookupswitch(AmbienteExecucao *ae) {
+	return 0;
+}
+int tableswitch(AmbienteExecucao *ae) {
+	return 0;
+}

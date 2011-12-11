@@ -212,7 +212,218 @@
 #define GOTO_W 200
 #define JSR_W 201
 
+int nop(AmbienteExecucao *ae);
+int bipush(AmbienteExecucao *ae);
+int aconst_null(AmbienteExecucao *ae);
+int istore(AmbienteExecucao *ae);
+
+
+int iload(AmbienteExecucao *ae);
+
+int iadd(AmbienteExecucao *ae);
+
+int i2d(AmbienteExecucao *ae);
+
+int dstore(AmbienteExecucao *ae);
+
+int ldc(AmbienteExecucao *ae);
+
+int fstore(AmbienteExecucao *ae);
+
+int fload(AmbienteExecucao *ae);
+
+int f2l(AmbienteExecucao *ae);
+
+int lstore(AmbienteExecucao *ae);
+
+
+int iconst(AmbienteExecucao *ae);
+
+int dload(AmbienteExecucao *ae);
+
+int d2i(AmbienteExecucao *ae);
+int lload(AmbienteExecucao *ae);
+
+int l2i(AmbienteExecucao *ae);
+
+int lconst(AmbienteExecucao *ae);
+
+int fconst(AmbienteExecucao *ae);
+
+int dconst(AmbienteExecucao *ae);
+
+int sipush(AmbienteExecucao *ae);
+
+int aload(AmbienteExecucao *ae);
+
+int pop(AmbienteExecucao *ae);
+
+int pop2(AmbienteExecucao *ae);
+
+int d2f(AmbienteExecucao *ae);
+
+int d2l(AmbienteExecucao *ae);
+
+int f2d(AmbienteExecucao *ae);
+
+int f2i(AmbienteExecucao *ae);
+
+int i2b(AmbienteExecucao *ae);
+
+int i2c(AmbienteExecucao *ae);
+
+int i2f(AmbienteExecucao *ae);
+
+int i2l(AmbienteExecucao *ae);
+
+int i2s(AmbienteExecucao *ae);
+
+int l2d(AmbienteExecucao *ae);
+
+int l2f(AmbienteExecucao *ae);
+
+int dmul(AmbienteExecucao *ae);
+
+int fmul(AmbienteExecucao *ae);
+
+int imul(AmbienteExecucao *ae);
+
+int lmul(AmbienteExecucao *ae);
+
+int invokevirtual(AmbienteExecucao *ae);
+
+int getstatic(AmbienteExecucao *ae);
+
+int dadd(AmbienteExecucao *ae);
+int dsub(AmbienteExecucao *ae);
+int fadd(AmbienteExecucao *ae);
+int fsub(AmbienteExecucao *ae);
+int isub(AmbienteExecucao *ae);
+int ladd(AmbienteExecucao *ae);
+int lsub(AmbienteExecucao *ae);
+
+int iand(AmbienteExecucao *ae);
+int ineg(AmbienteExecucao *ae);
+int ior(AmbienteExecucao *ae);
+int ixor(AmbienteExecucao *ae);
+int land(AmbienteExecucao *ae);
+int lneg(AmbienteExecucao *ae);
+int lor(AmbienteExecucao *ae);
+int lxor(AmbienteExecucao *ae);
+int dneg(AmbienteExecucao *ae);
+int fneg(AmbienteExecucao *ae);
+
+int astore(AmbienteExecucao *ae);
+int ldiv_(AmbienteExecucao *ae);
+int lrem(AmbienteExecucao *ae);
+
+int fcmpg(AmbienteExecucao *ae);
+int fcmpl(AmbienteExecucao *ae);
+int lcmp(AmbienteExecucao *ae);
+int frem(AmbienteExecucao *ae);
+int drem_(AmbienteExecucao *ae);
+int ishl(AmbienteExecucao *ae);
+int ishr(AmbienteExecucao *ae);
+int iushr(AmbienteExecucao *ae);
+int lshl(AmbienteExecucao *ae);
+int lshr(AmbienteExecucao *ae);
+int lushr(AmbienteExecucao *ae);
+int swap(AmbienteExecucao *ae);
+
+int dup(AmbienteExecucao *ae);
+int dup2(AmbienteExecucao *ae);
+int dup_x1(AmbienteExecucao *ae);
+int dup2_x2(AmbienteExecucao *ae);
+int dup_x2(AmbienteExecucao *ae);
+int dup2_x1(AmbienteExecucao *ae);
+
+int goto_(AmbienteExecucao *ae);
+int goto_w(AmbienteExecucao *ae);
+
+int jsr(AmbienteExecucao *ae);
+int jsr_w(AmbienteExecucao *ae);
+
+int iinc(AmbienteExecucao *ae);
+
+int newarray(AmbienteExecucao *ae);
+int aaload(AmbienteExecucao *ae);
+int iaload(AmbienteExecucao *ae);
+int aastore(AmbienteExecucao *ae);
+int iastore(AmbienteExecucao *ae);
+
+int idiv_(AmbienteExecucao *ae);
+
+int irem(AmbienteExecucao *ae);
+
+int if_acmpeq(AmbienteExecucao *ae);
+int if_acmpne(AmbienteExecucao *ae);
+int if_icmpeq(AmbienteExecucao *ae);
+int if_icmpne(AmbienteExecucao *ae);
+int if_icmplt(AmbienteExecucao *ae);
+int if_icmple(AmbienteExecucao *ae);
+int if_icmpgt(AmbienteExecucao *ae);
+int if_icmpge(AmbienteExecucao *ae);
+int ifeq(AmbienteExecucao *ae);
+int ifne(AmbienteExecucao *ae);
+int iflt(AmbienteExecucao *ae);
+int ifle(AmbienteExecucao *ae);
+int ifgt(AmbienteExecucao *ae);
+int ifge(AmbienteExecucao *ae);
+int ifnonnull(AmbienteExecucao *ae);
+int ifnull(AmbienteExecucao *ae);
+
+int fastore(AmbienteExecucao *ae);
+int faload(AmbienteExecucao *ae);
+int daload(AmbienteExecucao *ae);
+int dastore(AmbienteExecucao *ae);
+int caload(AmbienteExecucao *ae);
+int castore(AmbienteExecucao *ae);
+int laload(AmbienteExecucao *ae);
+int lastore(AmbienteExecucao *ae);
+int saload(AmbienteExecucao *ae);
+int sastore(AmbienteExecucao *ae);
+int baload(AmbienteExecucao *ae);
+int bastore(AmbienteExecucao *ae);
+
+int arraylength(AmbienteExecucao *ae);
+
+int return0(AmbienteExecucao *ae);
+int return1(AmbienteExecucao *ae);
+
+int athrow(AmbienteExecucao *ae);
+
+int ret(AmbienteExecucao *ae);
+
+int multianewarray(AmbienteExecucao *ae);
+
+int anewarray(AmbienteExecucao *ae);
+
+int wide(AmbienteExecucao *ae);
+
+int new_(AmbienteExecucao *ae);
+int putfield(AmbienteExecucao *ae);
+int getfield(AmbienteExecucao *ae);
+
+int fdiv(AmbienteExecucao *ae);
+int ddiv(AmbienteExecucao *ae);
+int fneg(AmbienteExecucao *ae);
+
+int dcmpl(AmbienteExecucao *ae);
+int dcmpg(AmbienteExecucao *ae);
+
+int checkcast(AmbienteExecucao *ae);
+int instanceof(AmbienteExecucao *ae);
+
+int invokestatic(AmbienteExecucao *ae);
+int invokespecial(AmbienteExecucao *ae);
+int putstatic(AmbienteExecucao *ae);
+
+int lookupswitch(AmbienteExecucao *ae);
+int tableswitch(AmbienteExecucao *ae);
+
 #endif /* INSTRUCOES_H_ */
 
 int (*vetFunc[])(AmbienteExecucao *p);
 u1 instrucao;
+
+

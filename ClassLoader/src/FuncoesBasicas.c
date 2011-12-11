@@ -4,11 +4,8 @@
  *  Created on: Dec 10, 2011
  *      Author: Bruno C.
  */
+
 #include "FuncoesBasicas.h"
-#include "Estruturas.h"
-#include "Util.h"
-#include "Heap.h"
-#include "ClassLoader.h"
 
 /*
  * Retorna a estrutura ClassFile na lista de Classes solicitada pelo nome da Classe. Caso o ClassFile nao
