@@ -57,24 +57,61 @@ List_Classfile *retornaSuperClasses(AmbienteExecucao *ae, ClassFile *cf) {
 Objeto * instanciaObjeto( ClassFile *cf, ) {
 	Objeto *newObjeto;
 	List_Classfile *superClasses, *p1;
-	int fieldsCount = 0;
+	tipo_info *ti;
+	field_info *pFieldInfo;
+	int tiposCount = 0;
 	int i = 0;
+	int index, tiposIndex, count;
 
-	fieldsCount = cf->fields_count;
+	tiposCount = cf->fields_count;
 	newObjeto = malloc(sizeof(Objeto));
 	superClasses = retornaSuperClasses(ae, cf);
 
 	if (superClasses != NULL) {
 		p1 = superClasses;
-		while (p1->prox != NULL) {
-			fieldsCount += p1->cf->fields_count;
+		while (p1 != NULL) {
+			tiposCount += p1->cf->fields_count;
 			p1 = p1->prox;
 		}
 	}
 
-	newObjeto->fields_count = fieldsCount;
-	newObjeto->fields = malloc(fieldsCount*sizeof(field_info));
+	newObjeto->tipos_count = tiposCount;
+	newObjeto->tipos = malloc(tiposCount*sizeof(tipo_info));
+	ti = newObjeto->tipos;
 	newObjeto->nomeClasse = retornaNomeClasse(cf);
+	pFieldInfo = cf->fields;
+
+	tiposIndex = 0;
+	count = cf->fields_count;
+	for (i=0; i<count; i++) {
+
+		index = cf->fields[i]->name_index;
+		index--;
+		newObjeto->tipos[tiposIndex]->nome = retornaUtf8(cf, index);
+
+		index = cf->fields[i]->descriptor_index;
+		index--;
+		newObjeto->tipos[tiposIndex]->tipo = retornaUtf8(cf, index);
+
+		tiposIndex++;
+	}
+
+	p1 = superClasses;
+	while(p1 != NULL) {
+		count = p1->cf->fields_count;
+		for (i=0; i<count; i++) {
+			index = p1->cf->fields[i]->name_index;
+			index--;
+			newObjeto->tipos[tiposIndex]->nome = retornaUtf8(cf, index);
+
+			index = p1->cf->fields[i]->descriptor_index;
+			index--;
+			newObjeto->tipos[tiposIndex]->tipo = retornaUtf8(cf, index);
+
+			tiposIndex++;
+		}
+		p1 = p1->prox;
+	}
 
 	return newObjeto;
 }
