@@ -22,8 +22,7 @@ Frame *criaFrame(ClassFile *cf, char *nomeMetodo, char *descritor){
 	}
 	//TODO Verificar se funciona com as setinhas
 	frame = malloc(sizeof(Frame));
-	frame->code_length = attribute.u.Code.code_length;
-	frame->code = attribute.u.Code.code;
+	frame->pc = attribute.u.Code.code;
 	frame->constant_pool = cf->constant_pool;
 	frame->pilhaOperandos = malloc(sizeof(PilhaOperandos));
 	//TODO verificar se esse ->tipo nao term q ser pilhaOperandos[0]->tipo

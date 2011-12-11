@@ -87,11 +87,11 @@ void empilhaOperando(Frame *frame, char *tipo, void *operando) {
 	}else if (strcmp("Z", tipo)) {
 		frame->pilhaOperandos->elementos[sp].tipo_boolean = *((char *)operando);
 	}else if (strcmp("[", tipo)) {
-		frame->pilhaOperandos->elementos[sp].tipo_retorno = *((u1 *)operando);
+		frame->pilhaOperandos->elementos[sp].tipo_retorno = *((u1 **)operando);
 	}
 }
 
-PilhaOperandos desempilhaOperando(Frame *frame) {
+PilhaOperandos *desempilhaOperando(Frame *frame) {
 	i2 sp = 0;
 	PilhaOperandos *operando;
 	sp = frame->pilhaOperandos->sp;
@@ -126,7 +126,7 @@ int pilhaOperandosVazia(Frame *frame) {
 
 
 void transferePilhaOperandosParaVariavelLocal(Frame *frame, int indiceVariavel) {
-	PilhaOperandos op;
+	PilhaOperandos *op;
 	i2 spVarLocal = 0;
 
 	op = desempilhaOperando(frame);
@@ -137,7 +137,7 @@ void transferePilhaOperandosParaVariavelLocal(Frame *frame, int indiceVariavel) 
 
 
 void transfereVariavelLocalParaPilhaOperandos(Frame *frame, int indiceVariavel) {
-	empilhaOperando(frame, frame->pilhaVariaveisLocais->tipo[indiceVariavel], frame->pilhaVariaveisLocais->elementos[indiceVariavel]);
+	empilhaOperando(frame, frame->pilhaVariaveisLocais->tipo[indiceVariavel], &(frame->pilhaVariaveisLocais->elementos[indiceVariavel]));
 }
 
 
