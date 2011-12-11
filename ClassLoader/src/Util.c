@@ -53,6 +53,9 @@ u2 retornaTamanhoVariaveisLocais(attribute_info *ai) {
 	return ai->u.Code.max_locals;
 }
 
+u1 *retornaClassInfo(ClassFile *cf, int indice){
+	return retornaUtf8(cf, cf->constant_pool[indice].u.Class.name_index);
+}
 
 /*
  * Funcoes uteis para pilha de operandos
@@ -127,7 +130,6 @@ int pilhaOperandosVazia(Frame *frame) {
 
 void transferePilhaOperandosParaVariavelLocal(Frame *frame, int indiceVariavel) {
 	PilhaOperandos *op;
-	i2 spVarLocal = 0;
 
 	op = desempilhaOperando(frame);
 

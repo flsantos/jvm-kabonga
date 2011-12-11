@@ -41,7 +41,7 @@ List_Classfile *retornaSuperClasses(AmbienteExecucao *ae, ClassFile *cf) {
 	p1 = cf;
 
 	while (p1->super_class != 0) {
-		p1 = verificarClassFile(ae, (char *)retornaNomeClasse(p1->super_class));
+		p1 = verificarClassFile(ae, (char *)retornaClassInfo(p1, p1->super_class));
 		adicionaClasse(p1, &listaClasses);
 	}
 	return listaClasses;
