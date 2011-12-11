@@ -34,7 +34,6 @@ method_info *retornaMetodoPorNome(ClassFile *cf, char *nomeMetodo, char *nomeDes
 		}
 	}
 	return NULL;
-
 }
 
 u1 * retornaNomeMetodo(ClassFile *cf, method_info *mi){
@@ -56,6 +55,24 @@ u2 retornaTamanhoVariaveisLocais(attribute_info *ai) {
 u1 *retornaClassInfo(ClassFile *cf, int indice){
 	return retornaUtf8(cf, cf->constant_pool[indice].u.Class.name_index);
 }
+
+DadosMetodo *retornaDadosMetodo(ClassFile *cf, int n) {
+	DadosMetodo *dadosMetodo;
+	DadosNameAndType *dadosNameAndType;
+	int indiceClasse, indiceNameAndType;
+
+	dadosMetodo = malloc(sizeof(DadosMetodo));
+
+	dadosMetodo->nomeClasse = retornaClassInfo(cf, (cf->constant_pool[n-1]).u.Fieldref.class_index);
+	dadosNameAndType = retornaNameAndTypeInfo(cf, (cf->constant_pool[n-1]).u.Fieldref.name_and_type_index);
+	dadosMetodo->nomeMetodo = dadosNameAndType->nome;
+	dadosMetodo->tipo = dadosNameAndType->tipo;
+
+	return dadosMetodo;
+}
+
+
+
 
 /*
  * Funcoes uteis para pilha de operandos
@@ -141,5 +158,7 @@ void transferePilhaOperandosParaVariavelLocal(Frame *frame, int indiceVariavel) 
 void transfereVariavelLocalParaPilhaOperandos(Frame *frame, int indiceVariavel) {
 	empilhaOperando(frame, frame->pilhaVariaveisLocais->tipo[indiceVariavel], &(frame->pilhaVariaveisLocais->elementos[indiceVariavel]));
 }
+
+
 
 
