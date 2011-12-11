@@ -245,4 +245,27 @@ typedef struct OBJETO {
 	tipo_info *tipos;
 } Objeto;
 
+typedef struct DADOSMETODO {
+	char *nomeClasse;
+	char *nomeMetodo;
+	char *tipo;
+
+} DadosMetodo;
+
+typedef struct DADOSFIELD {
+	char *nomeClasse;
+	char *nomeMetodo;
+	char *tipo;
+} DadosField;
+
+typedef struct DADOSNAMEANDTYPE {
+	char *nome;
+	char *tipo;
+} DadosNameAndType;
+
+typedef struct DADOSMETHODANDCLASS {
+	method_info *method_info;
+	ClassFile *class_file;
+} DadosMethodAndClass;
+
 #endif
