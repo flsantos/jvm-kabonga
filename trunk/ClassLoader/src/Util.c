@@ -57,7 +57,7 @@ u2 retornaTamanhoVariaveisLocais(attribute_info *ai) {
 }
 
 u1 *retornaClassInfo(ClassFile *cf, int indice) {
-	return retornaUtf8(cf, cf->constant_pool[indice].u.Class.name_index);
+	return retornaUtf8(cf, cf->constant_pool[indice-1].u.Class.name_index);
 }
 
 DadosNameAndType *retornaDadosNameAndTypeInfo(ClassFile *cf, int n) {
@@ -102,27 +102,27 @@ void empilhaOperando(Frame *frame, char *tipo, void *operando) {
 
 	frame->pilhaOperandos->tipo[sp] = tipo;
 
-	if (strcmp("B", tipo)) {
+	if (tipo[0] == 'B') {
 		frame->pilhaOperandos->elementos[sp].tipo_byte = *((i1 *) operando);
-	} else if (strcmp("C", tipo)) {
+	} else if (tipo[0] == 'C') {
 		frame->pilhaOperandos->elementos[sp].tipo_char = *((u1 *) operando);
-	} else if (strcmp("D", tipo)) {
+	} else if (tipo[0] == 'D') {
 		frame->pilhaOperandos->elementos[sp].tipo_double =
 				*((double *) operando);
-	} else if (strcmp("F", tipo)) {
+	} else if (tipo[0] == 'F') {
 		frame->pilhaOperandos->elementos[sp].tipo_float = *((float *) operando);
-	} else if (strcmp("I", tipo)) {
+	} else if (tipo[0] == 'I') {
 		frame->pilhaOperandos->elementos[sp].tipo_int = *((u4 *) operando);
-	} else if (strcmp("J", tipo)) {
+	} else if (tipo[0] == 'J') {
 		frame->pilhaOperandos->elementos[sp].tipo_long = *((long *) operando);
-	} else if (strcmp("L", tipo)) {
+	} else if (tipo[0] == 'L') {
 		frame->pilhaOperandos->elementos[sp].tipo_referencia = operando;
-	} else if (strcmp("S", tipo)) {
+	} else if (tipo[0] == 'S') {
 		frame->pilhaOperandos->elementos[sp].tipo_short = *((u2 *) operando);
-	} else if (strcmp("Z", tipo)) {
+	} else if (tipo[0] == 'Z') {
 		frame->pilhaOperandos->elementos[sp].tipo_boolean =
 				*((char *) operando);
-	} else if (strcmp("[", tipo)) {
+	} else if (tipo[0] == '[') {
 		frame->pilhaOperandos->elementos[sp].tipo_retorno = *((u1 **) operando);
 	}
 }

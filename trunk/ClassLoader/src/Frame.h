@@ -8,7 +8,7 @@
 #ifndef FRAME_H_
 #define FRAME_H_
 
-Frame *criaFrame(ClassFile *cf, char *nomeMetodo, char *descritor);
+Frame *criaFrame(ClassFile *cf, char *nomeMetodo, char *descritor, Frame *frame);
 
 
 
