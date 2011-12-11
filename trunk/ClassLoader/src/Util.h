@@ -37,3 +37,5 @@ void transfereVariavelLocalParaPilhaOperandos(Frame *frame, int indiceVariavel);
 DadosMetodo *retornaDadosMetodo(ClassFile *cf, int n);
 
 DadosNameAndType *retornaDadosNameAndTypeInfo(ClassFile *cf, int n);
+
+int retornaContadorArgumentos(char *descriptor);
