@@ -115,8 +115,27 @@ PilhaOperandos desempilhaOperando(Frame *frame) {
 	}
 }
 
-//ver se a pilha ta vazia
-//push
-//pop
-//transferir pilha pra lista de variaveis locais
-//transferir da lista de variaveis locais para a pilha
+int pilhaOperandosVazia(Frame *frame) {
+	if (frame->pilhaOperandos->sp == -1)
+		return 1;
+	else
+		return 0;
+}
+
+
+void transferePilhaOperandosParaVariavelLocal(Frame *frame, int indiceVariavel) {
+	PilhaOperandos op;
+	i2 spVarLocal = 0;
+
+	op = desempilhaOperando(frame);
+
+	frame->pilhaVariaveisLocais->elementos[indiceVariavel] = op->elementos[0];
+	frame->pilhaVariaveisLocais->tipo[indiceVariavel] = op->tipo[0];
+}
+
+
+void transfereVariavelLocalParaPilhaOperandos(Frame *frame, int indiceVariavel) {
+	empilhaOperando(frame, frame->pilhaVariaveisLocais->tipo[indiceVariavel], frame->pilhaVariaveisLocais->elementos[indiceVariavel]);
+}
+
+
