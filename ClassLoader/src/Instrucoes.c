@@ -704,14 +704,14 @@ int dload(AmbienteExecucao *ae) {
 int d2i(AmbienteExecucao *ae) {
 	return 0;
 }
-//int lload(AmbienteExecucao *ae, int pos) {
+int lload(AmbienteExecucao *ae) {
 //	transfer_localvar_to_opstack(&(ae->current_frame->local_variables), pos, &(ae->current_frame->opstack));
 //
-//	return 0;
-//}
-//
-//
-//int l2i(AmbienteExecucao *ae) {
+	return 0;
+}
+
+
+int l2i(AmbienteExecucao *ae) {
 //	PilhaOperandos *a;
 //	int b;
 //	a = desempilhaOperando(ae->pFrame);
@@ -719,46 +719,42 @@ int d2i(AmbienteExecucao *ae) {
 //
 //	empilhaOperando(ae->pFrame, "I", &(b));
 //
-//	return 0;
-//}
-//
-//int lconst(AmbienteExecucao *ae, long long valor) {
+	return 0;
+}
+
+int lconst(AmbienteExecucao *ae) {
 //	empilhaOperando(ae->pFrame, "J", &valor);
 //
-//	return 0;
-//}
-//
-//int fconst(AmbienteExecucao *ae, float valor) {
+	return 0;
+}
+
+int fconst(AmbienteExecucao *ae) {
 //	empilhaOperando(ae->pFrame, "F", &valor);
 //
-//	return 0;
-//}
-//
-//int dconst(AmbienteExecucao *ae, double valor) {
+	return 0;
+}
+
+int dconst(AmbienteExecucao *ae) {
 //	empilhaOperando(ae->pFrame, "D", &valor);
 //
-//	return 0;
-//}
-//
-//int sipush(AmbienteExecucao *ae, int valor) {
+	return 0;
+}
+
+int sipush(AmbienteExecucao *ae) {
 //	empilhaOperando(ae->pFrame, "I", &valor);
 //
-//	return 0;
-//}
-//TODO: instrucao nao pronta
-//int aload(AmbienteExecucao *ae, int pos) {
-//	transfer_localvar_to_opstack(&(ae->current_frame->local_variables), pos, &(ae->current_frame->opstack));
-//
-//	return 0;
-//}
-//
-//int pop(AmbienteExecucao *ae) {
+	return 0;
+}
+int f2i(AmbienteExecucao *ae){
+	return 0;
+}
+int pop(AmbienteExecucao *ae) {
 //	desempilhaOperando(ae->pFrame);
 //
-//	return 0;
-//}
-//
-//int pop2(AmbienteExecucao *ae) {
+	return 0;
+}
+
+int pop2(AmbienteExecucao *ae) {
 //	if((ae->pFrame->pilhaOperandos->tipo)[0] == 'D' ||	(ae->pFrame->pilhaOperandos->tipo)[0] == 'J') {
 //		 desempilhaOperando(ae->pFrame);
 //	} else {
@@ -766,11 +762,11 @@ int d2i(AmbienteExecucao *ae) {
 //		 desempilhaOperando(ae->pFrame);
 //	}
 //
-//	return 0;
-//}
-//
-//
-//int d2f(AmbienteExecucao *ae) {
+	return 0;
+}
+
+
+int d2f(AmbienteExecucao *ae) {
 //	PilhaOperandos *a;
 //	float b;
 //	a = desempilhaOperando(ae->pFrame);
@@ -778,10 +774,10 @@ int d2i(AmbienteExecucao *ae) {
 //
 //	empilhaOperando(ae->pFrame, "F", &b);
 //
-//	return 0;
-//}
+	return 0;
+}
 //
-//int d2l(AmbienteExecucao *ae) {
+int d2l(AmbienteExecucao *ae) {
 //	PilhaOperandos *a;
 //	long long b;
 //
@@ -790,10 +786,10 @@ int d2i(AmbienteExecucao *ae) {
 //
 //	empilhaOperando(ae->pFrame, "J", &b);
 //
-//	return 0;
-//}
-//
-//int f2d(AmbienteExecucao *ae) {
+	return 0;
+}
+
+int f2d(AmbienteExecucao *ae) {
 //	PilhaOperandos *a;
 //	double b;
 //
@@ -814,10 +810,10 @@ int d2i(AmbienteExecucao *ae) {
 //
 //	empilhaOperandos(ae->pFrame, "I", &b);
 //
-//	return 0;
-//}
-//
-//int i2b(AmbienteExecucao *ae) {
+	return 0;
+}
+
+int i2b(AmbienteExecucao *ae) {
 //	PilhaOperandos *a;
 //	char b;
 //
@@ -826,11 +822,11 @@ int d2i(AmbienteExecucao *ae) {
 //
 //	empilhaOperandos(ae->pFrame, "B", &b);
 //
-//	return 0;
-//
-//}
-//
-//int i2c(AmbienteExecucao *ae) {
+	return 0;
+
+}
+
+int i2c(AmbienteExecucao *ae) {
 //	PilhaOperandos *a;
 //	char b;
 //
@@ -839,10 +835,10 @@ int d2i(AmbienteExecucao *ae) {
 //
 //	empilhaOperandos(ae->pFrame, "C", &b);
 //
-//	return 0;
-//}
-//
-//int i2f(AmbienteExecucao *ae) {
+	return 0;
+}
+
+int i2f(AmbienteExecucao *ae) {
 //	PilhaOperandos *a;
 //	float b;
 //
@@ -851,11 +847,11 @@ int d2i(AmbienteExecucao *ae) {
 //
 //	empilhaOperandos(ae->pFrame, "F", &b);
 //
-//	return 0;
-//
-//}
-//
-//int i2l(AmbienteExecucao *ae) {
+	return 0;
+
+}
+
+int i2l(AmbienteExecucao *ae) {
 //	PilhaOperandos *a;
 //	long long b;
 //
@@ -864,10 +860,10 @@ int d2i(AmbienteExecucao *ae) {
 //
 //	empilhaOperandos(ae->pFrame, "J", &b);
 //
-//	return 0;
-//}
-//
-//int i2s(AmbienteExecucao *ae) {
+	return 0;
+}
+
+int i2s(AmbienteExecucao *ae) {
 //	PilhaOperandos *a;
 //	short b;
 //
@@ -876,10 +872,10 @@ int d2i(AmbienteExecucao *ae) {
 //
 //	empilhaOperandos(ae->pFrame, "S", &b);
 //
-//	return 0;
-//}
-//
-//int l2d(AmbienteExecucao *ae) {
+	return 0;
+}
+
+int l2d(AmbienteExecucao *ae) {
 //	PilhaOperandos *a;
 //	double b;
 //
@@ -888,10 +884,10 @@ int d2i(AmbienteExecucao *ae) {
 //
 //	empilhaOperandos(ae->pFrame, "D", &b);
 //
-//	return 0;
-//}
-//
-//int l2f(AmbienteExecucao *ae) {
+	return 0;
+}
+
+int l2f(AmbienteExecucao *ae) {
 //	PilhaOperandos *a;
 //	float b;
 //
@@ -900,10 +896,10 @@ int d2i(AmbienteExecucao *ae) {
 //
 //	empilhaOperandos(ae->pFrame, "F", &b);
 //
-//	return 0;
-//}
-//
-//int dmul(AmbienteExecucao *ae) {
+	return 0;
+}
+
+int dmul(AmbienteExecucao *ae) {
 //	double a, b, mul;
 //	a = desempilhaOperando(ae->pFrame)->elementos->tipo_double;
 //	b = desempilhaOperando(ae->pFrame)->elementos->tipo_double;
@@ -912,10 +908,10 @@ int d2i(AmbienteExecucao *ae) {
 //
 //	empilhaOperandos(ae->pFrame, "D", &mul);
 //
-//	return 0;
-//}
-//
-//int fmul(AmbienteExecucao *ae) {
+	return 0;
+}
+
+int fmul(AmbienteExecucao *ae) {
 //	float a, b, mul;
 //	a = desempilhaOperando(ae->pFrame)->elementos->tipo_float;
 //	b = desempilhaOperando(ae->pFrame)->elementos->tipo_float;
@@ -924,10 +920,10 @@ int d2i(AmbienteExecucao *ae) {
 //
 //	empilhaOperandos(ae->pFrame, "F", &mul);
 //
-//	return 0;
-//}
-//
-//int imul(AmbienteExecucao *ae) {
+	return 0;
+}
+
+int imul(AmbienteExecucao *ae) {
 //	int a, b, mul;
 //	a = desempilhaOperando(ae->pFrame)->elementos->tipo_int;
 //	b = desempilhaOperando(ae->pFrame)->elementos->tipo_int;
@@ -936,10 +932,10 @@ int d2i(AmbienteExecucao *ae) {
 //
 //	empilhaOperandos(ae->pFrame, "I", &mul);
 //
-//	return 0;
-//}
-//
-//int lmul(AmbienteExecucao *ae) {
+	return 0;
+}
+
+int lmul(AmbienteExecucao *ae) {
 //	long long a, b, mul;
 //	a = desempilhaOperando(ae->pFrame)->elementos->tipo_long;
 //	b = desempilhaOperando(ae->pFrame)->elementos->tipo_long;
@@ -948,8 +944,8 @@ int d2i(AmbienteExecucao *ae) {
 //
 //	empilhaOperandos(ae->pFrame, "J", &mul);
 //
-//	return 0;
-//}
+	return 0;
+}
 
 int getstatic(AmbienteExecucao *ae) {
 	return 0;
