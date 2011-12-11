@@ -387,6 +387,7 @@ int ifne(AmbienteExecucao *ae) {
 }
 
 int iload(AmbienteExecucao *ae) {
+	u1 pos;
 
 	switch(instrucao){
 	case ILOAD_0:
@@ -402,7 +403,7 @@ int iload(AmbienteExecucao *ae) {
 		transfereVariavelLocalParaPilhaOperandos(ae->pFrame, 3);
 		break;
 	case ILOAD:
-		u1 pos = leU1doPC(ae->pFrame);
+		pos = leU1doPC(ae->pFrame);
 		transfereVariavelLocalParaPilhaOperandos(ae->pFrame, pos);
 		break;
 	}
