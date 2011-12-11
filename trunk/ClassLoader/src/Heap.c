@@ -44,12 +44,11 @@ void adicionaClasse (ClassFile *cf, List_Classfile **lcf){
 }
 
 ClassFile * buscarClassePorNome(List_Classfile *lcf, char *nomeClasse) {
-	ClassFile *pcf;
 	List_Classfile *plcf;
 	plcf = lcf;
 
 	while (plcf != NULL) {
-		if (strcmp(retornaClassInfo(plcf->cf, plcf->cf->this_class) == nomeClasse)) {
+		if (strcmp((char *)retornaClassInfo(plcf->cf, plcf->cf->this_class), nomeClasse) == 0) {
 			return plcf->cf;
 		}
 		plcf = plcf->prox;
