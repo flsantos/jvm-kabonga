@@ -33,3 +33,5 @@ int pilhaOperandosVazia(Frame *frame);
 void transferePilhaOperandosParaVariavelLocal(Frame *frame, int indiceVariavel);
 
 void transfereVariavelLocalParaPilhaOperandos(Frame *frame, int indiceVariavel);
+
+DadosMetodo *retornaDadosMetodo(ClassFile *cf, int n);
