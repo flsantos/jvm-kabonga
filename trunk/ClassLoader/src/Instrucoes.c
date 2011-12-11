@@ -224,6 +224,55 @@ int ireturn(AmbienteExecucao *ae) {
 	return return_v;
 }
 
+//Inicio TODO do Rubens
+//int lload(AmbienteExecucao *ae, int pos) {
+//	transfer_localvar_to_opstack(&(ae->current_frame->local_variables), pos, &(ae->current_frame->opstack));
+//
+//	return 0;
+//}
+//
+//
+//int l2i(AmbienteExecucao *ae) {
+//	PilhaOperandos *a;
+//	int b;
+//	a = desempilhaOperando(ae->pFrame);
+//	b = (int) a->elementos->tipo_long;
+//
+//	empilhaOperando(ae->pFrame, "I", &(b));
+//
+//	return 0;
+//}
+//
+//int lconst(AmbienteExecucao *ae, long long valor) {
+//	empilhaOperando(ae->pFrame, "J", &valor);
+//
+//	return 0;
+//}
+//
+//int fconst(AmbienteExecucao *ae, float valor) {
+//	empilhaOperando(ae->pFrame, "F", &valor);
+//
+//	return 0;
+//}
+//
+//int dconst(AmbienteExecucao *ae, double valor) {
+//	empilhaOperando(ae->pFrame, "D", &valor);
+//
+//	return 0;
+//}
+//
+//int sipush(AmbienteExecucao *ae, int valor) {
+//	empilhaOperando(ae->pFrame, "I", &valor);
+//
+//	return 0;
+//}
+//TODO: fazer a funcao transfer_localvar_to_opstack
+//int aload(AmbienteExecucao *ae, int pos) {
+//	transfer_localvar_to_opstack(&(ae->current_frame->local_variables), pos, &(ae->current_frame->opstack));
+//
+//	return 0;
+//}
+
 int astore(AmbienteExecucao *ae) {
 	u1 pos = leU1doPC(ae->pFrame);
 	//transfer_opstack_to_localvar(&(interpreter->current_frame->opstack), &(interpreter->current_frame->local_variables), pos);
