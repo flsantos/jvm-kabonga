@@ -288,9 +288,27 @@ int aload(AmbienteExecucao *ae) {
 }
 
 int istore(AmbienteExecucao *ae) {
-	u1 pos = leU1doPC(ae->pFrame);
 	//transfer_opstack_to_localvar(&(interpreter->current_frame->opstack), &(interpreter->current_frame->local_variables), pos);
-	transferePilhaOperandosParaVariavelLocal(ae->pFrame, pos);
+	u1 pos;
+
+	switch (instrucao) {
+	case ISTORE_0:
+		transferePilhaOperandosParaVariavelLocal(ae->pFrame, 0);
+		break;
+	case ISTORE_1:
+		transferePilhaOperandosParaVariavelLocal(ae->pFrame, 1);
+		break;
+	case ISTORE_2:
+		transferePilhaOperandosParaVariavelLocal(ae->pFrame, 2);
+		break;
+	case ISTORE_3:
+		transferePilhaOperandosParaVariavelLocal(ae->pFrame, 3);
+		break;
+	case ISTORE:
+		pos = leU1doPC(ae->pFrame);
+		transferePilhaOperandosParaVariavelLocal(ae->pFrame, pos);
+		break;
+	}
 	return 0;
 }
 
@@ -298,6 +316,9 @@ int invokespecial(AmbienteExecucao *ae) {
 	u2 indice = leU2doPC(ae->pFrame);
 	DadosMetodo *dadosMetodo;
 	int arg_count;
+
+	printf("\ninvokespecial");
+	//getchar();
 
 	dadosMetodo = retornaDadosMetodo(ae->pFrame->cf, indice);
 
@@ -320,10 +341,14 @@ int invokespecial(AmbienteExecucao *ae) {
 
 int dup(AmbienteExecucao *ae) {
 
+	printf("\ndup");
+	//getchar();
+
 	//t_opstack *a = desempilhaOperando((&interpreter->current_frame->opstack));
 	PilhaOperandos *a = desempilhaOperando(ae->pFrame);
 	if ((*(a->tipo[0]) == 'J') || (*(a->tipo[0]) == 'D')) {
-		printf("Instrucao 'dup' nao permitida para valores 'double' ou 'long'.\n");
+		printf(
+				"Instrucao 'dup' nao permitida para valores 'double' ou 'long'.\n");
 		exit(1);
 	}
 
@@ -339,9 +364,9 @@ int new_(AmbienteExecucao *ae) {
 	u2 indice = leU2doPC(ae->pFrame);
 	char *nomeClasse;
 	Objeto *objeto;
-
-	nomeClasse = (char *)retornaClassInfo(ae->pFrame->cf, indice);
-
+	printf("\nnew");
+	//getchar();
+	nomeClasse = (char *) retornaClassInfo(ae->pFrame->cf, indice);
 	/* ajustando para o caso da StringBuffer */
 	if ((strcmp(nomeClasse, "java/lang/StringBuffer") == 0
 			|| strcmp(nomeClasse, "java/lang/StringBuilder") == 0)) {
@@ -439,6 +464,8 @@ int goto_(AmbienteExecucao *ae) {
 int iconst(AmbienteExecucao *ae) {
 	int valor;
 
+	printf("\niconst");
+
 	switch (instrucao) {
 	case ICONST_M1:
 		valor = -1;
@@ -487,7 +514,8 @@ int invokevirtual(AmbienteExecucao *ae) {
 			&& (strcmp(dadosMetodo->nomeMetodo, "println") == 0
 					|| strcmp(dadosMetodo->nomeMetodo, "print") == 0)) {
 		/* realiza o println */
-		if (ae->pFrame->pilhaOperandos->tipo[ae->pFrame->pilhaOperandos->sp][0] != '#') {
+		if (ae->pFrame->pilhaOperandos->tipo[ae->pFrame->pilhaOperandos->sp][0]
+				!= '#') {
 			data = desempilhaOperando(ae->pFrame);
 			tipo = data->tipo[ae->pFrame->pilhaOperandos->sp];
 			if (tipo[0] == 'B') {
@@ -541,8 +569,8 @@ int invokevirtual(AmbienteExecucao *ae) {
 		string_append = calloc(50, sizeof(char));
 		data = desempilhaOperando(ae->pFrame);
 		tipo = data->tipo[ae->pFrame->pilhaOperandos->sp];
-		string_to_append = (char*) desempilhaOperando(
-				ae->pFrame)->elementos[0].tipo_referencia;
+		string_to_append =
+				(char*) desempilhaOperando(ae->pFrame)->elementos[0].tipo_referencia;
 		if (tipo[0] == 'B') {
 			sprintf(string_append, "%d", data->elementos[0].tipo_byte);
 		} else if (tipo[0] == 'C') {

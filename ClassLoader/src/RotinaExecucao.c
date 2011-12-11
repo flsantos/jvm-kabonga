@@ -17,7 +17,6 @@ u1 leU1doPC(Frame *frame) {
 	instrucao = *(frame->pc);
 	frame->pc++;
 	frame->enderecoPC++;
-
 	return instrucao;
 }
 
@@ -64,12 +63,12 @@ u4 leU4doPC(Frame *frame) {
 }
 
 int execute_iteration(AmbienteExecucao *ae) {
-	u1 instruction;
 
 	while (1) {
-		instruction = leU1doPC(ae->pFrame);
-		vetFunc[instruction](ae);
-		if(instruction == RETURN){
+		instrucao = leU1doPC(ae->pFrame);
+		printf("\ninstrucao: %d", instrucao);
+		vetFunc[instrucao](ae);
+		if(instrucao == RETURN){
 			break;
 		}
 	}

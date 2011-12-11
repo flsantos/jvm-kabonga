@@ -19,10 +19,10 @@ void iniciaExecucaoMetodo(ClassFile *cf, AmbienteExecucao *ae, char *nomeMetodo,
 	Frame *frame = NULL;
 
 	if(ae->pFrame == NULL){
-		ae->pFrame = criaFrame(cf, nomeMetodo, descritor);
+		ae->pFrame = criaFrame(cf, nomeMetodo, descritor, frame);
 		ae->pFrame->frameAnterior = NULL;
 	} else {
-		frame =  criaFrame(cf, nomeMetodo, descritor);
+		frame =  criaFrame(cf, nomeMetodo, descritor, frame);
 		frame->frameAnterior = ae->pFrame;
 		ae->pFrame = frame;
 	}
@@ -54,7 +54,7 @@ int main(int argc, char *argv[]) {
 	ae.pFrame = NULL;
 	if (argc >= 2) {
 		nomeClassFile = argv[1];
-		iniciaClasse(nomeClassFile, &ae, "main", "([Ljava/lang/String;)V");
+		iniciaClasse(nomeClassFile, &ae, "IsPrime", "(I)Z");
 	}
 	else {
 		printf("O nome do arquivo .class deve ser passado como parametro.\nFavor verificar documentacao.\n"

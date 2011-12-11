@@ -7,15 +7,14 @@
 #include "Estruturas.h"
 #include "Util.h"
 
-Frame *criaFrame(ClassFile *cf, char *nomeMetodo, char *descritor){
-	Frame *frame = NULL;
+Frame *criaFrame(ClassFile *cf, char *nomeMetodo, char *descritor, Frame *frame){
 	method_info *metodo = NULL;
 	attribute_info attribute;
 	int i;
 
 	metodo = retornaMetodoPorNome(cf, nomeMetodo, descritor);
 	for(i = 0; i < metodo->attributes_count; i++){
-		if(strcmp((char*) retornaUtf8(cf, metodo->attributes[i].attribute_name_index), "Code") == 0){ //TODO Usar metodo criado
+		if(strcmp((char*) retornaUtf8(cf, metodo->attributes[i].attribute_name_index), "Code") == 0){
 			attribute = metodo->attributes[i];
 			break;
 		}
@@ -35,7 +34,6 @@ Frame *criaFrame(ClassFile *cf, char *nomeMetodo, char *descritor){
 	frame->pilhaVariaveisLocais->elementos = malloc(retornaTamanhoVariaveisLocais(&attribute)*sizeof(Tipo));
 	frame->pilhaVariaveisLocais->sp = retornaTamanhoVariaveisLocais(&attribute);
 	frame->cf = cf;
-	frame->pc = 0;
 	return frame;
 }
 
