@@ -10,6 +10,7 @@
  * @param frame a variavel do frame atual
  */
 #include "Estruturas.h"
+#include "Instrucoes.h"
 
 u1 leU1doPC(Frame *frame) {
 	u1 instrucao;
@@ -29,12 +30,12 @@ u2 leU2doPC(Frame *frame) {
 	u2 valor;
 	part1 = *(frame->pc);
 
-	part2 = *(frame->pc +1);
-	(frame->pc)+=2;
+	part2 = *(frame->pc + 1);
+	(frame->pc) += 2;
 
 	frame->enderecoPC += 2;
 
-	valor = (part1 << sizeof(u1)*8) + part2;
+	valor = (part1 << sizeof(u1) * 8) + part2;
 
 	return valor;
 }
@@ -57,6 +58,20 @@ u4 leU4doPC(Frame *frame) {
 
 	frame->enderecoPC += 4;
 
-    value = (part4 << 3*sizeof(u1)*8) + (part3 << 2*sizeof(u1)*8) + (part2 << 1*sizeof(u1)*8) + part1;
+	value = (part4 << 3 * sizeof(u1) * 8) + (part3 << 2 * sizeof(u1) * 8)
+			+ (part2 << 1 * sizeof(u1) * 8) + part1;
 	return value;
+}
+
+int execute_iteration(AmbienteExecucao *ae) {
+	u1 instruction;
+
+	while (1) {
+		instruction = leU1doPC(ae->pFrame);
+		vetFunc[instruction](ae);
+		if(instruction == RETURN){
+			break;
+		}
+	}
+	return 0;
 }
