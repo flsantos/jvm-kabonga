@@ -34,6 +34,7 @@ method_info *retornaMetodoPorNome(ClassFile *cf, char *nomeMetodo, char *nomeDes
 		}
 	}
 	return NULL;
+
 }
 
 u1 * retornaNomeMetodo(ClassFile *cf, method_info *mi){
@@ -54,6 +55,20 @@ u2 retornaTamanhoVariaveisLocais(attribute_info *ai) {
 
 u1 *retornaClassInfo(ClassFile *cf, int indice){
 	return retornaUtf8(cf, cf->constant_pool[indice].u.Class.name_index);
+}
+
+DadosNameAndType *retornaDadosNameAndTypeInfo(ClassFile *cf, int n) {
+	int indiceNome, indiceTipo;
+	DadosNameAndType *dadosNameAndType;
+	dadosNameAndType = malloc(sizeof(DadosNameAndType));
+
+	indiceNome = (cf->constant_pool + n - 1)->u.NameAndType.name_index;
+	indiceTipo = (cf->constant_pool + n - 1)->u.NameAndType.descriptor_index;
+	dadosNameAndType->nome = retornaUtf8(cf, indiceNome);
+	dadosNameAndType->tipo = retornaUtf8(cf, indiceTipo);
+
+	return dadosNameAndType;
+
 }
 
 DadosMetodo *retornaDadosMetodo(ClassFile *cf, int n) {
@@ -158,7 +173,4 @@ void transferePilhaOperandosParaVariavelLocal(Frame *frame, int indiceVariavel) 
 void transfereVariavelLocalParaPilhaOperandos(Frame *frame, int indiceVariavel) {
 	empilhaOperando(frame, frame->pilhaVariaveisLocais->tipo[indiceVariavel], &(frame->pilhaVariaveisLocais->elementos[indiceVariavel]));
 }
-
-
-
 
