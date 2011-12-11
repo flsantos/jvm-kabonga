@@ -10,7 +10,6 @@
 #include "Heap.h"
 #include "ClassLoader.h"
 
-
 /*
  * Retorna a estrutura ClassFile na lista de Classes solicitada pelo nome da Classe. Caso o ClassFile nao
  * esteja na lista de Classes, ele é criado e adicionado a lista.
@@ -168,8 +167,6 @@ Objeto * instanciaObjeto( ClassFile *cf, ) {
 //	}
 //
 //	ambienteexecucao->current_frame = frame_novo;
-//
-//
 //}
 
 
@@ -188,23 +185,19 @@ Objeto * instanciaObjeto( ClassFile *cf, ) {
 int jumpback(AmbienteExecucao *ambienteexecucao, int n_return) {
 	int i;
 	PilhaOperandos *pilhaoperandos;
-	pFrame *pframe;
-	pframe = ambienteexecucao->pFrame;
+	Frame *frame;
+	frame = ambienteexecucao->pFrame;
+
 	if(ambienteexecucao->pFrame->frameAnterior != NULL) {
 		ambienteexecucao->pFrame = desempilhaFrame(&(ambienteexecucao->pFrame->frameAnterior));
+
 		for(i=0; i< n_return; i++) {
-			pilhaoperandos = desempilhaOperando((&pframe->pilhaOperandos));
-			empilhaOperando(&(ambienteexecucao->pFrame->pilhaOperandos), pilhaoperandos->elementos, pilhaoperandos->);
+			pilhaoperandos = desempilhaOperando(&frame);
+			empilhaOperando(&(ambienteexecucao->pFrame), pilhaoperandos->tipo[0], pilhaoperandos->elementos[0]);
 		}
 
 		return 0;
 	} else {
 		return -1;
 	}
-
-
-
-
 }
-
-
