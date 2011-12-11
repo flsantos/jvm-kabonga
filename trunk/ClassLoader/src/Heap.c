@@ -17,6 +17,7 @@
  * */
 
 #include "Estruturas.h"
+#include "Util.h"
 
 void adicionaClasse (ClassFile *cf, List_Classfile **lcf){
 	List_Classfile *aux;
@@ -40,4 +41,18 @@ void adicionaClasse (ClassFile *cf, List_Classfile **lcf){
 		aux->class_name = malloc(sizeof(cf->constant_pool[cf->constant_pool[cf->this_class -1].u.Class.name_index -1].u.Utf8.length));
 		aux->class_name = cf->constant_pool[cf->constant_pool[cf->this_class -1].u.Class.name_index -1].u.Utf8.bytes;
 	}
+}
+
+ClassFile * buscarClassePorNome(List_Classfile *lcf, char *nomeClasse) {
+	ClassFile *pcf;
+	List_Classfile *plcf;
+	plcf = lcf;
+
+	while (plcf != NULL) {
+		if (strcmp(retornaClassInfo(plcf->cf, plcf->cf->this_class) == nomeClasse)) {
+			return plcf->cf;
+		}
+		plcf = plcf->prox;
+	}
+	return NULL;
 }
