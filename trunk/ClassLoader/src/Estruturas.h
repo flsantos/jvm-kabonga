@@ -236,13 +236,20 @@ typedef struct AMBIENTEEXECUCAO{
 }AmbienteExecucao;
 
 
+typedef struct TIPO_INFO {
+	char *nome;
+	char *tipo;
+	Tipo elemento;
+} tipo_info;
+
+
 /*
  * Estrutura do Objeto a ser instanciado
  */
 typedef struct OBJETO {
 	char *nomeClasse;
-	int fields_count;
-	field_info *fields;
+	int tipos_count;
+	tipo_info *tipos;
 } Objeto;
 
 #endif
