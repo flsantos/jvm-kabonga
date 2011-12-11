@@ -20,6 +20,8 @@ u1 * retornaNomeClasse (ClassFile *cf);
 
 u2 retornaTamanhoPilha (attribute_info *ai);
 
+u2 retornaTamanhoVariaveisLocais(attribute_info *ai);
+
 void empilhaOperando(Frame *frame, char *tipo, void *operando);
 
 PilhaOperandos *desempilhaOperando(Frame *frame);
