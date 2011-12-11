@@ -54,7 +54,7 @@ int main(int argc, char *argv[]) {
 	ae.pFrame = NULL;
 	if (argc >= 2) {
 		nomeClassFile = argv[1];
-		iniciaClasse(nomeClassFile, &ae, "IsPrime", "(I)Z");
+		iniciaClasse(nomeClassFile, &ae, "main", "([Ljava/lang/String;)V");
 	}
 	else {
 		printf("O nome do arquivo .class deve ser passado como parametro.\nFavor verificar documentacao.\n"
