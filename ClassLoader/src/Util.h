@@ -30,9 +30,9 @@ PilhaOperandos *desempilhaOperando(Frame *frame);
 
 int pilhaOperandosVazia(Frame *frame);
 
-void transferePilhaOperandosParaVariavelLocal(Frame *frame, int indiceVariavel);
+void transferePilhaOperandosParaVariavelLocal(Frame *frame, u1 indiceVariavel);
 
-void transfereVariavelLocalParaPilhaOperandos(Frame *frame, int indiceVariavel);
+void transfereVariavelLocalParaPilhaOperandos(Frame *frame, u1 indiceVariavel);
 
 DadosMetodo *retornaDadosMetodo(ClassFile *cf, int n);
 
