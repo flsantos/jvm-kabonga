@@ -1020,8 +1020,16 @@ int lcmp(AmbienteExecucao *ae) {
 	return 0;
 }
 int frem(AmbienteExecucao *ae) {
+	float a, b, rem;
+	b = desempilhaOperando(ae->pFrame)->elementos[0].tipo_float;
+	a = desempilhaOperando(ae->pFrame)->elementos[0].tipo_float;
+
+	rem = (float) fmod(a,b);
+
+	empilhaOperando(ae->pFrame, "F", &rem);
 	return 0;
 }
+
 int drem_(AmbienteExecucao *ae) {
 	return 0;
 }
