@@ -588,9 +588,25 @@ int ifne(AmbienteExecucao *ae) {
 }
 
 int iload(AmbienteExecucao *ae) {
-	u1 pos = leU1doPC(ae->pFrame);
 
-	transfereVariavelLocalParaPilhaOperandos(ae->pFrame, pos);
+	switch(instrucao){
+	case ILOAD_0:
+		transfereVariavelLocalParaPilhaOperandos(ae->pFrame, 0);
+		break;
+	case ILOAD_1:
+		transfereVariavelLocalParaPilhaOperandos(ae->pFrame, 1);
+		break;
+	case ILOAD_2:
+		transfereVariavelLocalParaPilhaOperandos(ae->pFrame, 2);
+		break;
+	case ILOAD_3:
+		transfereVariavelLocalParaPilhaOperandos(ae->pFrame, 3);
+		break;
+	case ILOAD:
+		u1 pos = leU1doPC(ae->pFrame);
+		transfereVariavelLocalParaPilhaOperandos(ae->pFrame, pos);
+		break;
+	}
 	return 0;
 }
 
