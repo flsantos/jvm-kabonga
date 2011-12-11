@@ -223,19 +223,62 @@ int ireturn(AmbienteExecucao *ae) {
 
 	return return_v;
 }
-
+int l2i(AmbienteExecucao *ae) {
+//	PilhaOperandos *a;
+//	int b;
+//	a = desempilhaOperando(ae->pFrame);
+//	b = (int) a->elementos->tipo_long;
+//
+//	empilhaOperando(ae->pFrame, "I", &(b));
+//
+	return 0;
+}
 
 int astore(AmbienteExecucao *ae) {
-	u1 pos = leU1doPC(ae->pFrame);
-	//transfer_opstack_to_localvar(&(interpreter->current_frame->opstack), &(interpreter->current_frame->local_variables), pos);
-	transferePilhaOperandosParaVariavelLocal(ae->pFrame, pos);
+	u1 pos;
+
+	switch (instrucao) {
+	case ASTORE_0:
+		transferePilhaOperandosParaVariavelLocal(ae->pFrame, 0);
+		break;
+	case ASTORE_1:
+		transferePilhaOperandosParaVariavelLocal(ae->pFrame, 1);
+		break;
+	case ASTORE_2:
+		transferePilhaOperandosParaVariavelLocal(ae->pFrame, 2);
+		break;
+	case ASTORE_3:
+		transferePilhaOperandosParaVariavelLocal(ae->pFrame, 3);
+		break;
+	case ASTORE:
+		pos = leU1doPC(ae->pFrame);
+		transferePilhaOperandosParaVariavelLocal(ae->pFrame, pos);
+		break;
+	}
 	return 0;
 }
 
 int aload(AmbienteExecucao *ae) {
-	u1 pos = leU1doPC(ae->pFrame);
-	//transfer_localvar_to_opstack(&(interpreter->current_frame->local_variables), pos, &(interpreter->current_frame->opstack));
-	transfereVariavelLocalParaPilhaOperandos(ae->pFrame, pos);
+
+	u1 pos;
+	switch(instrucao){
+	case ALOAD_0:
+		transfereVariavelLocalParaPilhaOperandos(ae->pFrame, 0);
+		break;
+	case ALOAD_1:
+		transfereVariavelLocalParaPilhaOperandos(ae->pFrame, 1);
+		break;
+	case ALOAD_2:
+		transfereVariavelLocalParaPilhaOperandos(ae->pFrame, 2);
+		break;
+	case ALOAD_3:
+		transfereVariavelLocalParaPilhaOperandos(ae->pFrame, 3);
+		break;
+	case ALOAD:
+		pos = leU1doPC(ae->pFrame);
+		transfereVariavelLocalParaPilhaOperandos(ae->pFrame, pos);
+		break;
+	}
 	return 0;
 }
 
@@ -674,18 +717,137 @@ int i2d(AmbienteExecucao *ae) {
 }
 
 int dstore(AmbienteExecucao *ae) {
+	u1 pos;
+
+	switch (instrucao) {
+	case DSTORE_0:
+		transferePilhaOperandosParaVariavelLocal(ae->pFrame, 0);
+		break;
+	case DSTORE_1:
+		transferePilhaOperandosParaVariavelLocal(ae->pFrame, 1);
+		break;
+	case DSTORE_2:
+		transferePilhaOperandosParaVariavelLocal(ae->pFrame, 2);
+		break;
+	case DSTORE_3:
+		transferePilhaOperandosParaVariavelLocal(ae->pFrame, 3);
+		break;
+	case DSTORE:
+		pos = leU1doPC(ae->pFrame);
+		transferePilhaOperandosParaVariavelLocal(ae->pFrame, pos);
+		break;
+	}
 	return 0;
 }
 
+
 int ldc(AmbienteExecucao *ae) {
+//	char *string;
+//	int integer;
+//	float fvalue;
+//	long long lvalue;
+//	double dvalue;
+//	u1 indice;
+//
+//	switch(instrucao){
+//	case LDC_W:
+//		break;
+//	case LDC2_W:
+//		break;
+//	case LDC:
+//		indice = leU1doPC(ae->pFrame);
+//		//switch((signed int)find_tag_info(interpreter->current_frame->class_file, cp_index)) {
+//		switch((signed int)(ae->pFrame->cf->constant_pool[indice -1]))
+//		case 8:
+//			/* CONSTANT_String */
+//
+////			string = find_string_info(interpreter->current_frame->class_file, cp_index);
+////			opstack_push(&(interpreter->current_frame->opstack), "[", string);
+//			string = ae->pFrame->cf->constant_pool[indice -1].u.Utf8.bytes;
+//			empilhaOperando(ae->pFrame, "[",string);
+//
+//			break;
+//		case 3:
+//			/* CONSTANT_Integer */
+//			integer = find_integer_info(interpreter->current_frame->class_file, cp_index);
+//			opstack_push(&(interpreter->current_frame->opstack), "I", &integer);
+//
+//			break;
+//		case 4:
+//			/* CONSTANT_Float */
+//			fvalue = find_float_info(interpreter->current_frame->class_file, cp_index);
+//			opstack_push(&(interpreter->current_frame->opstack), "F", &fvalue);
+//
+//			break;
+//		case 5:
+//			/* CONSTANT_Long */
+//			lvalue = find_long_info(interpreter->current_frame->class_file, cp_index);
+//			opstack_push(&(interpreter->current_frame->opstack), "J", &lvalue);
+//
+//			break;
+//		case 6:
+//			/* CONSTANT_Double */
+//			dvalue = find_double_info(interpreter->current_frame->class_file, cp_index);
+//			opstack_push(&(interpreter->current_frame->opstack), "D", &dvalue);
+//
+//			break;
+//
+//		default:
+//			fprintf(stderr,"Erro em 'ldc' tag: %d\n", (signed int)find_tag_info(interpreter->current_frame->class_file, cp_index));
+//			exit(1);
+//			break;
+//		}
+//
+//		return 0;
+//		break;
+//	}
 	return 0;
 }
 
 int fstore(AmbienteExecucao *ae) {
+	u1 pos;
+
+	switch (instrucao) {
+	case FSTORE_0:
+		transferePilhaOperandosParaVariavelLocal(ae->pFrame, 0);
+		break;
+	case FSTORE_1:
+		transferePilhaOperandosParaVariavelLocal(ae->pFrame, 1);
+		break;
+	case FSTORE_2:
+		transferePilhaOperandosParaVariavelLocal(ae->pFrame, 2);
+		break;
+	case FSTORE_3:
+		transferePilhaOperandosParaVariavelLocal(ae->pFrame, 3);
+		break;
+	case FSTORE:
+		pos = leU1doPC(ae->pFrame);
+		transferePilhaOperandosParaVariavelLocal(ae->pFrame, pos);
+		break;
+	}
 	return 0;
 }
 
 int fload(AmbienteExecucao *ae) {
+	u1 pos;
+	switch(instrucao){
+	case FLOAD_0:
+		transfereVariavelLocalParaPilhaOperandos(ae->pFrame, 0);
+		break;
+	case FLOAD_1:
+		transfereVariavelLocalParaPilhaOperandos(ae->pFrame, 1);
+		break;
+	case FLOAD_2:
+		transfereVariavelLocalParaPilhaOperandos(ae->pFrame, 2);
+		break;
+	case FLOAD_3:
+		transfereVariavelLocalParaPilhaOperandos(ae->pFrame, 3);
+		break;
+	case FLOAD:
+		pos = leU1doPC(ae->pFrame);
+		transfereVariavelLocalParaPilhaOperandos(ae->pFrame, pos);
+		break;
+	}
 	return 0;
 }
 
@@ -694,10 +856,49 @@ int f2l(AmbienteExecucao *ae) {
 }
 
 int lstore(AmbienteExecucao *ae) {
+	u1 pos;
+
+	switch (instrucao) {
+	case LSTORE_0:
+		transferePilhaOperandosParaVariavelLocal(ae->pFrame, 0);
+		break;
+	case LSTORE_1:
+		transferePilhaOperandosParaVariavelLocal(ae->pFrame, 1);
+		break;
+	case LSTORE_2:
+		transferePilhaOperandosParaVariavelLocal(ae->pFrame, 2);
+		break;
+	case LSTORE_3:
+		transferePilhaOperandosParaVariavelLocal(ae->pFrame, 3);
+		break;
+	case LSTORE:
+		pos = leU1doPC(ae->pFrame);
+		transferePilhaOperandosParaVariavelLocal(ae->pFrame, pos);
+		break;
+	}
 	return 0;
 }
 
 int dload(AmbienteExecucao *ae) {
+	u1 pos;
+	switch(instrucao){
+	case DLOAD_0:
+		transfereVariavelLocalParaPilhaOperandos(ae->pFrame, 0);
+		break;
+	case DLOAD_1:
+		transfereVariavelLocalParaPilhaOperandos(ae->pFrame, 1);
+		break;
+	case DLOAD_2:
+		transfereVariavelLocalParaPilhaOperandos(ae->pFrame, 2);
+		break;
+	case DLOAD_3:
+		transfereVariavelLocalParaPilhaOperandos(ae->pFrame, 3);
+		break;
+	case DLOAD:
+		pos = leU1doPC(ae->pFrame);
+		transfereVariavelLocalParaPilhaOperandos(ae->pFrame, pos);
+		break;
+	}
 	return 0;
 }
 
@@ -705,21 +906,26 @@ int d2i(AmbienteExecucao *ae) {
 	return 0;
 }
 int lload(AmbienteExecucao *ae) {
-//	transfer_localvar_to_opstack(&(ae->current_frame->local_variables), pos, &(ae->current_frame->opstack));
-//
-	return 0;
-}
-
-
-int l2i(AmbienteExecucao *ae) {
-//	PilhaOperandos *a;
-//	int b;
-//	a = desempilhaOperando(ae->pFrame);
-//	b = (int) a->elementos->tipo_long;
-//
-//	empilhaOperando(ae->pFrame, "I", &(b));
-//
-	return 0;
+	u1 pos;
+	switch(instrucao){
+		case LLOAD_0:
+			transfereVariavelLocalParaPilhaOperandos(ae->pFrame, 0);
+			break;
+		case LLOAD_1:
+			transfereVariavelLocalParaPilhaOperandos(ae->pFrame, 1);
+			break;
+		case LLOAD_2:
+			transfereVariavelLocalParaPilhaOperandos(ae->pFrame, 2);
+			break;
+		case LLOAD_3:
+			transfereVariavelLocalParaPilhaOperandos(ae->pFrame, 3);
+			break;
+		case LLOAD:
+			pos = leU1doPC(ae->pFrame);
+			transfereVariavelLocalParaPilhaOperandos(ae->pFrame, pos);
+			break;
+		}
+		return 0;
 }
 
 int lconst(AmbienteExecucao *ae) {
@@ -1192,7 +1398,7 @@ int return0(AmbienteExecucao *ae) {
 	return 0;
 }
 int return1(AmbienteExecucao *ae) {
-	return 0;
+		return jumpback(ae, 1);
 }
 
 int athrow(AmbienteExecucao *ae) {
