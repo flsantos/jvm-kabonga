@@ -223,9 +223,6 @@ int ireturn(AmbienteExecucao *ambienteexecucao){
 }
 
 
-
-
-
 int astore(AmbienteExecucao *ae) {
 	u1 pos = lerU1doPc(ae->pFrame);
 	//transfer_opstack_to_localvar(&(interpreter->current_frame->opstack), &(interpreter->current_frame->local_variables), pos);
