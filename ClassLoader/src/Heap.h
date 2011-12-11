@@ -10,4 +10,6 @@
 
 void adicionaClasse (ClassFile *cf, List_Classfile **lcf);
 
+ClassFile * buscarClassePorNome(List_Classfile *lcf, char *nomeClasse);
+
 #endif /* HEAP_H_ */
