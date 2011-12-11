@@ -224,207 +224,6 @@ int ireturn(AmbienteExecucao *ae) {
 	return return_v;
 }
 
-//TODO: instrucao nao pronta
-//int lload(AmbienteExecucao *ae, int pos) {
-//	transfer_localvar_to_opstack(&(ae->current_frame->local_variables), pos, &(ae->current_frame->opstack));
-//
-//	return 0;
-//}
-//
-//
-//int l2i(AmbienteExecucao *ae) {
-//	PilhaOperandos *a;
-//	int b;
-//	a = desempilhaOperando(ae->pFrame);
-//	b = (int) a->elementos->tipo_long;
-//
-//	empilhaOperando(ae->pFrame, "I", &(b));
-//
-//	return 0;
-//}
-//
-//int lconst(AmbienteExecucao *ae, long long valor) {
-//	empilhaOperando(ae->pFrame, "J", &valor);
-//
-//	return 0;
-//}
-//
-//int fconst(AmbienteExecucao *ae, float valor) {
-//	empilhaOperando(ae->pFrame, "F", &valor);
-//
-//	return 0;
-//}
-//
-//int dconst(AmbienteExecucao *ae, double valor) {
-//	empilhaOperando(ae->pFrame, "D", &valor);
-//
-//	return 0;
-//}
-//
-//int sipush(AmbienteExecucao *ae, int valor) {
-//	empilhaOperando(ae->pFrame, "I", &valor);
-//
-//	return 0;
-//}
-//TODO: instrucao nao pronta
-//int aload(AmbienteExecucao *ae, int pos) {
-//	transfer_localvar_to_opstack(&(ae->current_frame->local_variables), pos, &(ae->current_frame->opstack));
-//
-//	return 0;
-//}
-//
-//int pop(AmbienteExecucao *ae) {
-//	desempilhaOperando(ae->pFrame);
-//
-//	return 0;
-//}
-//
-//int pop2(AmbienteExecucao *ae) {
-//	if((ae->pFrame->pilhaOperandos->tipo)[0] == 'D' ||	(ae->pFrame->pilhaOperandos->tipo)[0] == 'J') {
-//		 desempilhaOperando(ae->pFrame);
-//	} else {
-//		 desempilhaOperando(ae->pFrame);
-//		 desempilhaOperando(ae->pFrame);
-//	}
-//
-//	return 0;
-//}
-//
-//
-//int d2f(AmbienteExecucao *ae) {
-//	PilhaOperandos *a;
-//	float b;
-//	a = desempilhaOperando(ae->pFrame);
-//	b = (float) a->elementos->tipo_double;
-//
-//	empilhaOperando(ae->pFrame, "F", &b);
-//
-//	return 0;
-//}
-//
-//int d2l(AmbienteExecucao *ae) {
-//	PilhaOperandos *a;
-//	long long b;
-//
-//	a = desempilhaOperando(ae->pFrame);
-//	b = (long long) a->elementos->tipo_double;
-//
-//	empilhaOperando(ae->pFrame, "J", &b);
-//
-//	return 0;
-//}
-//
-//int f2d(AmbienteExecucao *ae) {
-//	PilhaOperandos *a;
-//	double b;
-//
-//	a = desempilhaOperando(ae->pFrame);
-//	b = (double) a->elementos->tipo_float;
-//
-//	empilhaOperandos(ae->pFrame, "D", &b);
-//
-//	return 0;
-//}
-//
-//int f2i(AmbienteExecucao *ae) {
-//	PilhaOperandos *a;
-//	int b;
-//
-//	a = desempilhaOperando(ae->pFrame);
-//	b = (int) a->elementos->tipo_float;
-//
-//	empilhaOperandos(ae->pFrame, "I", &b);
-//
-//	return 0;
-//}
-//
-//int i2b(AmbienteExecucao *ae) {
-//	PilhaOperandos *a;
-//	char b;
-//
-//	a = desempilhaOperando(ae->pFrame);
-//	b = (char) a->elementos->tipo_int;
-//
-//	empilhaOperandos(ae->pFrame, "B", &b);
-//
-//	return 0;
-//
-//}
-//
-//int i2c(AmbienteExecucao *ae) {
-//	PilhaOperandos *a;
-//	char b;
-//
-//	a = desempilhaOperando(ae->pFrame);
-//	b = (char) a->elementos->tipo_int;
-//
-//	empilhaOperandos(ae->pFrame, "C", &b);
-//
-//	return 0;
-//}
-//
-//int i2f(AmbienteExecucao *ae) {
-//	PilhaOperandos *a;
-//	float b;
-//
-//	a = desempilhaOperando(ae->pFrame);
-//	b = (char) a->elementos->tipo_int;
-//
-//	empilhaOperandos(ae->pFrame, "F", &b);
-//
-//	return 0;
-//
-//}
-//
-//int i2l(AmbienteExecucao *ae) {
-//	PilhaOperandos *a;
-//	long long b;
-//
-//	a = desempilhaOperando(ae->pFrame);
-//	b = (long long) a->elementos->tipo_int;
-//
-//	empilhaOperandos(ae->pFrame, "J", &b);
-//
-//	return 0;
-//}
-//
-//int i2s(AmbienteExecucao *ae) {
-//	PilhaOperandos *a;
-//	short b;
-//
-//	a = desempilhaOperando(ae->pFrame);
-//	b = (short) a->elementos->tipo_int;
-//
-//	empilhaOperandos(ae->pFrame, "S", &b);
-//
-//	return 0;
-//}
-//
-//int l2d(AmbienteExecucao *ae) {
-//	PilhaOperandos *a;
-//	double b;
-//
-//	a = desempilhaOperando(ae->pFrame);
-//	b = (double) a->elementos->tipo_long;
-//
-//	empilhaOperandos(ae->pFrame, "D", &b);
-//
-//	return 0;
-//}
-//
-//int l2f(AmbienteExecucao *ae) {
-//	PilhaOperandos *a;
-//	float b;
-//
-//	a = desempilhaOperando(ae->pFrame);
-//	b = (float) a->elementos->tipo_long;
-//
-//	empilhaOperandos(ae->pFrame, "F", &b);
-//
-//	return 0;
-//}
-//TODO do Rubens
-
 
 int astore(AmbienteExecucao *ae) {
 	u1 pos = leU1doPC(ae->pFrame);
@@ -904,97 +703,252 @@ int dload(AmbienteExecucao *ae) {
 int d2i(AmbienteExecucao *ae) {
 	return 0;
 }
-int lload(AmbienteExecucao *ae) {
-	return 0;
-}
-
-int l2i(AmbienteExecucao *ae) {
-	return 0;
-}
-
-int lconst(AmbienteExecucao *ae) {
-	return 0;
-}
-
-int fconst(AmbienteExecucao *ae) {
-	return 0;
-}
-
-int dconst(AmbienteExecucao *ae) {
-	return 0;
-}
-
-int sipush(AmbienteExecucao *ae) {
-	return 0;
-}
-
-int pop(AmbienteExecucao *ae) {
-	return 0;
-}
-
-int pop2(AmbienteExecucao *ae) {
-	return 0;
-}
-
-int d2f(AmbienteExecucao *ae) {
-	return 0;
-}
-
-int d2l(AmbienteExecucao *ae) {
-	return 0;
-}
-
-int f2d(AmbienteExecucao *ae) {
-	return 0;
-}
-
-int f2i(AmbienteExecucao *ae) {
-	return 0;
-}
-
-int i2b(AmbienteExecucao *ae) {
-	return 0;
-}
-
-int i2c(AmbienteExecucao *ae) {
-	return 0;
-}
-
-int i2f(AmbienteExecucao *ae) {
-	return 0;
-}
-
-int i2l(AmbienteExecucao *ae) {
-	return 0;
-}
-
-int i2s(AmbienteExecucao *ae) {
-	return 0;
-}
-
-int l2d(AmbienteExecucao *ae) {
-	return 0;
-}
-
-int l2f(AmbienteExecucao *ae) {
-	return 0;
-}
-
-int dmul(AmbienteExecucao *ae) {
-	return 0;
-}
-
-int fmul(AmbienteExecucao *ae) {
-	return 0;
-}
-
-int imul(AmbienteExecucao *ae) {
-	return 0;
-}
-
-int lmul(AmbienteExecucao *ae) {
-	return 0;
-}
+//int lload(AmbienteExecucao *ae, int pos) {
+//	transfer_localvar_to_opstack(&(ae->current_frame->local_variables), pos, &(ae->current_frame->opstack));
+//
+//	return 0;
+//}
+//
+//
+//int l2i(AmbienteExecucao *ae) {
+//	PilhaOperandos *a;
+//	int b;
+//	a = desempilhaOperando(ae->pFrame);
+//	b = (int) a->elementos->tipo_long;
+//
+//	empilhaOperando(ae->pFrame, "I", &(b));
+//
+//	return 0;
+//}
+//
+//int lconst(AmbienteExecucao *ae, long long valor) {
+//	empilhaOperando(ae->pFrame, "J", &valor);
+//
+//	return 0;
+//}
+//
+//int fconst(AmbienteExecucao *ae, float valor) {
+//	empilhaOperando(ae->pFrame, "F", &valor);
+//
+//	return 0;
+//}
+//
+//int dconst(AmbienteExecucao *ae, double valor) {
+//	empilhaOperando(ae->pFrame, "D", &valor);
+//
+//	return 0;
+//}
+//
+//int sipush(AmbienteExecucao *ae, int valor) {
+//	empilhaOperando(ae->pFrame, "I", &valor);
+//
+//	return 0;
+//}
+//TODO: instrucao nao pronta
+//int aload(AmbienteExecucao *ae, int pos) {
+//	transfer_localvar_to_opstack(&(ae->current_frame->local_variables), pos, &(ae->current_frame->opstack));
+//
+//	return 0;
+//}
+//
+//int pop(AmbienteExecucao *ae) {
+//	desempilhaOperando(ae->pFrame);
+//
+//	return 0;
+//}
+//
+//int pop2(AmbienteExecucao *ae) {
+//	if((ae->pFrame->pilhaOperandos->tipo)[0] == 'D' ||	(ae->pFrame->pilhaOperandos->tipo)[0] == 'J') {
+//		 desempilhaOperando(ae->pFrame);
+//	} else {
+//		 desempilhaOperando(ae->pFrame);
+//		 desempilhaOperando(ae->pFrame);
+//	}
+//
+//	return 0;
+//}
+//
+//
+//int d2f(AmbienteExecucao *ae) {
+//	PilhaOperandos *a;
+//	float b;
+//	a = desempilhaOperando(ae->pFrame);
+//	b = (float) a->elementos->tipo_double;
+//
+//	empilhaOperando(ae->pFrame, "F", &b);
+//
+//	return 0;
+//}
+//
+//int d2l(AmbienteExecucao *ae) {
+//	PilhaOperandos *a;
+//	long long b;
+//
+//	a = desempilhaOperando(ae->pFrame);
+//	b = (long long) a->elementos->tipo_double;
+//
+//	empilhaOperando(ae->pFrame, "J", &b);
+//
+//	return 0;
+//}
+//
+//int f2d(AmbienteExecucao *ae) {
+//	PilhaOperandos *a;
+//	double b;
+//
+//	a = desempilhaOperando(ae->pFrame);
+//	b = (double) a->elementos->tipo_float;
+//
+//	empilhaOperandos(ae->pFrame, "D", &b);
+//
+//	return 0;
+//}
+//
+//int f2i(AmbienteExecucao *ae) {
+//	PilhaOperandos *a;
+//	int b;
+//
+//	a = desempilhaOperando(ae->pFrame);
+//	b = (int) a->elementos->tipo_float;
+//
+//	empilhaOperandos(ae->pFrame, "I", &b);
+//
+//	return 0;
+//}
+//
+//int i2b(AmbienteExecucao *ae) {
+//	PilhaOperandos *a;
+//	char b;
+//
+//	a = desempilhaOperando(ae->pFrame);
+//	b = (char) a->elementos->tipo_int;
+//
+//	empilhaOperandos(ae->pFrame, "B", &b);
+//
+//	return 0;
+//
+//}
+//
+//int i2c(AmbienteExecucao *ae) {
+//	PilhaOperandos *a;
+//	char b;
+//
+//	a = desempilhaOperando(ae->pFrame);
+//	b = (char) a->elementos->tipo_int;
+//
+//	empilhaOperandos(ae->pFrame, "C", &b);
+//
+//	return 0;
+//}
+//
+//int i2f(AmbienteExecucao *ae) {
+//	PilhaOperandos *a;
+//	float b;
+//
+//	a = desempilhaOperando(ae->pFrame);
+//	b = (char) a->elementos->tipo_int;
+//
+//	empilhaOperandos(ae->pFrame, "F", &b);
+//
+//	return 0;
+//
+//}
+//
+//int i2l(AmbienteExecucao *ae) {
+//	PilhaOperandos *a;
+//	long long b;
+//
+//	a = desempilhaOperando(ae->pFrame);
+//	b = (long long) a->elementos->tipo_int;
+//
+//	empilhaOperandos(ae->pFrame, "J", &b);
+//
+//	return 0;
+//}
+//
+//int i2s(AmbienteExecucao *ae) {
+//	PilhaOperandos *a;
+//	short b;
+//
+//	a = desempilhaOperando(ae->pFrame);
+//	b = (short) a->elementos->tipo_int;
+//
+//	empilhaOperandos(ae->pFrame, "S", &b);
+//
+//	return 0;
+//}
+//
+//int l2d(AmbienteExecucao *ae) {
+//	PilhaOperandos *a;
+//	double b;
+//
+//	a = desempilhaOperando(ae->pFrame);
+//	b = (double) a->elementos->tipo_long;
+//
+//	empilhaOperandos(ae->pFrame, "D", &b);
+//
+//	return 0;
+//}
+//
+//int l2f(AmbienteExecucao *ae) {
+//	PilhaOperandos *a;
+//	float b;
+//
+//	a = desempilhaOperando(ae->pFrame);
+//	b = (float) a->elementos->tipo_long;
+//
+//	empilhaOperandos(ae->pFrame, "F", &b);
+//
+//	return 0;
+//}
+//
+//int dmul(AmbienteExecucao *ae) {
+//	double a, b, mul;
+//	a = desempilhaOperando(ae->pFrame)->elementos->tipo_double;
+//	b = desempilhaOperando(ae->pFrame)->elementos->tipo_double;
+//
+//	mul = a*b;
+//
+//	empilhaOperandos(ae->pFrame, "D", &mul);
+//
+//	return 0;
+//}
+//
+//int fmul(AmbienteExecucao *ae) {
+//	float a, b, mul;
+//	a = desempilhaOperando(ae->pFrame)->elementos->tipo_float;
+//	b = desempilhaOperando(ae->pFrame)->elementos->tipo_float;
+//
+//	mul = a*b;
+//
+//	empilhaOperandos(ae->pFrame, "F", &mul);
+//
+//	return 0;
+//}
+//
+//int imul(AmbienteExecucao *ae) {
+//	int a, b, mul;
+//	a = desempilhaOperando(ae->pFrame)->elementos->tipo_int;
+//	b = desempilhaOperando(ae->pFrame)->elementos->tipo_int;
+//
+//	mul = a*b;
+//
+//	empilhaOperandos(ae->pFrame, "I", &mul);
+//
+//	return 0;
+//}
+//
+//int lmul(AmbienteExecucao *ae) {
+//	long long a, b, mul;
+//	a = desempilhaOperando(ae->pFrame)->elementos->tipo_long;
+//	b = desempilhaOperando(ae->pFrame)->elementos->tipo_long;
+//
+//	mul = a*b;
+//
+//	empilhaOperandos(ae->pFrame, "J", &mul);
+//
+//	return 0;
+//}
 
 int getstatic(AmbienteExecucao *ae) {
 	return 0;
