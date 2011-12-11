@@ -212,6 +212,12 @@ typedef struct PILHA{
 	Tipo *elementos;
 } PilhaOperandos, PilhaVariaveisLocais;
 
+typedef struct opstack {
+	char *type;
+	t_data_union data;
+	struct opstack *next;
+} t_opstack,  t_local_variable_list, t_array_list;
+
 typedef struct FRAME{
 	int enderecoPC;
 	u4 pc;

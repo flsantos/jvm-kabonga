@@ -9,5 +9,10 @@
 #define FUNCOESBASICAS_H_
 
 
+void jump(AmbienteExecucao *ambienteexecucao, char *classPath, char *methodName, char *descriptor, int n_arguments);
+
+int jumpback(AmbienteExecucao *ambienteexecucao, int n_return);
+
+
 
 #endif /* FUNCOESBASICAS_H_ */

@@ -7,7 +7,7 @@
 
 #include "Estruturas.h"
 
-int (*vetFunc[])(AmbienteExecucao *p) = {
+int (*vetFunc[])(unsigned char *p) = {
 		"nop",
 		"aconst_null",
 		"iconst_m1",
@@ -211,6 +211,20 @@ int (*vetFunc[])(AmbienteExecucao *p) = {
 		"goto_w",
 		"jsr_w"
 };
+
+
+
+int ireturn(AmbienteExecucao *ambienteexecucao){
+	int return_v;
+	return_v = jumpback(ambienteexecucao, 1);
+
+
+	return return_v;
+}
+
+
+
+
 
 int astore(AmbienteExecucao *ae) {
 	u1 pos = lerU1doPc(ae->pFrame);
