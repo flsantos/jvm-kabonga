@@ -214,7 +214,7 @@ typedef struct PILHA{
 
 typedef struct FRAME{
 	int enderecoPC;
-	u4 *pc;
+	u1 *pc;
 	u4 code_length;
 	cp_info *constant_pool;
 	PilhaOperandos *pilhaOperandos;
