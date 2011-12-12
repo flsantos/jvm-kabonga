@@ -1854,12 +1854,34 @@ int ldiv_(AmbienteExecucao *ae) {
 	return 0;
 }
 
-int if_acmpeq(AmbienteExecucao *ae) {
+int if_acmpeq(AmbienteExecucao *ae){
+	void *a, *b;
+	int offset;
+	a = desempilhaOperando(ae->pFrame)->elementos[0].tipo_referencia;
+	b = desempilhaOperando(ae->pFrame)->elementos[0].tipo_referencia;
+
+	offset = leU2doPC(ae->pFrame);
+	if (a == b){
+		ae->pFrame->pc += offset - 3;
+		ae->pFrame->pc += offset -3;
+	}
 	return 0;
 }
-int if_acmpne(AmbienteExecucao *ae) {
+
+int if_acmpne(AmbienteExecucao *ae){
+	void *a, *b;
+	int offset;
+	a = desempilhaOperando(ae->pFrame)->elementos[0].tipo_referencia;
+	b = desempilhaOperando(ae->pFrame)->elementos[0].tipo_referencia;
+
+	offset = leU2doPC(ae->pFrame);
+	if (a != b){
+		ae->pFrame->pc += offset - 3;
+		ae->pFrame->pc += offset -3;
+	}
 	return 0;
 }
+
 int if_icmpeq(AmbienteExecucao *ae) {
 	return 0;
 }
