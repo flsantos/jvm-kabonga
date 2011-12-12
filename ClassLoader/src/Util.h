@@ -41,3 +41,5 @@ DadosMetodo *retornaDadosMetodo(ClassFile *cf, int n);
 DadosNameAndType *retornaDadosNameAndTypeInfo(ClassFile *cf, int n);
 
 int retornaContadorArgumentos(char *descriptor);
+
+void adicionaValorArray(Array **array, int posicao, char *tipo, void *info);
