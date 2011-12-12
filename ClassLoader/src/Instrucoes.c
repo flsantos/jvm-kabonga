@@ -1840,6 +1840,17 @@ int idiv_(AmbienteExecucao *ae) {
 }
 
 int ldiv_(AmbienteExecucao *ae) {
+	long long a, b, div;
+	a = desempilhaOperando(ae->pFrame)->elementos->tipo_long;
+	b = desempilhaOperando(ae->pFrame)->elementos->tipo_long;
+
+	if (a == 0){
+		printf("\nDivisao de long por zero requisitada, retornando valor nulo.\n");
+		div = 0;
+	} else {
+		div = b/a;
+	}
+	empilhaOperando(ae->pFrame,"J", &div);
 	return 0;
 }
 
@@ -2207,7 +2218,7 @@ int lookupswitch(AmbienteExecucao *ae) {
 	}
 
 	objref = desempilhaOperando(ae->pFrame);
-	case_value = objref->elementos[objref->sp]->tipo_int;
+	case_value = objref->elementos[objref->sp].tipo_int;
 
 
 	if ( objref->tipo[objref->sp][0] != 'I'){
