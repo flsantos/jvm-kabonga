@@ -168,6 +168,15 @@ void transferePilhaOperandosParaVariavelLocal(Frame *frame, u1 indiceVariavel) {
 	frame->pilhaVariaveisLocais->tipo[indiceVariavel] = op->tipo[0];
 }
 
+void transferePilhaOperandosParaVariavelLocalPorFrames(Frame *frame1, Frame *frame2, u1 indiceVariavel) {
+	PilhaOperandos *op;
+
+	op = desempilhaOperando(frame1);
+
+	frame2->pilhaVariaveisLocais->elementos[indiceVariavel] = op->elementos[0];
+	frame2->pilhaVariaveisLocais->tipo[indiceVariavel] = op->tipo[0];
+}
+
 void transfereVariavelLocalParaPilhaOperandos(Frame *frame, u1 indiceVariavel) {
 	empilhaOperando(frame, frame->pilhaVariaveisLocais->tipo[indiceVariavel],
 			&(frame->pilhaVariaveisLocais->elementos[indiceVariavel]));

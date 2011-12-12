@@ -310,13 +310,11 @@ int istore(AmbienteExecucao *ae) {
 int invokespecial(AmbienteExecucao *ae) {
 	u2 indice = leU2doPC(ae->pFrame);
 	DadosMetodo *dadosMetodo;
-	int arg_count;
+	int argumento;
 
 	printf("\ninvokespecial");
-	//getchar();
 
 	dadosMetodo = retornaDadosMetodo(ae->pFrame->cf, indice);
-
 	if ((strcmp(dadosMetodo->nomeClasse, "java/lang/StringBuffer") == 0
 			|| strcmp(dadosMetodo->nomeClasse, "java/lang/StringBuilder") == 0)
 			&& strcmp(dadosMetodo->nomeMetodo, "<init>") == 0) {
@@ -324,23 +322,40 @@ int invokespecial(AmbienteExecucao *ae) {
 		return 0;
 	}
 
-	arg_count = retornaContadorArgumentos(dadosMetodo->tipo) + 1;
+	argumento = retornaContadorArgumentos(dadosMetodo->tipo) + 1;
 
 	/*jump(ae, dadosMetodo->nomeClasse, dadosMetodo->nomeMetodo,
-	 dadosMetodo->tipo, arg_count);*/
-	iniciaClasse(dadosMetodo->nomeClasse, ae, dadosMetodo->nomeMetodo,
-			dadosMetodo->tipo);
+	 dadosMetodo->tipo, argumento);*/
+	iniciaExecucaoMetodo(dadosMetodo->nomeClasse, ae, dadosMetodo->nomeMetodo,
+			dadosMetodo->tipo, argumento);
 
 	return 0;
 }
 
+int dup(AmbienteExecucao *ae) {
+
+	printf("\ndup");
+
+	//t_opstack *a = desempilhaOperando((&interpreter->current_frame->opstack));
+	PilhaOperandos *a = desempilhaOperando(ae->pFrame);
+	if ((*(a->tipo[0]) == 'J') || (*(a->tipo[0]) == 'D')) {
+		printf(
+				"Instrucao 'dup' nao permitida para valores 'double' ou 'long'.\n");
+		exit(1);
+	}
+
+	//empilhaOperando_data(&(interpreter->current_frame->opstack),a->type,a->data);
+	empilhaOperando(ae->pFrame, a->tipo[0], &(a->elementos[a->sp]));
+	//empilhaOperando_data(&(interpreter->current_frame->opstack),a->type,a->data);
+	empilhaOperando(ae->pFrame, a->tipo[0], &(a->elementos[a->sp]));
+
+	return 0;
+}
 
 int new_(AmbienteExecucao *ae) {
 	u2 indice = leU2doPC(ae->pFrame);
 	char *nomeClasse;
 	Objeto *objeto;
-	printf("\nnew");
-	//getchar();
 	nomeClasse = (char *) retornaClassInfo(ae->pFrame->cf, indice);
 	/* ajustando para o caso da StringBuffer */
 	if ((strcmp(nomeClasse, "java/lang/StringBuffer") == 0
@@ -354,9 +369,8 @@ int new_(AmbienteExecucao *ae) {
 	}
 
 	//class_file = leitura_class_file(interpreter, nomeClasse);
-	iniciaClasse(nomeClasse, ae, "<init>", "()V");
-
-	objeto = instanciaObjeto(ae->pFrame->cf, ae);
+	verificarClassFile(ae, nomeClasse);
+	objeto = ae->pClassHeap->obj;
 
 	//empilhaOperando(&(interpreter->current_frame->opstack), "L", object);
 	empilhaOperando(ae->pFrame, "L", objeto);
@@ -443,9 +457,6 @@ int irem(AmbienteExecucao *ae) {
 	empilhaOperando(ae->pFrame, "I", &rem);
 
 	return 0;
-}
-
-int lrem(AmbienteExecucao *ae) {
 }
 
 int goto_(AmbienteExecucao *ae) {
@@ -664,17 +675,17 @@ int invokevirtual(AmbienteExecucao *ae) {
 
 	} else {
 		DadosMetodo *dadosMetodo;
-		int arg_count;
+		int argumento;
 
 		dadosMetodo = retornaDadosMetodo(ae->pFrame->cf, cp_indice);
 
-		arg_count = retornaContadorArgumentos(dadosMetodo->tipo) + 1;
+		argumento = retornaContadorArgumentos(dadosMetodo->tipo) + 1;
 
 //				jump(ae, dadosMetodo->nomeClasse, dadosMetodo->nomeMetodo,
-//						dadosMetodo->tipo, arg_count);
+//						dadosMetodo->tipo, argumento);
 
-		iniciaClasse(dadosMetodo->nomeClasse, ae, dadosMetodo->nomeMetodo,
-				dadosMetodo->tipo);
+		iniciaExecucaoMetodo(dadosMetodo->nomeClasse, ae, dadosMetodo->nomeMetodo,
+				dadosMetodo->tipo, argumento);
 	}
 
 	return 0;
@@ -934,7 +945,9 @@ int sipush(AmbienteExecucao *ae) {
 //
 	return 0;
 }
-
+int lrem(AmbienteExecucao *ae){
+	return 0;
+}
 int pop(AmbienteExecucao *ae) {
 	desempilhaOperando(ae->pFrame);
 
@@ -1181,7 +1194,6 @@ int fsub(AmbienteExecucao *ae) {
 
 	return 0;
 }
-
 int isub(AmbienteExecucao *ae) {
 	int a, b, sub;
 	a = desempilhaOperando(ae->pFrame)->elementos->tipo_int;
@@ -1203,7 +1215,6 @@ int ladd(AmbienteExecucao *ae){
 
 	return 0;
 }
-
 int lsub(AmbienteExecucao *ae) {
 	long long a, b, sub;
 	a = desempilhaOperando(ae->pFrame)->elementos->tipo_long;
@@ -1472,7 +1483,6 @@ int ishr(AmbienteExecucao *ae) {
 
 	return 0;
 }
-
 int iushr(AmbienteExecucao *ae) {
 	int a, b, mask, res;
 
@@ -1490,7 +1500,6 @@ int iushr(AmbienteExecucao *ae) {
 
 	return 0;
 }
-
 int lshl(AmbienteExecucao *ae) {
 	long long a, mask, res;
 	int b;
@@ -1506,7 +1515,6 @@ int lshl(AmbienteExecucao *ae) {
 
 	return 0;
 }
-
 int lshr(AmbienteExecucao *ae) {
 	long long a, mask, res, sign;
 	int b;
@@ -1525,7 +1533,6 @@ int lshr(AmbienteExecucao *ae) {
 
 	return 0;
 }
-
 int lushr(AmbienteExecucao *ae) {
 	long long a, mask, res;
 	int b;
@@ -1558,28 +1565,6 @@ int swap(AmbienteExecucao *ae){
 	return 0;
 }
 
-int dup(AmbienteExecucao *ae) {
-
-	printf("\ndup");
-	//getchar();
-
-	//t_opstack *a = desempilhaOperando((&interpreter->current_frame->opstack));
-	PilhaOperandos *a = desempilhaOperando(ae->pFrame);
-	if ((*(a->tipo[0]) == 'J') || (*(a->tipo[0]) == 'D')) {
-		printf(
-				"Instrucao 'dup' nao permitida para valores 'double' ou 'long'.\n");
-		exit(1);
-	}
-
-	//empilhaOperando_data(&(interpreter->current_frame->opstack),a->type,a->data);
-	empilhaOperando(ae->pFrame, a->tipo[0], &(a->elementos[a->sp]));
-	//empilhaOperando_data(&(interpreter->current_frame->opstack),a->type,a->data);
-	empilhaOperando(ae->pFrame, a->tipo[0], &(a->elementos[a->sp]));
-
-	return 0;
-}
-
-
 int dup2(AmbienteExecucao *ae){
 	PilhaOperandos *a, *b;
 
@@ -1603,7 +1588,6 @@ int dup2(AmbienteExecucao *ae){
 	empilhaOperando(ae->pFrame,(a->tipo)[0],a->elementos);
 
 	return 0;
-
 }
 
 int dup_x1(AmbienteExecucao *ae){

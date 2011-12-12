@@ -12,20 +12,24 @@
  * esteja na lista de Classes, ele é criado e adicionado a lista.
  */
 ClassFile * verificarClassFile(AmbienteExecucao *ae, char *nomeClasse) {
-	ClassFile *classFile = NULL;
+	ClassFile *cf = NULL;
 	char *nomeArquivo;
+	int i;
 
-	nomeArquivo = nomeClasse;
-	strcat(nomeArquivo, ".class");
-	classFile = buscarClassePorNome(ae->pClassHeap, nomeClasse);
-	if (classFile == NULL) {
-		classFile = malloc(sizeof(ClassFile));
-		classFile[0] = lerClassFile(nomeArquivo);
-		adicionaClasse(classFile, &(ae->pClassHeap));
+	cf = buscarClassePorNome(ae->pClassHeap, nomeClasse);
+	if (cf == NULL) {
+		nomeArquivo = malloc(strlen(nomeClasse) + 7 * sizeof(char));
+		for(i = 0; i <= strlen(nomeClasse); i++){
+			nomeArquivo[i] = nomeClasse[i];
+		}
+		strcat(nomeArquivo, ".class");
+		cf = malloc(sizeof(ClassFile));
+		cf[0] = lerClassFile(nomeArquivo);
+		Objeto *obj = instanciaObjeto(cf, ae);
+
+		adicionaClasse(cf, &(ae->pClassHeap), obj);
 	}
-	// TODO Fazer criar ClassFile de classes de outros packages
-
-	return classFile;
+	return cf;
 }
 
 /*
@@ -34,12 +38,14 @@ ClassFile * verificarClassFile(AmbienteExecucao *ae, char *nomeClasse) {
 List_Classfile *retornaSuperClasses(AmbienteExecucao *ae, ClassFile *cf) {
 	ClassFile *p1;
 	List_Classfile *listaClasses;
+	char *str;
 	listaClasses = NULL;
 	p1 = cf;
-
-	while (p1->super_class != 0) {
-		p1 = verificarClassFile(ae, (char *)retornaClassInfo(p1, p1->super_class));
-		adicionaClasse(p1, &listaClasses);
+	str = (char *) retornaClassInfo(p1, p1->super_class);
+	while (strcmp(str, "java/lang/Object") != 0) {
+		printf("\n\n%s", str);
+		p1 = verificarClassFile(ae,
+				(char *) retornaClassInfo(p1, p1->super_class));
 	}
 	return listaClasses;
 }
@@ -67,11 +73,10 @@ Objeto * instanciaObjeto(ClassFile *cf, AmbienteExecucao *ae) {
 			p1 = p1->prox;
 		}
 	}
-
 	newObjeto->tipos_count = tiposCount;
 	newObjeto->tipos = malloc(tiposCount * sizeof(tipo_info));
 	ti = newObjeto->tipos;
-	newObjeto->nomeClasse = (char *)retornaNomeClasse(cf);
+	newObjeto->nomeClasse = (char *) retornaNomeClasse(cf);
 	pFieldInfo = cf->fields;
 
 	tiposIndex = 0;
@@ -80,11 +85,11 @@ Objeto * instanciaObjeto(ClassFile *cf, AmbienteExecucao *ae) {
 
 		index = cf->fields[i].name_index;
 		index--;
-		newObjeto->tipos[tiposIndex].nome = (char *)retornaUtf8(cf, index);
+		newObjeto->tipos[tiposIndex].nome = (char *) retornaUtf8(cf, index);
 
 		index = cf->fields[i].descriptor_index;
 		index--;
-		newObjeto->tipos[tiposIndex].tipo = (char *)retornaUtf8(cf, index);
+		newObjeto->tipos[tiposIndex].tipo = (char *) retornaUtf8(cf, index);
 
 		tiposIndex++;
 	}
@@ -95,11 +100,11 @@ Objeto * instanciaObjeto(ClassFile *cf, AmbienteExecucao *ae) {
 		for (i = 0; i < count; i++) {
 			index = p1->cf->fields[i].name_index;
 			index--;
-			newObjeto->tipos[tiposIndex].nome = (char *)retornaUtf8(cf, index);
+			newObjeto->tipos[tiposIndex].nome = (char *) retornaUtf8(cf, index);
 
 			index = p1->cf->fields[i].descriptor_index;
 			index--;
-			newObjeto->tipos[tiposIndex].tipo = (char *)retornaUtf8(cf, index);
+			newObjeto->tipos[tiposIndex].tipo = (char *) retornaUtf8(cf, index);
 
 			tiposIndex++;
 		}
@@ -183,8 +188,8 @@ int jumpback(AmbienteExecucao *ae, int n_return) {
 
 		for (i = 0; i < n_return; i++) {
 			pilhaoperandos = desempilhaOperando(frame);
-			empilhaOperando(ae->pFrame,
-					pilhaoperandos->tipo[0], &(pilhaoperandos->elementos[0]));
+			empilhaOperando(ae->pFrame, pilhaoperandos->tipo[0],
+					&(pilhaoperandos->elementos[0]));
 		}
 
 		return 0;

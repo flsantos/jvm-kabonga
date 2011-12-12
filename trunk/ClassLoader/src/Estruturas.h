@@ -19,6 +19,8 @@ typedef int16_t i2;
 typedef int32_t i4;
 typedef int64_t i8;
 
+typedef struct OBJETO Objeto;
+
 typedef struct UFLOAT {
 	union {
 		u4 bits;
@@ -84,19 +86,19 @@ typedef struct CP_INFO {
 	} u;
 } cp_info;
 
-typedef struct EXCEPTION_TABLE{
+typedef struct EXCEPTION_TABLE {
 	u2 start_pc;
 	u2 end_pc;
 	u2 handler_pc;
 	u2 catch_type;
 } exception_table;
 
-typedef struct LINE_NUMBER_TABLE{
+typedef struct LINE_NUMBER_TABLE {
 	u2 start_pc;
 	u2 line_number;
 } line_number_table;
 
-typedef struct LOCAL_VARIABLE_TABLE{
+typedef struct LOCAL_VARIABLE_TABLE {
 	u2 start_pc;
 	u2 length;
 	u2 name_index;
@@ -104,7 +106,7 @@ typedef struct LOCAL_VARIABLE_TABLE{
 	u2 index;
 } local_variable_table;
 
-typedef struct CLASSES{
+typedef struct CLASSES {
 	u2 inner_class_info_index;
 	u2 outer_class_info_index;
 	u2 inner_name_index;
@@ -168,7 +170,7 @@ typedef struct METHOD_INFO {
  * Definicao da estrutura de um Classfile
  * As informacoes nao utilizadas estao comentadas
  */
-typedef struct  CLASSFILE{
+typedef struct CLASSFILE {
 	u4 magic;
 	u2 minor_version;
 	u2 major_version;
@@ -187,14 +189,7 @@ typedef struct  CLASSFILE{
 	attribute_info *attributes;
 } ClassFile;
 
-typedef struct LIST_CLASSFILE{
-	u1 *class_name;
-	ClassFile *cf;
-	struct LIST_CLASSFILE *prox;
-}List_Classfile;
-
-
-typedef union TIPO{
+typedef union TIPO {
 	i1 tipo_byte;
 	u1 tipo_char;
 	u2 tipo_short;
@@ -203,17 +198,17 @@ typedef union TIPO{
 	double tipo_double;
 	long tipo_long;
 	char tipo_boolean;
-	void *tipo_referencia;
+	Objeto *tipo_referencia;
 	u1 *tipo_retorno;
 } Tipo;
 
-typedef struct PILHA{
+typedef struct PILHA {
 	i2 sp;
 	Tipo *elementos;
 	char **tipo;
 } PilhaOperandos, PilhaVariaveisLocais;
 
-typedef struct FRAME{
+typedef struct FRAME {
 	int enderecoPC;
 	u1 *pc;
 	cp_info *constant_pool;
@@ -223,27 +218,27 @@ typedef struct FRAME{
 	struct FRAME *frameAnterior;
 } Frame;
 
-typedef struct AMBIENTEEXECUCAO{
-	Frame *pFrame;
-	List_Classfile *pClassHeap;
-}AmbienteExecucao;
-
-
 typedef struct TIPO_INFO {
 	char *nome;
 	char *tipo;
 	Tipo elemento;
 } tipo_info;
 
-
 /*
  * Estrutura do Objeto a ser instanciado
  */
-typedef struct OBJETO {
+struct OBJETO {
 	char *nomeClasse;
 	int tipos_count;
 	tipo_info *tipos;
-} Objeto;
+};
+
+typedef struct LIST_CLASSFILE {
+	u1 *class_name;
+	ClassFile *cf;
+	Objeto *obj;
+	struct LIST_CLASSFILE *prox;
+} List_Classfile;
 
 typedef struct DADOSMETODO {
 	char *nomeClasse;
@@ -268,4 +263,10 @@ typedef struct DADOSMETHODANDCLASS {
 	ClassFile *class_file;
 } DadosMethodAndClass;
 
+typedef struct AMBIENTEEXECUCAO {
+	Frame *pFrame;
+	List_Classfile *pClassHeap;
+} AmbienteExecucao;
+
 #endif
+
