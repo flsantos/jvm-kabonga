@@ -206,7 +206,7 @@ typedef struct PILHA {
 	i2 sp;
 	Tipo *elementos;
 	char **tipo;
-} PilhaOperandos, PilhaVariaveisLocais;
+} PilhaOperandos, PilhaVariaveisLocais, Array;
 
 typedef struct FRAME {
 	int enderecoPC;
