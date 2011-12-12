@@ -1451,29 +1451,133 @@ int frem(AmbienteExecucao *ae) {
 }
 
 int drem_(AmbienteExecucao *ae) {
+	double a, b, rem;
+	b = desempilhaOperando(ae->pFrame)->elementos[0].tipo_double;
+	a = desempilhaOperando(ae->pFrame)->elementos[0].tipo_double;
+	rem = fmod(a,b);
+
+	empilhaOperando(ae->pFrame, "D", &rem);
+
 	return 0;
 }
+
 int ishl(AmbienteExecucao *ae) {
+	int a, b, mask, res;
+
+	mask = 0x1F;		/* 0x1F, ou 31 seta os 5 primeiros bits como 1 */
+
+	b = desempilhaOperando(ae->pFrame)->elementos[0].tipo_int;
+	a = desempilhaOperando(ae->pFrame)->elementos[0].tipo_int;
+	res = a<<(b & mask);
+
+	empilhaOperando(ae->pFrame, "I", &res);
+
 	return 0;
 }
+
 int ishr(AmbienteExecucao *ae) {
+	int a, b, mask, res, sign;
+
+	mask = 0x1F;			/* 0x1F, ou 31 seta os 5 primeiros bits como 1 */
+	sign = 0x80000000;		/* Ultimo bit setado como 1 */
+
+	b = desempilhaOperando(ae->pFrame)->elementos[0].tipo_int;
+	a = desempilhaOperando(ae->pFrame)->elementos[0].tipo_int;
+
+	sign = sign & a;		/* pegando o sign */
+	res = a>>(b & mask);
+	res = res | sign;		/* devolvendo o sign */
+
+	empilhaOperando(ae->pFrame, "I", &res);
+
 	return 0;
 }
+
 int iushr(AmbienteExecucao *ae) {
+	int a, b, mask, res;
+
+	mask = 0x1F;		/* 0x1F, ou 31 seta os 5 primeiros bits como 1 */
+
+	b = desempilhaOperando(ae->pFrame)->elementos[0].tipo_int;
+	a = desempilhaOperando(ae->pFrame)->elementos[0].tipo_int;
+
+	if (a >= 0)
+		res = a>>(b & mask);
+	else
+		res = (a>>(b & mask)) + (2>>(b & mask));
+
+	empilhaOperando(ae->pFrame, "I", &res);
+
 	return 0;
 }
+
 int lshl(AmbienteExecucao *ae) {
+	long long a, mask, res;
+	int b;
+
+	mask = 0x3F;		/* 0x3F, ou 63 seta os 6 primeiros bits como 1 */
+
+	b = desempilhaOperando(ae->pFrame)->elementos[0].tipo_int;
+	a = desempilhaOperando(ae->pFrame)->elementos[0].tipo_long;
+
+	res = a<<(b & mask);
+
+	empilhaOperando(ae->pFrame, "J", &res);
+
 	return 0;
 }
+
 int lshr(AmbienteExecucao *ae) {
+	long long a, mask, res, sign;
+	int b;
+
+	mask = 0x3F;					/* 0x1F, ou 63 seta os 6 primeiros bits como 1 */
+	sign = 0x80000000;				/* Ultimo bit setado como 1 */
+
+	b = desempilhaOperando(ae->pFrame)->elementos[0].tipo_int;
+	a = desempilhaOperando(ae->pFrame)->elementos[0].tipo_long;
+
+	sign = sign & a;		/* pegando o sign */
+	res = a>>(b & mask);
+	res = res | sign;		/* devolvendo o sign */
+
+	empilhaOperando(ae->pFrame, "J", &res);
+
 	return 0;
 }
+
 int lushr(AmbienteExecucao *ae) {
+	long long a, mask, res;
+	int b;
+
+	mask = 0x3F;		/* 0x1F, ou 63 seta os 6 primeiros bits como 1 */
+
+	b = desempilhaOperando(ae->pFrame)->elementos[0].tipo_int;
+	a = desempilhaOperando(ae->pFrame)->elementos[0].tipo_long;
+
+	if (a >= 0)
+		res = a>>(b & mask);
+	else
+		res = (a>>(b & mask)) + (2L>>(b & mask));
+
+	empilhaOperando(ae->pFrame, "J", &res);
+
 	return 0;
 }
-int swap(AmbienteExecucao *ae) {
+
+int swap(AmbienteExecucao *ae){
+	PilhaOperandos *a, *b;
+
+	b = desempilhaOperando(ae->pFrame);
+	a = desempilhaOperando(ae->pFrame);
+
+	empilhaOperando(ae->pFrame,*(a->tipo),&(a->elementos));
+	empilhaOperando(ae->pFrame,*(b->tipo),&(b->elementos));
+
+
 	return 0;
 }
+
 
 int dup2(AmbienteExecucao *ae) {
 	return 0;
