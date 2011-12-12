@@ -252,7 +252,7 @@ int retornaContadorArgumentos(char *descriptor) {
 	return count;
 }
 
-
+/*
 
 void adicionaValorArray(Array *array, int posicao, char *tipo, void *info) {
 	if(tipo[0] == 'B') {
@@ -278,4 +278,4 @@ void adicionaValorArray(Array *array, int posicao, char *tipo, void *info) {
 	} else if(tipo[0] == 'r') {
 		array->elementos[posicao]->tipo_retorno = ((char*)info);
 	}
-}
+}*/
