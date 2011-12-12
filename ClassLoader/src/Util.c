@@ -332,3 +332,17 @@ int defineFieldObjeto(Objeto *object, char *nomeField, char *tipo, Tipo info) {
 	}
 	return -1;
 }
+
+
+tipo_info *retornaFieldObjeto(Objeto *object, char *nomeField) {
+	tipo_info *p1;
+	int n, i;
+	n = object->numeroTipos;
+
+	for(i=0, p1 = object->tipos; i<n; i++, p1++) {
+		if(strcmp(p1->nome, nomeField) == 0) {
+			return p1;
+		}
+	}
+	return NULL;
+}

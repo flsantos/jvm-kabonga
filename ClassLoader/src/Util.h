@@ -47,3 +47,5 @@ int retornaContadorArgumentos(char *descriptor);
 void adicionaValorArray(Array *array, int posicao, char *tipo, void *info);
 
 int defineFieldObjeto(Objeto *object, char *nomeField, char *tipo, Tipo info);
+
+tipo_info *retornaFieldObjeto(Objeto *object, char *nomeField);
