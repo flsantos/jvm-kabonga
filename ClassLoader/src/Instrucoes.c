@@ -375,8 +375,11 @@ int new_(AmbienteExecucao *ae) {
 
 }
 
+/**
+ * @author Daniel
+ */
 int if_icmplt(AmbienteExecucao *ae) {
-	u2 branchoffset = leU2doPC(ae->pFrame);
+	u2 offsetDestino = leU2doPC(ae->pFrame);
 	int a, b;
 	//b = desempilhaOperando(&(interpreter->current_frame->opstack))->data.data_int;
 	//a = desempilhaOperando(&(interpreter->current_frame->opstack))->data.data_int;
