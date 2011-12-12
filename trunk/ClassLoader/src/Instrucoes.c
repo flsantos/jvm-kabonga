@@ -1861,6 +1861,32 @@ int baload(AmbienteExecucao *ae) {
 	return 0;
 }
 int bastore(AmbienteExecucao *ae) {
+	int valor, indice;
+	Array *referencias;
+	char valorChar;
+	int mascara;
+	int tamanho = 0;
+	mascara = 0x00000001;
+
+	valor = desempilhaOperando(ae->pFrame)->elementos->tipo_int;
+	indice= desempilhaOperando(ae->pFrame)->elementos->tipo_int;
+	referencias = (Array*)desempilhaOperando(ae->pFrame)->elementos->tipo_referencia;
+
+	while (referencias->tipo[referencias->sp][tamanho] == '[' ){
+		tamanho++;
+	}
+
+	if((referencias->tipo[referencias->sp])[tamanho] == 'B') {
+		valorChar = (int)valor;
+		adicionaValorArray(referencias, indice, "B", &valorChar);
+	} else if((referencias->tipo)[tamanho] == 'Z') {
+		valorChar = (valor & mascara);
+		adicionaValorArray(referencias, indice, "Z", &valorChar);
+	} else {
+		printf("Erro em 'bastore'\n");
+		exit(1);
+	}
+
 	return 0;
 }
 
@@ -1963,10 +1989,30 @@ int getfield(AmbienteExecucao *ae) {
 	return 0;
 }
 
+/*
+ * Autor: Fernando
+ */
 int fdiv(AmbienteExecucao *ae) {
+	float a, b, div;
+	b = desempilhaOperando(ae->pFrame)->elementos[0].tipo_float;
+	a = desempilhaOperando(ae->pFrame)->elementos[0].tipo_float;
+
+	div = b/a;
+
+	empilhaOperando(ae->pFrame, "F", &div);
 	return 0;
 }
+/*
+ * Autor: Fernando
+ */
 int ddiv(AmbienteExecucao *ae) {
+	double a, b, div;
+	b = desempilhaOperando(ae->pFrame)->elementos[0].tipo_double;
+	a = desempilhaOperando(ae->pFrame)->elementos[0].tipo_double;
+
+	div = b/a;
+
+	empilhaOperando(ae->pFrame, "D", &div);
 	return 0;
 }
 /*
