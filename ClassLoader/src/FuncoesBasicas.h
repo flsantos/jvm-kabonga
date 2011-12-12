@@ -13,6 +13,8 @@
 #include "Heap.h"
 #include "ClassLoader.h"
 
+ClassFile * verificarClassFile(AmbienteExecucao *ae, char *nomeClasse);
+
 Objeto * instanciaObjeto(ClassFile *cf, AmbienteExecucao *ae);
 
 int jumpback(AmbienteExecucao *ambienteexecucao, int n_return);

@@ -468,7 +468,7 @@ ClassFile lerClassFile(char *nomeArquivo) {
 
 	fp = fopen(nomeArquivo, "rb");
 	if (fp == NULL) {
-		printf("Arquivo nao encontrado: %s\n", nomeArquivo);
+		printf("\nArquivo nao encontrado: %s\n", nomeArquivo);
 		exit(1);
 	}
 
