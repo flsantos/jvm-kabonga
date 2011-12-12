@@ -142,7 +142,7 @@ PilhaOperandos *desempilhaOperando(Frame *frame) {
 		operando->elementos[0] = frame->pilhaOperandos->elementos[sp];
 		operando->tipo = &(frame->pilhaOperandos->tipo[sp]);
 
-		operando->sp = 1;
+		operando->sp = sp;
 
 		frame->pilhaOperandos->sp--;
 	} else {
