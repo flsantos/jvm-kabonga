@@ -297,3 +297,39 @@ void adicionaValorArray(Array *array, int posicao, char *tipo, void *info) {
 	array->tipo[posicao] = tipo;
 }
 
+int defineFieldObjeto(Objeto *object, char *nomeField, char *tipo, Tipo info) {
+	tipo_info *p1;
+	int n, i;
+	n = object->numeroTipos;
+
+	for(i=0, p1 = object->tipos; i < n; i++, p1++) {
+		if(strcmp(p1->nome, nomeField) == 0) {
+			p1->tipo = tipo;
+			if(tipo[0] == 'B') {
+				p1->elemento.tipo_byte = info.tipo_byte;
+			} else if(tipo[0] == 'C') {
+				p1->elemento.tipo_char = info.tipo_char;
+			} else if(tipo[0] == 'D') {
+				p1->elemento.tipo_double = info.tipo_double;
+			} else if(tipo[0] == 'F') {
+				p1->elemento.tipo_float= info.tipo_float;
+			} else if(tipo[0] == 'I') {
+				p1->elemento.tipo_int = info.tipo_int;
+			} else if(tipo[0] == 'J') {
+				p1->elemento.tipo_long = info.tipo_long;
+			} else if(tipo[0] == 'L') {
+				p1->elemento.tipo_referencia = info.tipo_referencia;
+			} else if(tipo[0] == 'S') {
+				p1->elemento.tipo_short = info.tipo_short;
+			} else if(tipo[0] == 'Z') {
+				p1->elemento.tipo_boolean = info.tipo_boolean;
+			} else if(tipo[0] == '[') {
+				p1->elemento.tipo_referencia = info.tipo_referencia;
+			} else if(tipo[0] == 'r') {
+				p1->elemento.tipo_retorno = info.tipo_retorno;
+			}
+			return 1;
+		}
+	}
+	return -1;
+}
