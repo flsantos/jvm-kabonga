@@ -71,7 +71,7 @@ Objeto * instanciaObjeto(ClassFile *cf, AmbienteExecucao *ae) {
 			p1 = p1->prox;
 		}
 	}
-	newObjeto->tipos_count = tiposCount;
+	newObjeto->numeroTipos = tiposCount;
 	newObjeto->tipos = malloc(tiposCount * sizeof(tipo_info));
 	ti = newObjeto->tipos;
 	newObjeto->nomeClasse = (char *) retornaNomeClasse(cf);

@@ -45,3 +45,5 @@ DadosField *retornaDadosField(ClassFile *class, int n);
 int retornaContadorArgumentos(char *descriptor);
 
 void adicionaValorArray(Array *array, int posicao, char *tipo, void *info);
+
+int defineFieldObjeto(Objeto *object, char *nomeField, char *tipo, Tipo info);

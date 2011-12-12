@@ -230,7 +230,7 @@ typedef struct TIPO_INFO {
  */
 struct OBJETO {
 	char *nomeClasse;
-	int tipos_count;
+	int numeroTipos;
 	tipo_info *tipos;
 };
 
