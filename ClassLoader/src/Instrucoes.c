@@ -334,6 +334,10 @@ int invokespecial(AmbienteExecucao *ae) {
 	return 0;
 }
 
+int newarray(AmbienteExecucao *ae){
+	return 0;
+}
+
 int dup(AmbienteExecucao *ae) {
 
 	//t_opstack *a = desempilhaOperando((&interpreter->current_frame->opstack));
@@ -527,25 +531,25 @@ int invokevirtual(AmbienteExecucao *ae) {
 			data = desempilhaOperando(ae->pFrame);
 			tipo = data->tipo[ae->pFrame->pilhaOperandos->sp];
 			if (tipo[0] == 'B') {
-				printf("%d", data->elementos[0].tipo_byte);
+				printf("%d", data->elementos[data->sp].tipo_byte);
 			} else if (tipo[0] == 'C') {
-				printf("%c", (unsigned char) data->elementos[0].tipo_char);
+				printf("%c", (unsigned char) data->elementos[data->sp].tipo_char);
 			} else if (tipo[0] == 'D') {
-				printf("%f", data->elementos[0].tipo_double);
+				printf("%f", data->elementos[data->sp].tipo_double);
 			} else if (tipo[0] == 'F') {
-				printf("%f", data->elementos[0].tipo_float);
+				printf("%f", data->elementos[data->sp].tipo_float);
 			} else if (tipo[0] == 'I') {
-				printf("%d", data->elementos[0].tipo_int);
+				printf("%d", data->elementos[data->sp].tipo_int);
 			} else if (tipo[0] == 'J') {
-				printf("%d", data->elementos[0].tipo_long);
+				printf("%d", data->elementos[data->sp].tipo_long);
 			} else if (tipo[0] == 'L') {
 				printf("Impressao de um objeto?! Não implementado!");
 			} else if (tipo[0] == 'S') {
-				printf("%d", data->elementos[0].tipo_short);
+				printf("%d", data->elementos[data->sp].tipo_short);
 			} else if (tipo[0] == 'Z') {
-				printf("%d", data->elementos[0].tipo_boolean);
+				printf("%d", data->elementos[data->sp].tipo_boolean);
 			} else if (tipo[0] == '[') {
-				printf("%s", (char*) data->elementos[0].tipo_referencia);
+				printf("%s", (char*) data->elementos[data->sp].tipo_referencia);
 			} else if (tipo[0] == 'r') {
 				printf("Impressao de uma referencia. Arrumar.");
 			}
@@ -1807,9 +1811,6 @@ int jsr_w(AmbienteExecucao *ae) {
 	return 0;
 }
 
-int newarray(AmbienteExecucao *ae) {
-	return 0;
-}
 int aaload(AmbienteExecucao *ae) {
 	return 0;
 }
