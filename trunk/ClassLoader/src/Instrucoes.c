@@ -1936,6 +1936,9 @@ int sastore(AmbienteExecucao *ae) {
 int baload(AmbienteExecucao *ae) {
 	return 0;
 }
+/*
+ * @author Fernando
+ */
 int bastore(AmbienteExecucao *ae) {
 	int valor, indice;
 	Array *referencias;
@@ -1955,7 +1958,7 @@ int bastore(AmbienteExecucao *ae) {
 	if((referencias->tipo[referencias->sp])[tamanho] == 'B') {
 		valorChar = (int)valor;
 		adicionaValorArray(referencias, indice, "B", &valorChar);
-	} else if((referencias->tipo)[tamanho] == 'Z') {
+	} else if((referencias->tipo)[referencias->sp][tamanho] == 'Z') {
 		valorChar = (valor & mascara);
 		adicionaValorArray(referencias, indice, "Z", &valorChar);
 	} else {
@@ -2058,15 +2061,44 @@ int wide(AmbienteExecucao *ae) {
 	return 0;
 }
 
+/*
+ * @autor Fernando
+ */
 int putfield(AmbienteExecucao *ae) {
-	return 0;
-}
-int getfield(AmbienteExecucao *ae) {
+	DadosField *dadosField;
+	Objeto *obj;
+	PilhaOperandos *pilhaOp;
+
+	dadosField = retornaDadosField(ae->pFrame->cf, leU2doPC(ae->pFrame));
+
+	pilhaOp = desempilhaOperando(ae->pFrame);
+	obj = (Objeto*)desempilhaOperando(ae->pFrame)->elementos->tipo_referencia;
+
+	defineFieldObjeto(obj, dadosField->nomeField, pilhaOp->tipo[0], pilhaOp->elementos[0]);
+
 	return 0;
 }
 
 /*
- * Autor: Fernando
+ * @autor Fernando
+ */
+int getfield(AmbienteExecucao *ae) {
+	Objeto *obj;
+	DadosField *dadosField;
+	tipo_info *tipo;
+
+	dadosField = retornaDadosField(ae->pFrame->cf, leU2doPC(ae->pFrame));
+	obj = (Objeto*)desempilhaOperando(ae->pFrame)->elementos->tipo_referencia;
+
+	tipo = retornaFieldObjeto(obj, dadosField->nomeField);
+
+	empilhaOperando(ae->pFrame, tipo->tipo, &(tipo->elemento));
+
+	return 0;
+}
+
+/*
+ * @author Fernando
  */
 int fdiv(AmbienteExecucao *ae) {
 	float a, b, div;
@@ -2079,7 +2111,7 @@ int fdiv(AmbienteExecucao *ae) {
 	return 0;
 }
 /*
- * Autor: Fernando
+ * @author Fernando
  */
 int ddiv(AmbienteExecucao *ae) {
 	double a, b, div;
