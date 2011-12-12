@@ -714,11 +714,31 @@ int aconst_null(AmbienteExecucao *ae) {
 	return 0;
 }
 
+/*
+ * @author Bruno Capu
+ */
 int iadd(AmbienteExecucao *ae) {
+	int a, b, soma;
+	soma = 0;
+
+	a = desempilhaOperando(ae->pFrame)->elementos[0].tipo_int;
+	b = desempilhaOperando(ae->pFrame)->elementos[0].tipo_int;
+
+	soma = a + b;
+	empilhaOperando(ae->pFrame, "I", &soma);
 	return 0;
 }
 
+/*
+ * @author Bruno capu
+ */
 int i2d(AmbienteExecucao *ae) {
+	int a;
+	double b;
+
+	a = desempilhaOperando(ae->pFrame)->elementos[0].tipo_int;
+	b = (double) a;
+	empilhaOperando(ae->pFrame, "D", &b);
 	return 0;
 }
 
@@ -857,7 +877,16 @@ int fload(AmbienteExecucao *ae) {
 	return 0;
 }
 
+/*
+ * @author Bruno Capu
+ */
 int f2l(AmbienteExecucao *ae) {
+	float a;
+	long long b;
+
+	a = desempilhaOperando(ae->pFrame)->elementos[0].tipo_float;
+	b = (long long) a;
+
 	return 0;
 }
 
@@ -949,9 +978,27 @@ int lconst(AmbienteExecucao *ae) {
 	return 0;
 }
 
+/*
+ * @author Bruno Capu
+ */
 int fconst(AmbienteExecucao *ae) {
-//	empilhaOperando(ae->pFrame, "F", &valor);
-//
+	float valor;
+	valor = 0;
+
+	switch (instrucao) {
+	case FCONST_0 :
+		valor = 0;
+		break;
+	case FCONST_1 :
+		valor = 1;
+		break;
+	case FCONST_2 :
+		valor = 2;
+		break;
+	}
+
+	empilhaOperando(ae->pFrame, "F", &valor);
+
 	return 0;
 }
 
@@ -1462,6 +1509,9 @@ int frem(AmbienteExecucao *ae) {
 	return 0;
 }
 
+/*
+ * @author Capu
+ */
 int drem_(AmbienteExecucao *ae) {
 	double a, b, rem;
 	b = desempilhaOperando(ae->pFrame)->elementos[0].tipo_double;
@@ -1774,7 +1824,18 @@ int iastore(AmbienteExecucao *ae) {
 	return 0;
 }
 
+/*
+ * @author Bruno Capu
+ */
 int idiv_(AmbienteExecucao *ae) {
+	int a, b, div;
+
+	a = desempilhaOperando(ae->pFrame)->elementos[0].tipo_int;
+	b = desempilhaOperando(ae->pFrame)->elementos[0].tipo_int;
+
+	div = a/b;
+
+	empilhaOperando(ae->pFrame, "I", &div);
 	return 0;
 }
 
@@ -1823,7 +1884,22 @@ int ifge(AmbienteExecucao *ae) {
 int ifnonnull(AmbienteExecucao *ae) {
 	return 0;
 }
+
+/*
+ * @author Bruno Capu
+ */
 int ifnull(AmbienteExecucao *ae) {
+	void *a;
+	u2 branchOffset;
+
+	branchOffset = leU2doPC(ae->pFrame);
+
+	a = desempilhaOperando(ae->pFrame)->elementos[0].tipo_referencia;
+	if (a == NULL) {
+		ae->pFrame->pc += branchOffset;
+		ae->pFrame->enderecoPC += branchOffset;
+	}
+
 	return 0;
 }
 
