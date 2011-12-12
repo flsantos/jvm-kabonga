@@ -250,7 +250,7 @@ typedef struct DADOSMETODO {
 
 typedef struct DADOSFIELD {
 	char *nomeClasse;
-	char *nomeMetodo;
+	char *nomeField;
 	char *tipo;
 } DadosField;
 
