@@ -146,24 +146,24 @@ void readConstantPool(ClassFile *cf) {
 		cp_info cp;
 		cp.tag = u1Read();
 
-		printf("\n\ntag : %d (%s)", cp.tag, getTag(cp.tag));
+		//printf("\n\ntag : %d (%s)", cp.tag, getTag(cp.tag));
 
 		switch (cp.tag) {
 		case CONSTANT_Class:
 			cp.u.Class.name_index = u2Read();
-			printf("\nname_index : %d", cp.u.Class.name_index);
+			//printf("\nname_index : %d", cp.u.Class.name_index);
 			break;
 		case CONSTANT_Fieldred:
 			cp.u.Fieldref.class_index = u2Read();
 			cp.u.Fieldref.name_and_type_index = u2Read();
-			printf("\nclass_index : %d", cp.u.Fieldref.class_index);
-			printf("\nname_and_type_index : %d", cp.u.Fieldref.name_and_type_index);
+			//printf("\nclass_index : %d", cp.u.Fieldref.class_index);
+			//printf("\nname_and_type_index : %d", cp.u.Fieldref.name_and_type_index);
 			break;
 		case CONSTANT_NameAndType:
 			cp.u.NameAndType.name_index = u2Read();
 			cp.u.NameAndType.descriptor_index = u2Read();
-			printf("\nname_index : %d", cp.u.NameAndType.name_index);
-			printf("\ndescriptor_index : %d", cp.u.NameAndType.descriptor_index);
+			//printf("\nname_index : %d", cp.u.NameAndType.name_index);
+			//printf("\ndescriptor_index : %d", cp.u.NameAndType.descriptor_index);
 			break;
 		case CONSTANT_Utf8: /*Nesse caso o programa aloca memoria para a string e concatena um \0 no fim da string*/
 			cp.u.Utf8.length = u2Read();
@@ -172,42 +172,42 @@ void readConstantPool(ClassFile *cf) {
 				cp.u.Utf8.bytes[j] = u1Read();
 			}
 			cp.u.Utf8.bytes[j] = '\0';
-			printf("\nlength : %d", cp.u.Utf8.length);
-			printf("\nbytes : %s", cp.u.Utf8.bytes);
+			//printf("\nlength : %d", cp.u.Utf8.length);
+			//printf("\nbytes : %s", cp.u.Utf8.bytes);
 			break;
 		case CONSTANT_Methodref:
 			cp.u.Methodref.class_index = u2Read();
 			cp.u.Methodref.name_and_type_index = u2Read();
-			printf("\nclass_index : %d", cp.u.Methodref.class_index);
-			printf("\nname_and_type_index : %d", cp.u.Methodref.name_and_type_index);
+			//printf("\nclass_index : %d", cp.u.Methodref.class_index);
+			//printf("\nname_and_type_index : %d", cp.u.Methodref.name_and_type_index);
 			break;
 		case CONSTANT_InterfaceMethodref:
 			cp.u.InterfaceMethodref.class_index = u2Read();
 			cp.u.InterfaceMethodref.name_and_type_index = u2Read();
-			printf("\nclass_index : %d", cp.u.InterfaceMethodref.class_index);
-			printf("\nname_and_type_index : %d", cp.u.InterfaceMethodref.name_and_type_index);
+			//printf("\nclass_index : %d", cp.u.InterfaceMethodref.class_index);
+			//printf("\nname_and_type_index : %d", cp.u.InterfaceMethodref.name_and_type_index);
 			break;
 		case CONSTANT_String:
 			cp.u.String.string_index = u2Read();
-			printf("\nstring_index : %d", cp.u.String.string_index);
+			//printf("\nstring_index : %d", cp.u.String.string_index);
 			break;
 		case CONSTANT_Integer:
 			cp.u.Integer.bytes = u4Read();
-			printf("\nbytes : %d", cp.u.Integer.bytes);
+			//printf("\nbytes : %d", cp.u.Integer.bytes);
 			break;
 		case CONSTANT_Float:
 			cp.u.Float.bytes.uf.bits = u4Read();
-			printf("\nbytes : %f", cp.u.Float.bytes.uf.valor);
+			//printf("\nbytes : %f", cp.u.Float.bytes.uf.valor);
 			break;
 		case CONSTANT_Long:
 			cp.u.Long.high_bytes = u4Read();
 			cp.u.Long.low_bytes = u4Read();
-			printf("\nhigh_bytes : %d", cp.u.Long.high_bytes);
-			printf("\nllow_bytes : %d", cp.u.Long.low_bytes);
+			//printf("\nhigh_bytes : %d", cp.u.Long.high_bytes);
+			//printf("\nllow_bytes : %d", cp.u.Long.low_bytes);
 			break;
 		case CONSTANT_Double:
 			cp.u.Double.bytes.ud.bits = u8Read();
-			printf("\nbytes : %f", cp.u.Double.bytes.ud.valor);
+			//printf("\nbytes : %f", cp.u.Double.bytes.ud.valor);
 			break;
 		default:
 			break;
@@ -215,7 +215,7 @@ void readConstantPool(ClassFile *cf) {
 
 		cf->constant_pool[i] = cp;
 
-		printf("\n%d", i);
+		//printf("\n%d", i);
 		if (cp.tag == CONSTANT_Double || cp.tag == CONSTANT_Long) {
 			i++;
 			cf->constant_pool[i] = cp;
@@ -228,7 +228,7 @@ void readConstantPool(ClassFile *cf) {
  */
 void readAccessFlags(ClassFile *cf) {
 	cf->access_flags = u2Read();
-	printf("\naccess_flags: 0x%04X", cf->access_flags);
+	//printf("\naccess_flags: 0x%04X", cf->access_flags);
 }
 
 /*
@@ -237,8 +237,8 @@ void readAccessFlags(ClassFile *cf) {
  */
 void readThisClass(ClassFile *cf) {
 	cf->this_class = u2Read();
-	printf("\nthis_class: %d", cf->this_class);
-	printf("\n%s", cf->constant_pool[cf->constant_pool[cf->this_class - 1].u.Class.name_index - 1].u.Utf8.bytes);
+	//printf("\nthis_class: %d", cf->this_class);
+	//printf("\n%s", cf->constant_pool[cf->constant_pool[cf->this_class - 1].u.Class.name_index - 1].u.Utf8.bytes);
 }
 
 /*
@@ -247,8 +247,10 @@ void readThisClass(ClassFile *cf) {
  */
 void readSuperClass(ClassFile *cf) {
 	cf->super_class = u2Read();
-	printf("\nsuper_class: %d", cf->super_class);
-	printf("\n%s", cf->constant_pool[cf->constant_pool[cf->super_class - 1].u.Class.name_index - 1].u.Utf8.bytes);
+	//printf("\nsuper_class: %d", cf->super_class);
+	if(cf->super_class != 0){
+		//printf("\n%s", cf->constant_pool[cf->constant_pool[cf->super_class - 1].u.Class.name_index - 1].u.Utf8.bytes);
+	}
 }
 
 /*
@@ -256,7 +258,7 @@ void readSuperClass(ClassFile *cf) {
  */
 void readInterfaceCount(ClassFile *cf) {
 	cf->interfaces_count = u2Read();
-	printf("\ninterfaces_count: %d", cf->interfaces_count);
+	//printf("\ninterfaces_count: %d", cf->interfaces_count);
 }
 
 /*
@@ -267,8 +269,8 @@ void readInterfaces(ClassFile *cf) {
 	cf->interfaces = malloc((cf->interfaces_count) * sizeof(u2));
 	for (i = 0; i < cf->interfaces_count; i++) {
 		cf->interfaces[i] = u2Read();
-		printf("\ninterfaces[%d]: %s", i,
-				cf->constant_pool[cf->constant_pool[cf->interfaces[i] - 1].u.Class.name_index - 1].u.Utf8.bytes);
+		//printf("\ninterfaces[%d]: %s", i,
+		//		cf->constant_pool[cf->constant_pool[cf->interfaces[i] - 1].u.Class.name_index - 1].u.Utf8.bytes);
 	}
 }
 
@@ -277,39 +279,39 @@ void readInterfaces(ClassFile *cf) {
  */
 void readAttributeConstantValue(attribute_info *ai) {
 	ai->u.ConstantValue.constantvalue_index = u2Read();
-	printf("\nConstantValue.constantvalue_index : %d", ai->u.ConstantValue.constantvalue_index);
+	//printf("\nConstantValue.constantvalue_index : %d", ai->u.ConstantValue.constantvalue_index);
 }
 
 void readAttributeCode(ClassFile *cf, attribute_info *ai) {
 	int i;
 	ai->u.Code.max_stack = u2Read();
-	printf("\nCode.max_stack: %d", ai->u.Code.max_stack);
+	//printf("\nCode.max_stack: %d", ai->u.Code.max_stack);
 	ai->u.Code.max_locals = u2Read();
-	printf("\nCode.max_locals: %d", ai->u.Code.max_locals);
+	//printf("\nCode.max_locals: %d", ai->u.Code.max_locals);
 	ai->u.Code.code_length = u4Read();
-	printf("\nCode.code_length: %d", ai->u.Code.code_length);
+	//printf("\nCode.code_length: %d", ai->u.Code.code_length);
 
 	ai->u.Code.code = malloc(ai->u.Code.code_length * sizeof(u1));
-	printf("\nCode.code: 0x");
+	//printf("\nCode.code: 0x");
 	for (i = 0; i < ai->u.Code.code_length; i++) {
 		ai->u.Code.code[i] = u1Read();
-		printf("%X", ai->u.Code.code[i]);
+		//printf("%X", ai->u.Code.code[i]);
 	}
 	ai->u.Code.exception_table_length = u2Read();
-	printf("\nCode.exception_table_length: %d", ai->u.Code.exception_table_length);
+	//printf("\nCode.exception_table_length: %d", ai->u.Code.exception_table_length);
 	ai->u.Code.exception_table = malloc(ai->u.Code.exception_table_length * sizeof(exception_table));
 	for (i = 0; i < ai->u.Code.exception_table_length; i++) {
 		ai->u.Code.exception_table[i].start_pc = u2Read();
-		printf("\nCode.exception_table[%d].start_pc: %d", i, ai->u.Code.exception_table[i].start_pc);
+		//printf("\nCode.exception_table[%d].start_pc: %d", i, ai->u.Code.exception_table[i].start_pc);
 		ai->u.Code.exception_table[i].end_pc = u2Read();
-		printf("\nCode.exception_table[%d].end_pc: %d", i, ai->u.Code.exception_table[i].end_pc);
+		//printf("\nCode.exception_table[%d].end_pc: %d", i, ai->u.Code.exception_table[i].end_pc);
 		ai->u.Code.exception_table[i].handler_pc = u2Read();
-		printf("\nCode.exception_table[%d].handler_pc: %d", i, ai->u.Code.exception_table[i].handler_pc);
+		//printf("\nCode.exception_table[%d].handler_pc: %d", i, ai->u.Code.exception_table[i].handler_pc);
 		ai->u.Code.exception_table[i].catch_type = u2Read();
-		printf("\nCode.exception_table[%d].catch_type: %d", i, ai->u.Code.exception_table[i].catch_type);
+		//printf("\nCode.exception_table[%d].catch_type: %d", i, ai->u.Code.exception_table[i].catch_type);
 	}
 	ai->u.Code.attributes_count = u2Read();
-	printf("\nCode.attributes_count: %d", ai->u.Code.attributes_count);
+	//printf("\nCode.attributes_count: %d", ai->u.Code.attributes_count);
 	ai->u.Code.attributes = malloc(ai->u.Code.attributes_count * sizeof(attribute_info));
 	for (i = 0; i < ai->u.Code.attributes_count; i++) {
 		readAttributesInfo(cf, &(ai->u.Code.attributes[i]));
@@ -320,36 +322,36 @@ void readAttributeExceptions(attribute_info *ai) {
 	int i;
 
 	ai->u.Exceptions.number_of_exceptions = u2Read();
-	printf("\nExceptions.number_of_exceptions: %d", ai->u.Exceptions.number_of_exceptions);
+	//printf("\nExceptions.number_of_exceptions: %d", ai->u.Exceptions.number_of_exceptions);
 	ai->u.Exceptions.exception_index_table = malloc(ai->u.Exceptions.number_of_exceptions * sizeof(u2));
 	for (i = 0; i < ai->u.Exceptions.number_of_exceptions; i++) {
 		ai->u.Exceptions.exception_index_table[i] = u2Read();
-		printf("\nExceptions.exception_index_table[%d]: %d", i, (int)ai->u.Exceptions.exception_index_table);
+		//printf("\nExceptions.exception_index_table[%d]: %d", i, (int)ai->u.Exceptions.exception_index_table);
 	}
 }
 
 void readAttributeInnerClasses(attribute_info *ai) {
 	int i;
 	ai->u.InnerClasses.number_of_classes = u2Read();
-	printf("\nInnerClasses.number_of_classes: %d", ai->u.InnerClasses.number_of_classes);
+	//printf("\nInnerClasses.number_of_classes: %d", ai->u.InnerClasses.number_of_classes);
 	ai->u.InnerClasses.classes = malloc(ai->u.InnerClasses.number_of_classes * sizeof(classes));
 	for (i = 0; i < ai->u.InnerClasses.number_of_classes; i++) {
 		ai->u.InnerClasses.classes[i].inner_class_info_index = u2Read();
-		printf("\nInnerClasses.classes[%d].inner_class_info_index: %d", i, ai->u.InnerClasses.classes[i].inner_class_info_index);
+		//printf("\nInnerClasses.classes[%d].inner_class_info_index: %d", i, ai->u.InnerClasses.classes[i].inner_class_info_index);
 		ai->u.InnerClasses.classes[i].outer_class_info_index = u2Read();
-		printf("\nInnerClasses.classes[%d].outer_class_info_index: %d", i, ai->u.InnerClasses.classes[i].outer_class_info_index);
+		//printf("\nInnerClasses.classes[%d].outer_class_info_index: %d", i, ai->u.InnerClasses.classes[i].outer_class_info_index);
 		ai->u.InnerClasses.classes[i].inner_name_index = u2Read();
-		printf("\nInnerClasses.classes[%d].inner_name_index %d", i, ai->u.InnerClasses.classes[i].inner_name_index);
+		//printf("\nInnerClasses.classes[%d].inner_name_index %d", i, ai->u.InnerClasses.classes[i].inner_name_index);
 		ai->u.InnerClasses.classes[i].inner_class_access_flags = u2Read();
-		printf("\nInnerClasses.classes[%d].inner_class_access_flags: %d", i, ai->u.InnerClasses.classes[i].inner_class_access_flags);
+		//printf("\nInnerClasses.classes[%d].inner_class_access_flags: %d", i, ai->u.InnerClasses.classes[i].inner_class_access_flags);
 	}
 }
 
 void readAttributeSynthetic(attribute_info *ai) {
 	ai->u.Synthetic.attribute_name_index = u2Read();
-	printf("\nSynthetic.attribute_name_index: %d", ai->u.Synthetic.attribute_name_index);
+	//printf("\nSynthetic.attribute_name_index: %d", ai->u.Synthetic.attribute_name_index);
 	ai->u.Synthetic.attribute_length = u4Read();
-	printf("\nSynthetic.attribute_length: %d", ai->u.Synthetic.attribute_length);
+	//printf("\nSynthetic.attribute_length: %d", ai->u.Synthetic.attribute_length);
 }
 
 void readAttributeDefault(attribute_info *ai){
@@ -367,7 +369,7 @@ void readAttributesInfo(ClassFile *cf, attribute_info *ai) {
 	ai->attribute_length = u4Read();
 	str = malloc(sizeof(char) * cf->constant_pool[ai->attribute_name_index - 1].u.Utf8.length);
 	strcpy(str, (const char*) cf->constant_pool[ai->attribute_name_index - 1].u.Utf8.bytes);
-	printf("\nNome do atributo: %s ", str);
+	//printf("\nNome do atributo: %s ", str);
 	if (strcmp(str, "ConstantValue") == 0) {
 		readAttributeConstantValue(ai);
 	} else if (strcmp(str, "Code") == 0) {
@@ -389,7 +391,7 @@ void readAttributesInfo(ClassFile *cf, attribute_info *ai) {
 
 void readFieldsCount(ClassFile *cf) {
 	cf->fields_count = u2Read();
-	printf("\nfields_count: %d", cf->fields_count);
+	//printf("\nfields_count: %d", cf->fields_count);
 }
 
 /*
@@ -405,10 +407,10 @@ void readFieldsInfo(ClassFile *cf) {
 		cf->fields[i].descriptor_index = u2Read();
 		cf->fields[i].attributes_count = u2Read();
 		cf->fields[i].attributes = malloc((cf->fields[i].attributes_count) * sizeof(attribute_info));
-		printf("\n\nfield.access_flags: 0x%04X", cf->fields[i].access_flags);
-		printf("\nfield.name_index: %d", cf->fields[i].name_index);
-		printf("\nfield.descriptor_index: %d", cf->fields[i].descriptor_index);
-		printf("\nfield.attributes_count: %d", cf->fields[i].attributes_count);
+		//printf("\n\nfield.access_flags: 0x%04X", cf->fields[i].access_flags);
+		//printf("\nfield.name_index: %d", cf->fields[i].name_index);
+		//printf("\nfield.descriptor_index: %d", cf->fields[i].descriptor_index);
+		//printf("\nfield.attributes_count: %d", cf->fields[i].attributes_count);
 		for (j = 0; j < cf->fields[i].attributes_count; j++) {
 			readAttributesInfo(cf, &(cf->fields[i].attributes[j]));
 		}
@@ -421,7 +423,7 @@ void readFieldsInfo(ClassFile *cf) {
  */
 void readMethodsCount(ClassFile *cf) {
 	cf->methods_count = u2Read();
-	printf("\nmethods_count: %d", cf->methods_count);
+	//printf("\nmethods_count: %d", cf->methods_count);
 }
 
 /*
@@ -436,10 +438,10 @@ void readMethodsInfo(ClassFile *cf) {
 		cf->methods[i].descriptor_index = u2Read();
 		cf->methods[i].attributes_count = u2Read();
 		cf->methods[i].attributes = malloc((cf->methods[i].attributes_count) * sizeof(attribute_info));
-		printf("\n\nmethod.access_flags: 0x%04X", cf->methods[i].access_flags);
-		printf("\nmethod.name_index: %d", cf->methods[i].name_index);
-		printf("\nmethod.descriptor_index: %d", cf->methods[i].descriptor_index);
-		printf("\nmethod.attributes_count: %d", cf->methods[i].attributes_count);
+		//printf("\n\nmethod.access_flags: 0x%04X", cf->methods[i].access_flags);
+		//printf("\nmethod.name_index: %d", cf->methods[i].name_index);
+		//printf("\nmethod.descriptor_index: %d", cf->methods[i].descriptor_index);
+		//printf("\nmethod.attributes_count: %d", cf->methods[i].attributes_count);
 		for (j = 0; j < cf->methods[i].attributes_count; j++) {
 			readAttributesInfo(cf, &(cf->methods[i].attributes[j]));
 		}
@@ -452,7 +454,7 @@ void readMethodsInfo(ClassFile *cf) {
  */
 void readAttributesCount(ClassFile *cf) {
 	cf->attributes_count = u2Read();
-	printf("\nattributes_count: %d", cf->attributes_count);
+	//printf("\nattributes_count: %d", cf->attributes_count);
 }
 
 /*
@@ -468,7 +470,7 @@ ClassFile lerClassFile(char *nomeArquivo) {
 
 	fp = fopen(nomeArquivo, "rb");
 	if (fp == NULL) {
-		printf("\nArquivo nao encontrado: %s\n", nomeArquivo);
+		//printf("\nArquivo nao encontrado: %s\n", nomeArquivo);
 		exit(1);
 	}
 
@@ -478,50 +480,50 @@ ClassFile lerClassFile(char *nomeArquivo) {
 		cf.minor_version = u2Read();
 		cf.major_version = u2Read();
 //		if (cf.major_version < 45 || cf.major_version> 46 || (cf.major_version == 46 && cf.minor_version > 0)) {
-//			printf("Versão nao suportada.");
+//			//printf("Versão nao suportada.");
 //			exit(1);
 //		}
 		cf.constant_pool_count = u2Read();
 		printf("\nmagic_number : 0xCAFEBABE");
-		printf("\nminor_version : %d", cf.minor_version);
-		printf("\nmajor_version : %d", cf.major_version);
-		printf("\nconstant_pool_count : %d", cf.constant_pool_count);
+		//printf("\nminor_version : %d", cf.minor_version);
+		//printf("\nmajor_version : %d", cf.major_version);
+		//printf("\nconstant_pool_count : %d", cf.constant_pool_count);
 
 		/* Alocacao de memoria para a constant_pool */
 		cf.constant_pool = malloc((cf.constant_pool_count - 1) * sizeof(cp_info));
 
-		printf("\n--------------------");
+		//printf("\n--------------------");
 		readConstantPool(&cf);
-		printf("\n--------------------");
+		//printf("\n--------------------");
 		readAccessFlags(&cf);
-		printf("\n--------------------");
+		//printf("\n--------------------");
 		readThisClass(&cf);
-		printf("\n--------------------");
+		//printf("\n--------------------");
 		readSuperClass(&cf);
-		printf("\n--------------------");
+		//printf("\n--------------------");
 		readInterfaceCount(&cf);
-		printf("\n--------------------");
+		//printf("\n--------------------");
 		readInterfaces(&cf);
-		printf("\n--------------------");
+		//printf("\n--------------------");
 		readFieldsCount(&cf);
-		printf("\n--------------------");
+		//printf("\n--------------------");
 		readFieldsInfo(&cf);
-		printf("\n--------------------");
+		//printf("\n--------------------");
 		readMethodsCount(&cf);
-		printf("\n--------------------");
+		//printf("\n--------------------");
 		readMethodsInfo(&cf);
-		printf("\n--------------------");
+		//printf("\n--------------------");
 		readAttributesCount(&cf);
-		printf("\n--------------------");
+		//printf("\n--------------------");
 		cf.attributes = malloc(cf.attributes_count *  sizeof(attribute_info));
 		for(i = 0; i< cf.attributes_count; i++){
 			readAttributesInfo(&cf, &(cf.attributes[i]));
 		}
-		printf("\n--------------------\nFim do .class");
+		//printf("\n--------------------\nFim do .class");
 
 
 	} else {
-		printf("O magic number esta incorreto.");
+		//printf("O magic number esta incorreto.");
 	}
 
 
