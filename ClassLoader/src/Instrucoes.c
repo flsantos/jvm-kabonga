@@ -334,26 +334,6 @@ int invokespecial(AmbienteExecucao *ae) {
 	return 0;
 }
 
-int dup(AmbienteExecucao *ae) {
-
-	printf("\ndup");
-	//getchar();
-
-	//t_opstack *a = desempilhaOperando((&interpreter->current_frame->opstack));
-	PilhaOperandos *a = desempilhaOperando(ae->pFrame);
-	if ((*(a->tipo[0]) == 'J') || (*(a->tipo[0]) == 'D')) {
-		printf(
-				"Instrucao 'dup' nao permitida para valores 'double' ou 'long'.\n");
-		exit(1);
-	}
-
-	//empilhaOperando_data(&(interpreter->current_frame->opstack),a->type,a->data);
-	empilhaOperando(ae->pFrame, a->tipo[0], &(a->elementos[a->sp]));
-	//empilhaOperando_data(&(interpreter->current_frame->opstack),a->type,a->data);
-	empilhaOperando(ae->pFrame, a->tipo[0], &(a->elementos[a->sp]));
-
-	return 0;
-}
 
 int new_(AmbienteExecucao *ae) {
 	u2 indice = leU2doPC(ae->pFrame);
@@ -1571,27 +1551,192 @@ int swap(AmbienteExecucao *ae){
 	b = desempilhaOperando(ae->pFrame);
 	a = desempilhaOperando(ae->pFrame);
 
-	empilhaOperando(ae->pFrame,*(a->tipo),&(a->elementos));
-	empilhaOperando(ae->pFrame,*(b->tipo),&(b->elementos));
+	empilhaOperando(ae->pFrame,(a->tipo)[0],a->elementos);
+	empilhaOperando(ae->pFrame,(b->tipo)[0],b->elementos);
 
 
 	return 0;
 }
 
+int dup(AmbienteExecucao *ae) {
 
-int dup2(AmbienteExecucao *ae) {
+	printf("\ndup");
+	//getchar();
+
+	//t_opstack *a = desempilhaOperando((&interpreter->current_frame->opstack));
+	PilhaOperandos *a = desempilhaOperando(ae->pFrame);
+	if ((*(a->tipo[0]) == 'J') || (*(a->tipo[0]) == 'D')) {
+		printf(
+				"Instrucao 'dup' nao permitida para valores 'double' ou 'long'.\n");
+		exit(1);
+	}
+
+	//empilhaOperando_data(&(interpreter->current_frame->opstack),a->type,a->data);
+	empilhaOperando(ae->pFrame, a->tipo[0], &(a->elementos[a->sp]));
+	//empilhaOperando_data(&(interpreter->current_frame->opstack),a->type,a->data);
+	empilhaOperando(ae->pFrame, a->tipo[0], &(a->elementos[a->sp]));
+
 	return 0;
 }
-int dup_x1(AmbienteExecucao *ae) {
+
+
+int dup2(AmbienteExecucao *ae){
+	PilhaOperandos *a, *b;
+
+	a = desempilhaOperando(ae->pFrame);
+	if ( (*(a->tipo)[0] == 'J' ) || (*(a->tipo)[0] == 'D' ) ) {
+		/*float type e double type*/
+		empilhaOperando(ae->pFrame,(a->tipo)[0],a->elementos);
+		empilhaOperando(ae->pFrame,(b->tipo)[0],b->elementos);
+		return 0;
+	}
+
+	b = desempilhaOperando(ae->pFrame);
+	if( (*(b->tipo)[0] == 'J' ) || (*(b->tipo)[0] == 'D') ){
+		fprintf(stderr,"Operacao 'dup2' nao permitida para value2 'float' ou 'double' type.\n");
+		exit(1);
+	}
+
+	empilhaOperando(ae->pFrame,(b->tipo)[0],b->elementos);
+	empilhaOperando(ae->pFrame,(a->tipo)[0],a->elementos);
+	empilhaOperando(ae->pFrame,(b->tipo)[0],b->elementos);
+	empilhaOperando(ae->pFrame,(a->tipo)[0],a->elementos);
+
+	return 0;
+
+}
+
+int dup_x1(AmbienteExecucao *ae){
+
+	PilhaOperandos *a = desempilhaOperando(ae->pFrame);
+	PilhaOperandos *b = desempilhaOperando(ae->pFrame);
+	if( ( strchr((b->tipo)[0],'J') != NULL ) || ( strchr((b->tipo)[0],'D') != NULL ) || ( strchr((a->tipo)[0],'J') != NULL ) || ( strchr((a->tipo)[0],'D') != NULL ) ) {
+		fprintf(stderr,"Instrucao 'dup_x1' nao permitida para 'float' ou 'double' type.\n");
+		exit(1);
+	}
+
+	empilhaOperando(ae->pFrame,(a->tipo)[0],a->elementos);
+	empilhaOperando(ae->pFrame,(b->tipo)[0],b->elementos);
+	empilhaOperando(ae->pFrame,(a->tipo)[0],a->elementos);
 	return 0;
 }
-int dup2_x2(AmbienteExecucao *ae) {
+
+int dup_x2(AmbienteExecucao *ae){
+
+	PilhaOperandos *a = desempilhaOperando(ae->pFrame);
+	if(( strchr((a->tipo)[0],'J') != NULL ) || ( strchr((a->tipo)[0],'D') != NULL )){
+		fprintf(stderr,"Instrucao 'dup_x2' nao permitida para 'double' ou 'long'1.\n");
+		exit(1);
+	}
+
+	PilhaOperandos *b = desempilhaOperando(ae->pFrame);
+	if(( strchr((b->tipo)[0],'J') != NULL ) || ( strchr((b->tipo)[0],'D') != NULL )){
+		/*form 2*/
+		empilhaOperando(ae->pFrame,(a->tipo)[0],a->elementos);
+		empilhaOperando(ae->pFrame,(b->tipo)[0],b->elementos);
+		empilhaOperando(ae->pFrame,(a->tipo)[0],a->elementos);
+		return 0;
+	}
+
+	PilhaOperandos *c = desempilhaOperando(ae->pFrame);
+	if(( strchr((c->tipo)[0],'J') != NULL ) || ( strchr((c->tipo)[0],'D') != NULL )){
+		fprintf(stderr,"Instrucao 'dup_x2' nao permitida para 'double' ou 'long'2.\n");
+		exit(1);
+	}
+
+	empilhaOperando(ae->pFrame,(a->tipo)[0],a->elementos);
+	empilhaOperando(ae->pFrame,(c->tipo)[0],c->elementos);
+	empilhaOperando(ae->pFrame,(b->tipo)[0],b->elementos);
+	empilhaOperando(ae->pFrame,(a->tipo)[0],a->elementos);
+
 	return 0;
 }
-int dup_x2(AmbienteExecucao *ae) {
+
+int dup2_x1(AmbienteExecucao *ae){
+
+	PilhaOperandos *a = desempilhaOperando(ae->pFrame);
+	PilhaOperandos *b = desempilhaOperando(ae->pFrame);
+	if(( strchr((b->tipo)[0],'J') != NULL ) || ( strchr((b->tipo)[0],'D') != NULL )){
+		fprintf(stderr,"Instrucao 'dup2_x1' nao permitida para value2 of 'double' ou 'float'.\n");
+		exit(1);
+	}
+	if(( strchr((a->tipo)[0],'J') != NULL ) || ( strchr((a->tipo)[0],'D') != NULL )){
+		empilhaOperando(ae->pFrame,(a->tipo)[0],a->elementos);
+		empilhaOperando(ae->pFrame,(b->tipo)[0],b->elementos);
+		empilhaOperando(ae->pFrame,(a->tipo)[0],a->elementos);
+		return 0;
+	}
+	PilhaOperandos *c = desempilhaOperando(ae->pFrame);
+	if(( strchr((c->tipo)[0],'J') != NULL ) || ( strchr((c->tipo)[0],'D') != NULL )){
+		fprintf(stderr,"Instrucao 'dup2_x1' nao permitida para value3 ou 'double' ou 'float'.\n");
+		exit(1);
+	}
+
+	empilhaOperando(ae->pFrame,(b->tipo)[0],b->elementos);
+	empilhaOperando(ae->pFrame,(a->tipo)[0],a->elementos);
+	empilhaOperando(ae->pFrame,(c->tipo)[0],c->elementos);
+	empilhaOperando(ae->pFrame,(b->tipo)[0],b->elementos);
+	empilhaOperando(ae->pFrame,(a->tipo)[0],a->elementos);
+
 	return 0;
 }
-int dup2_x1(AmbienteExecucao *ae) {
+
+int dup2_x2(AmbienteExecucao *ae){
+
+	PilhaOperandos *a = desempilhaOperando(ae->pFrame);
+	PilhaOperandos *b = desempilhaOperando(ae->pFrame);
+	PilhaOperandos *c, *d;
+	if( (( strchr((a->tipo)[0],'J') != NULL ) || ( strchr((a->tipo)[0],'D') != NULL )) ){
+
+		if( ((strchr((b->tipo)[0],'J') != NULL) || (strchr((b->tipo)[0],'D') != NULL)) ){
+			empilhaOperando(ae->pFrame,(a->tipo)[0],a->elementos);
+			empilhaOperando(ae->pFrame,(b->tipo)[0],b->elementos);
+			empilhaOperando(ae->pFrame,(a->tipo)[0],a->elementos);
+			return 0;
+		}
+
+		c = desempilhaOperando(ae->pFrame);
+		if(( strchr((c->tipo)[0],'J') != NULL ) || ( strchr((c->tipo)[0],'D') != NULL )){
+			fprintf(stderr,"Instrucao 'dup2_x2' nao permitida para value3 de 'double' ou 'float' e value1 de 'double' ou 'float'.\n");
+			exit(1);
+		}
+
+		empilhaOperando(ae->pFrame,(a->tipo)[0],a->elementos);
+		empilhaOperando(ae->pFrame,(c->tipo)[0],c->elementos);
+		empilhaOperando(ae->pFrame,(b->tipo)[0],b->elementos);
+		empilhaOperando(ae->pFrame,(a->tipo)[0],a->elementos);
+		return 0;
+
+	}
+
+	if(( strchr((b->tipo)[0],'J')!=NULL ) || ( strchr((b->tipo)[0],'D')!=NULL )){
+		fprintf(stderr,"Operacao 'dup2_x2' nao permitida para value1 of type 1 e value2 d tipo 'float' ou 'double'.\n");
+		exit(1);
+	}
+
+	c = desempilhaOperando(ae->pFrame);
+	if(( strchr((c->tipo)[0],'J') != NULL ) || ( strchr((c->tipo)[0],'D') != NULL )){
+		empilhaOperando(ae->pFrame,(b->tipo)[0],b->elementos);
+		empilhaOperando(ae->pFrame,(a->tipo)[0],a->elementos);
+		empilhaOperando(ae->pFrame,(c->tipo)[0],c->elementos);
+		empilhaOperando(ae->pFrame,(b->tipo)[0],b->elementos);
+		empilhaOperando(ae->pFrame,(a->tipo)[0],a->elementos);
+		return 0;
+	}
+
+	d = desempilhaOperando(ae->pFrame);
+	if(( strchr((d->tipo)[0],'J')!=NULL ) || ( strchr((d->tipo)[0],'D')!=NULL )){
+		fprintf(stderr,"Operacao 'dup2_x2' nao permitida para value4 do tipo 'float' ou 'double'.\n");
+		exit(1);
+	}
+
+	empilhaOperando(ae->pFrame,(b->tipo)[0],b->elementos);
+	empilhaOperando(ae->pFrame,(a->tipo)[0],a->elementos);
+	empilhaOperando(ae->pFrame,(a->tipo)[0],d->elementos);
+	empilhaOperando(ae->pFrame,(c->tipo)[0],c->elementos);
+	empilhaOperando(ae->pFrame,(b->tipo)[0],b->elementos);
+	empilhaOperando(ae->pFrame,(a->tipo)[0],a->elementos);
+
 	return 0;
 }
 
