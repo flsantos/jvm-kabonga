@@ -31,7 +31,6 @@ void iniciaExecucaoMetodo(char nomeClassFile[], AmbienteExecucao *ae,
 			transferePilhaOperandosParaVariavelLocalPorFrames(ae->pFrame->frameAnterior, ae->pFrame, i);
 		}
 	}
-	printf("\n\nFrame");
 }
 
 void iniciaClasse(char nomeClassFile[], AmbienteExecucao *ae, char *nomeMetodo,

@@ -232,8 +232,8 @@ u1 leU1doPC(Frame *frame) {
 u2 leU2doPC(Frame *frame) {
 	u1 part1, part2;
 	u2 valor;
-	part1 = *(frame->pc);
 
+	part1 = *(frame->pc);
 	part2 = *(frame->pc + 1);
 	(frame->pc) += 2;
 

@@ -385,11 +385,10 @@ int new_(AmbienteExecucao *ae) {
  * @author Daniel
  */
 int if_icmplt(AmbienteExecucao *ae) {
-	u2 offsetDestino = leU2doPC(ae->pFrame);
+	i2 offsetDestino = leU2doPC(ae->pFrame);
 	int a, b;
 	//b = desempilhaOperando(&(interpreter->current_frame->opstack))->data.data_int;
 	//a = desempilhaOperando(&(interpreter->current_frame->opstack))->data.data_int;
-
 	b = desempilhaOperando(ae->pFrame)->elementos[0].tipo_int;
 	a = desempilhaOperando(ae->pFrame)->elementos[0].tipo_int;
 
@@ -1974,7 +1973,7 @@ int return0(AmbienteExecucao *ae) {
 	return jumpback(ae, 0);
 }
 int return1(AmbienteExecucao *ae) {
-		return jumpback(ae, 1);
+	return jumpback(ae, 1);
 }
 
 int athrow(AmbienteExecucao *ae) {
@@ -2115,7 +2114,7 @@ int checkcast(AmbienteExecucao *ae) {
 			printf("Falha em 'checkcast', tipo do objeto na pilha inadequado.\n");
 			exit(0);
 		} else {
-			char *T = retornaClassInfo(ae->pFrame->cf, indice);
+			char *T = (char *)retornaClassInfo(ae->pFrame->cf, indice);
 			if (ref->tipo[ref->sp][0] == 'L'){
 				obj = (Objeto *) ref->elementos->tipo_referencia;
 				if (strcmp(T,obj->nomeClasse) != 0){

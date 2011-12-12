@@ -484,7 +484,7 @@ ClassFile lerClassFile(char *nomeArquivo) {
 //			exit(1);
 //		}
 		cf.constant_pool_count = u2Read();
-		printf("\nmagic_number : 0xCAFEBABE");
+		//printf("\nmagic_number : 0xCAFEBABE");
 		//printf("\nminor_version : %d", cf.minor_version);
 		//printf("\nmajor_version : %d", cf.major_version);
 		//printf("\nconstant_pool_count : %d", cf.constant_pool_count);
