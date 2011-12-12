@@ -91,13 +91,12 @@ DadosMetodo *retornaDadosMetodo(ClassFile *cf, int n) {
 }
 
 DadosField *retornaDadosField(ClassFile *class, int n) {
-	int indiceClasse, indiceNameAndType;
 	DadosField *dadosField;
 	DadosNameAndType *dadosNameAndType;
 
 	dadosField = malloc(sizeof(DadosField));
 
-	dadosField->nomeClasse = retornaClassInfo(class, (class->constant_pool + n -1)->u.Fieldref.class_index);
+	dadosField->nomeClasse = (char *)retornaClassInfo(class, (class->constant_pool + n -1)->u.Fieldref.class_index);
 
 	dadosNameAndType = retornaDadosNameAndTypeInfo(class, (class->constant_pool + n - 1)->u.Fieldref.name_and_type_index);
 	dadosField->nomeField = dadosNameAndType->nome;
