@@ -1853,7 +1853,9 @@ int ldiv_(AmbienteExecucao *ae) {
 	empilhaOperando(ae->pFrame,"J", &div);
 	return 0;
 }
-
+/*
+ * @author Fernando
+ */
 int if_acmpeq(AmbienteExecucao *ae){
 	void *a, *b;
 	int offset;
@@ -1863,11 +1865,14 @@ int if_acmpeq(AmbienteExecucao *ae){
 	offset = leU2doPC(ae->pFrame);
 	if (a == b){
 		ae->pFrame->pc += offset - 3;
-		ae->pFrame->pc += offset -3;
+		ae->pFrame->enderecoPC += offset -3;
 	}
 	return 0;
 }
 
+/*
+ * @author Fernando
+ */
 int if_acmpne(AmbienteExecucao *ae){
 	void *a, *b;
 	int offset;
@@ -1877,25 +1882,83 @@ int if_acmpne(AmbienteExecucao *ae){
 	offset = leU2doPC(ae->pFrame);
 	if (a != b){
 		ae->pFrame->pc += offset - 3;
-		ae->pFrame->pc += offset -3;
+		ae->pFrame->enderecoPC += offset -3;
 	}
 	return 0;
 }
 
-int if_icmpeq(AmbienteExecucao *ae) {
-	return 0;
-}
-int if_icmpne(AmbienteExecucao *ae) {
+int if_icmpeq(AmbienteExecucao *ae){
+	int a, b;
+	int offset;
+	b = desempilhaOperando(ae->pFrame)->elementos[0].tipo_int;
+	a = desempilhaOperando(ae->pFrame)->elementos[0].tipo_int;
+
+	offset = leU2doPC(ae->pFrame);
+	if (a == b){
+		ae->pFrame->pc += offset -3;
+		ae->pFrame->enderecoPC += offset -3;
+	}
+
 	return 0;
 }
 
-int if_icmple(AmbienteExecucao *ae) {
+int if_icmpne(AmbienteExecucao *ae){
+	int a, b;
+	int offset;
+	b = desempilhaOperando(ae->pFrame)->elementos[0].tipo_int;
+	a = desempilhaOperando(ae->pFrame)->elementos[0].tipo_int;
+
+	offset = leU2doPC(ae->pFrame);
+	if (a != b){
+		ae->pFrame->pc += offset -3;
+		ae->pFrame->enderecoPC += offset -3;
+	}
+
 	return 0;
 }
-int if_icmpgt(AmbienteExecucao *ae) {
+
+int if_icmple(AmbienteExecucao *ae){
+	int a, b;
+	int offset;
+	b = desempilhaOperando(ae->pFrame)->elementos[0].tipo_int;
+	a = desempilhaOperando(ae->pFrame)->elementos[0].tipo_int;
+
+	offset = leU2doPC(ae->pFrame);
+	if (a <= b){
+		ae->pFrame->pc += offset -3;
+		ae->pFrame->enderecoPC += offset -3;
+	}
+
 	return 0;
 }
-int if_icmpge(AmbienteExecucao *ae) {
+
+int if_icmpgt(AmbienteExecucao *ae){
+	int a, b;
+	int offset;
+	b = desempilhaOperando(ae->pFrame)->elementos[0].tipo_int;
+	a = desempilhaOperando(ae->pFrame)->elementos[0].tipo_int;
+
+	offset = leU2doPC(ae->pFrame);
+	if (a > b){
+		ae->pFrame->pc += offset -3;
+		ae->pFrame->enderecoPC += offset -3;
+	}
+
+	return 0;
+}
+
+int if_icmpge(AmbienteExecucao *ae){
+	int a, b;
+	int offset;
+	b = desempilhaOperando(ae->pFrame)->elementos[0].tipo_int;
+	a = desempilhaOperando(ae->pFrame)->elementos[0].tipo_int;
+
+	offset = leU2doPC(ae->pFrame);
+	if (a >= b){
+		ae->pFrame->pc += offset -3;
+		ae->pFrame->enderecoPC += offset -3;
+	}
+
 	return 0;
 }
 int ifeq(AmbienteExecucao *ae) {
