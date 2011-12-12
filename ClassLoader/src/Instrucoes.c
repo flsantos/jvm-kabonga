@@ -2180,7 +2180,56 @@ int putstatic(AmbienteExecucao *ae) {
 	return 0;
 }
 
+/*
+ * @author: Daniel
+ */
 int lookupswitch(AmbienteExecucao *ae) {
+	int bytepads;
+	u4 npairs;
+	u2 defaultbyte;
+
+	bytepads = (4 - (ae->pFrame->pc - ae->pFrame->pcInicial)%4)%4;
+	ae->pFrame->pc += bytepads;
+	defaultbyte = leU4doPC(ae->pFrame);
+	npairs = leU4doPC(ae->pFrame);
+
+	PilhaOperandos * objref;
+	int foundInPairs = 0;
+	int case_value;
+
+	u4 offsets[npairs][2];
+	unsigned long int i;
+
+
+	for (i = 0; i < npairs; i++) {
+		offsets[i][1] = (u4) leU4doPC(ae->pFrame);
+		offsets[i][2] = (u4) leU4doPC(ae->pFrame);
+	}
+
+	objref = desempilhaOperando(ae->pFrame);
+	case_value = objref->elementos[objref->sp]->tipo_int;
+
+
+	if ( objref->tipo[objref->sp][0] != 'I'){
+		printf("Falha em 'tableswitch', elemento de switch diferente de inteiro.\n");
+		exit(1);
+	} else {
+		/* Recuando para o endereco original da funcao */
+		ae->pFrame->pc += - ( 2*sizeof(u4) + npairs*sizeof(u4)*2 + 1 + bytepads);
+		ae->pFrame->enderecoPC += - ( 3*sizeof(u4) + npairs*sizeof(u4)*2 + 1 + bytepads);
+		for (i = 0; i < npairs ; i++) {
+			if (offsets[i][1] == case_value)
+				foundInPairs = i + 1;
+		}
+
+		if ( foundInPairs == 0 ){
+			ae->pFrame->pc += defaultbyte;
+			ae->pFrame->enderecoPC += defaultbyte;
+		} else {
+			ae->pFrame->pc += offsets[foundInPairs - 1][2];
+			ae->pFrame->enderecoPC += offsets[foundInPairs - 1][2];
+		}
+	}
 	return 0;
 }
 /*
