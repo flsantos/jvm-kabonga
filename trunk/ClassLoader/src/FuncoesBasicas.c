@@ -180,12 +180,13 @@ int jumpback(AmbienteExecucao *ae, int n_return) {
 	frame = ae->pFrame;
 
 	if (ae->pFrame->frameAnterior != NULL) {
+		frame = ae->pFrame;
 		ae->pFrame = ae->pFrame->frameAnterior;
 
 		for (i = 0; i < n_return; i++) {
 			pilhaoperandos = desempilhaOperando(frame);
-			empilhaOperando(ae->pFrame, pilhaoperandos->tipo[0],
-					&(pilhaoperandos->elementos[0]));
+			empilhaOperando(ae->pFrame, pilhaoperandos->tipo[pilhaoperandos->sp],
+					&(pilhaoperandos->elementos[pilhaoperandos->sp]));
 		}
 
 		return 0;
