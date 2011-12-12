@@ -234,6 +234,10 @@ int l2i(AmbienteExecucao *ae) {
 	return 0;
 }
 
+int lrem(AmbienteExecucao *ae){
+	return 0;
+}
+
 int astore(AmbienteExecucao *ae) {
 	u1 pos;
 
@@ -334,16 +338,16 @@ int dup(AmbienteExecucao *ae) {
 
 	//t_opstack *a = desempilhaOperando((&interpreter->current_frame->opstack));
 	PilhaOperandos *a = desempilhaOperando(ae->pFrame);
-	if ((*(a->tipo[0]) == 'J') || (*(a->tipo[0]) == 'D')) {
+	if (((a->tipo[a->sp][0]) == 'J') || ((a->tipo[a->sp][0]) == 'D')) {
 		printf(
 				"Instrucao 'dup' nao permitida para valores 'double' ou 'long'.\n");
 		exit(1);
 	}
 
 	//empilhaOperando_data(&(interpreter->current_frame->opstack),a->type,a->data);
-	empilhaOperando(ae->pFrame, a->tipo[0], &(a->elementos[a->sp]));
+	empilhaOperando(ae->pFrame, a->tipo[a->sp], &(a->elementos[a->sp]));
 	//empilhaOperando_data(&(interpreter->current_frame->opstack),a->type,a->data);
-	empilhaOperando(ae->pFrame, a->tipo[0], &(a->elementos[a->sp]));
+	empilhaOperando(ae->pFrame, a->tipo[a->sp], &(a->elementos[a->sp]));
 
 	return 0;
 }
@@ -352,6 +356,8 @@ int new_(AmbienteExecucao *ae) {
 	u2 indice = leU2doPC(ae->pFrame);
 	char *nomeClasse;
 	Objeto *objeto;
+	printf("\nnew");
+	//getchar();
 	nomeClasse = (char *) retornaClassInfo(ae->pFrame->cf, indice);
 	/* ajustando para o caso da StringBuffer */
 	if ((strcmp(nomeClasse, "java/lang/StringBuffer") == 0
@@ -389,9 +395,9 @@ int if_icmplt(AmbienteExecucao *ae) {
 
 	if (a < b) {
 		//interpreter->current_frame->pc += branchoffset -3;
-		ae->pFrame->pc += branchoffset - 3;
+		ae->pFrame->pc += offsetDestino - 3;
 		//interpreter->current_frame->pc_address += branchoffset -3;
-		ae->pFrame->enderecoPC += branchoffset - 3;
+		ae->pFrame->enderecoPC += offsetDestino - 3;
 
 	}
 
@@ -693,9 +699,18 @@ int nop(AmbienteExecucao *ae) {
 	return 0;
 }
 int bipush(AmbienteExecucao *ae) {
+	u1 valor;
+	valor = leU1doPC(ae->pFrame);
+
+	empilhaOperando(ae->pFrame, "I", (&valor));
 	return 0;
 }
+
+/*
+ * @author Daniel
+ */
 int aconst_null(AmbienteExecucao *ae) {
+	empilhaOperando(ae->pFrame,"[",NULL);
 	return 0;
 }
 
@@ -893,7 +908,16 @@ int dload(AmbienteExecucao *ae) {
 	return 0;
 }
 
+/*
+ * @autor: Daniel
+ */
 int d2i(AmbienteExecucao *ae) {
+	double a;
+	int b;
+	a = desempilhaOperando(ae->pFrame)->elementos->tipo_double;
+	b = (int)a;
+
+	empilhaOperando(ae->pFrame, "I", &b);
 	return 0;
 }
 int lload(AmbienteExecucao *ae) {
@@ -932,19 +956,19 @@ int fconst(AmbienteExecucao *ae) {
 }
 
 int dconst(AmbienteExecucao *ae) {
+
 //	empilhaOperando(ae->pFrame, "D", &valor);
 //
 	return 0;
 }
 
 int sipush(AmbienteExecucao *ae) {
-//	empilhaOperando(ae->pFrame, "I", &valor);
-//
+	u2 valor = leU2doPC(ae->pFrame);
+	empilhaOperando(ae->pFrame, "I", &valor);
+
 	return 0;
 }
-int lrem(AmbienteExecucao *ae){
-	return 0;
-}
+
 int pop(AmbienteExecucao *ae) {
 	desempilhaOperando(ae->pFrame);
 
@@ -1549,15 +1573,17 @@ int lushr(AmbienteExecucao *ae) {
 	return 0;
 }
 
-int swap(AmbienteExecucao *ae){
+/*
+ * @author Daniel
+ */
+int swap(AmbienteExecucao *ae) {
+
 	PilhaOperandos *a, *b;
-
-	b = desempilhaOperando(ae->pFrame);
 	a = desempilhaOperando(ae->pFrame);
+	b = desempilhaOperando(ae->pFrame);
 
-	empilhaOperando(ae->pFrame,(a->tipo)[0],a->elementos);
-	empilhaOperando(ae->pFrame,(b->tipo)[0],b->elementos);
-
+	empilhaOperando(ae->pFrame, a->tipo[a->sp], a->elementos);
+	empilhaOperando(ae->pFrame, b->tipo[a->sp], b->elementos);
 
 	return 0;
 }
@@ -1853,7 +1879,20 @@ int athrow(AmbienteExecucao *ae) {
 	return 0;
 }
 
+/*
+ * Author Daniel
+ */
 int ret(AmbienteExecucao *ae) {
+	u1 indice;
+	indice = leU1doPC(ae->pFrame);
+	//D�vida no acesso abaixo
+	PilhaVariaveisLocais localvar = (ae->pFrame->pilhaVariaveisLocais)[indice];
+	if ( (localvar.tipo)[localvar.sp][0] != 'r'){
+			printf("Endereco de retorno invalido, tipo errado.\n");
+			exit(1);
+		}
+	//Checar o acesso abaixo
+		ae->pFrame->pc = localvar.elementos->tipo_retorno;
 	return 0;
 }
 
@@ -1865,7 +1904,55 @@ int anewarray(AmbienteExecucao *ae) {
 	return 0;
 }
 
+/*
+ * @author Daniel
+ */
+
 int wide(AmbienteExecucao *ae) {
+	u1 opcode = leU1doPC(ae->pFrame);
+	switch (opcode) {
+			case ILOAD:
+				iload(ae);
+				break;
+			case FLOAD:
+				fload(ae);
+				break;
+			case ALOAD:
+				aload(ae);
+				break;
+				break;
+			case LLOAD:
+				lload(ae);
+				break;
+			case DLOAD:
+				dload(ae);
+				break;
+			case ISTORE:
+				istore(ae);
+				break;
+			case FSTORE:
+				fstore(ae);
+				break;
+			case ASTORE:
+				astore(ae);
+				break;
+			case LSTORE:
+				lstore(ae);
+				break;
+			case DSTORE:
+				dstore(ae);
+				break;
+			case RET:
+				ret(ae);
+				break;
+			case IINC:
+				iinc(ae);
+				break;
+			default:
+				printf("Erro na instrucao wide, Opcode invalido para wide.\n");
+				exit(1);
+				break;
+		}
 	return 0;
 }
 
@@ -1882,8 +1969,49 @@ int fdiv(AmbienteExecucao *ae) {
 int ddiv(AmbienteExecucao *ae) {
 	return 0;
 }
-
+/*
+ * @author Daniel
+ */
 int checkcast(AmbienteExecucao *ae) {
+	u2 indice;
+	indice = leU2doPC(ae->pFrame);
+
+	PilhaOperandos *ref;
+		Objeto *obj;
+		Array *arr;
+		ref = desempilhaOperando(ae->pFrame);
+		if ( (ref->tipo[ref->sp][0] != '[') || (ref->tipo[ref->sp][0] != 'L') ){
+			printf("Falha em 'checkcast', objeto na pilha inadequado.\n");
+			exit(0);
+		}
+		if (ref->elementos->tipo_referencia == NULL){
+			return 0;
+		}
+		int tag = (signed int) (ae->pFrame->cf->constant_pool[indice -1].u.Utf8.bytes);
+
+		if (tag != 7){
+			printf("Falha em 'checkcast', tipo do objeto na pilha inadequado.\n");
+			exit(0);
+		} else {
+			char *T = retornaClassInfo(ae->pFrame->cf, indice);
+			if (ref->tipo[ref->sp][0] == 'L'){
+				obj = (Objeto *) ref->elementos->tipo_referencia;
+				if (strcmp(T,obj->nomeClasse) != 0){
+					printf("Falha em 'checkcast', class types not compatible.\n");
+					exit(1);
+				}
+			/* TODO: Checar tipo de subclasse  */
+			} else 	if (ref->tipo[ref->sp][0]  == '[') {
+				arr = (Array *) ref->elementos->tipo_referencia;
+				/* TODO: Descobrir como est o type e arrumar isso aqui!  */
+				if (strcmp(T, arr->tipo[ref->sp]) != 0){
+					printf("Falha em 'checkcast', array class type duuh?.\n");
+					exit(1);
+				}
+				/* TODO: Arrumar o resto daqui tambm  */
+			}
+		}
+		empilhaOperando(ae->pFrame,ref->tipo[ref->sp],ref->elementos);
 	return 0;
 }
 int instanceof(AmbienteExecucao *ae) {
@@ -1901,6 +2029,59 @@ int putstatic(AmbienteExecucao *ae) {
 int lookupswitch(AmbienteExecucao *ae) {
 	return 0;
 }
+/*
+ * @author Daniel
+ */
 int tableswitch(AmbienteExecucao *ae) {
+	int bytepads;
+	u4 highbyte, lowbyte;
+	u4 defaultbyte;
+	bytepads = (4 - (ae->pFrame->pc - ae->pFrame->pcInicial)%4)%4;
+	ae->pFrame->pc += bytepads;
+	defaultbyte = leU4doPC(ae->pFrame);
+	lowbyte = leU4doPC(ae->pFrame);
+	highbyte = leU4doPC(ae->pFrame);
+
+	PilhaOperandos * objref;
+		int case_value;
+
+		u4 switchsize = (highbyte - lowbyte + 1);
+		u4 offsets[switchsize];
+		int i;
+
+		if ( switchsize < 0 ){
+			printf("Erro na 'tableswitch', lowbyte maior que highbyte.\n");
+			exit(1);
+		}
+
+		for (i = 0; i < switchsize; i++) {
+			offsets[i] = (u4) leU4doPC(ae->pFrame);
+		}
+
+		objref = desempilhaOperando(ae->pFrame);
+		case_value = objref->elementos->tipo_int;
+
+		if ( objref->tipo[objref->sp][0] != 'I'){
+			printf("Falha em 'tableswitch', elemento de switch diferente de inteiro.\n");
+			exit(1);
+		} else {
+			/* Recuando para o endereco original da funcao */
+			//interpreter->current_frame->pc += - ( 3*sizeof(u4) + switchsize*sizeof(u4) + 1 + padbytes);
+			ae->pFrame->pc += - ( 3*sizeof(u4) + switchsize*sizeof(u4) + 1 + bytepads);
+			//interpreter->current_frame->pc_address += - ( 3*sizeof(u4) + switchsize*sizeof(u4) + 1 + padbytes);
+			ae->pFrame->enderecoPC += - ( 3*sizeof(u4) + switchsize*sizeof(u4) + 1 + bytepads);
+			if ( ( case_value > (int)highbyte) || ( case_value < (int)lowbyte ) ){
+				//interpreter->current_frame->pc += defaultbyte;
+				ae->pFrame->pc += defaultbyte;
+				//interpreter->current_frame->pc_address += defaultbyte;
+				ae->pFrame->enderecoPC += defaultbyte;
+			} else {
+				//interpreter->current_frame->pc += offsets[objref->data.data_int - lowbyte];
+				ae->pFrame->pc += offsets[objref->elementos->tipo_int - lowbyte];
+				//interpreter->current_frame->pc_address += offsets[objref->data.data_int - lowbyte];
+				ae->pFrame->enderecoPC += offsets[objref->elementos->tipo_int- lowbyte];
+			}
+		}
+
 	return 0;
 }
