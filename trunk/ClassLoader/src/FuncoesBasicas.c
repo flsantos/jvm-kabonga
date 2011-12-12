@@ -26,7 +26,6 @@ ClassFile * verificarClassFile(AmbienteExecucao *ae, char *nomeClasse) {
 		cf = malloc(sizeof(ClassFile));
 		cf[0] = lerClassFile(nomeArquivo);
 		Objeto *obj = instanciaObjeto(cf, ae);
-
 		adicionaClasse(cf, &(ae->pClassHeap), obj);
 	}
 	return cf;
@@ -41,11 +40,11 @@ List_Classfile *retornaSuperClasses(AmbienteExecucao *ae, ClassFile *cf) {
 	char *str;
 	listaClasses = NULL;
 	p1 = cf;
-	str = (char *) retornaClassInfo(p1, p1->super_class);
-	while (strcmp(str, "java/lang/Object") != 0) {
-		printf("\n\n%s", str);
+	while (p1->super_class != 0) {
+		str = (char *) retornaClassInfo(p1, p1->super_class);
 		p1 = verificarClassFile(ae,
 				(char *) retornaClassInfo(p1, p1->super_class));
+		adicionaClasse(p1, &listaClasses, NULL);
 	}
 	return listaClasses;
 }
@@ -65,7 +64,6 @@ Objeto * instanciaObjeto(ClassFile *cf, AmbienteExecucao *ae) {
 	tiposCount = cf->fields_count;
 	newObjeto = malloc(sizeof(Objeto));
 	superClasses = retornaSuperClasses(ae, cf);
-
 	if (superClasses != NULL) {
 		p1 = superClasses;
 		while (p1 != NULL) {
@@ -78,7 +76,6 @@ Objeto * instanciaObjeto(ClassFile *cf, AmbienteExecucao *ae) {
 	ti = newObjeto->tipos;
 	newObjeto->nomeClasse = (char *) retornaNomeClasse(cf);
 	pFieldInfo = cf->fields;
-
 	tiposIndex = 0;
 	count = cf->fields_count;
 	for (i = 0; i < count; i++) {
@@ -93,7 +90,6 @@ Objeto * instanciaObjeto(ClassFile *cf, AmbienteExecucao *ae) {
 
 		tiposIndex++;
 	}
-
 	p1 = superClasses;
 	while (p1 != NULL) {
 		count = p1->cf->fields_count;

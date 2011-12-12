@@ -312,8 +312,6 @@ int invokespecial(AmbienteExecucao *ae) {
 	DadosMetodo *dadosMetodo;
 	int argumento;
 
-	printf("\ninvokespecial");
-
 	dadosMetodo = retornaDadosMetodo(ae->pFrame->cf, indice);
 	if ((strcmp(dadosMetodo->nomeClasse, "java/lang/StringBuffer") == 0
 			|| strcmp(dadosMetodo->nomeClasse, "java/lang/StringBuilder") == 0)
@@ -333,8 +331,6 @@ int invokespecial(AmbienteExecucao *ae) {
 }
 
 int dup(AmbienteExecucao *ae) {
-
-	printf("\ndup");
 
 	//t_opstack *a = desempilhaOperando((&interpreter->current_frame->opstack));
 	PilhaOperandos *a = desempilhaOperando(ae->pFrame);
@@ -469,8 +465,6 @@ int goto_(AmbienteExecucao *ae) {
 
 int iconst(AmbienteExecucao *ae) {
 	int valor;
-
-	printf("\niconst");
 
 	switch (instrucao) {
 	case ICONST_M1:
@@ -1846,7 +1840,7 @@ int arraylength(AmbienteExecucao *ae) {
 }
 
 int return0(AmbienteExecucao *ae) {
-	return 0;
+	return jumpback(ae, 0);
 }
 int return1(AmbienteExecucao *ae) {
 		return jumpback(ae, 1);
