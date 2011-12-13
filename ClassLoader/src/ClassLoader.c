@@ -470,7 +470,7 @@ ClassFile lerClassFile(char *nomeArquivo) {
 
 	fp = fopen(nomeArquivo, "rb");
 	if (fp == NULL) {
-		//printf("\nArquivo nao encontrado: %s\n", nomeArquivo);
+		printf("\nArquivo nao encontrado: %s\n", nomeArquivo);
 		exit(1);
 	}
 
@@ -523,7 +523,7 @@ ClassFile lerClassFile(char *nomeArquivo) {
 
 
 	} else {
-		//printf("O magic number esta incorreto.");
+		printf("O magic number esta incorreto.");
 	}
 
 
