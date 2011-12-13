@@ -1264,7 +1264,7 @@ int getstatic(AmbienteExecucao *ae) {
 	DadosField *dadosField;
 	tipo_info *fieldRet;
 	List_Classfile *p1, *p2, *p3;
-	List_Classfile superClasses;
+	List_Classfile *superClasses;
 
 	indiceDF = leU2doPC(ae->pFrame);
 
@@ -1279,10 +1279,10 @@ int getstatic(AmbienteExecucao *ae) {
 	else {
 		p1 = ae->pClassHeap;
 		while (p1 != NULL) {
-			if (strcmp(p1->class_name, dadosField->nomeClasse) == 0) {
+			if (strcmp((char *)p1->class_name, dadosField->nomeClasse) == 0) {
 				fieldRet = retornaFieldObjeto(p1->obj, dadosField->nomeField);
 				if (fieldRet != NULL) {
-					empilhaOperando(ae->pFrame, fieldRet->tipo, fieldRet->elemento);
+					empilhaOperando(ae->pFrame, fieldRet->tipo, &(fieldRet->elemento));
 					return 0;
 				}
 				else {
@@ -1291,10 +1291,10 @@ int getstatic(AmbienteExecucao *ae) {
 					while (p2 != NULL) {
 						p3 = ae->pClassHeap;
 						while (p3 != NULL) {
-							if (strcmp(p2->class_name, p3->class_name) == 0) {
+							if (strcmp((char *)p2->class_name, (char *)p3->class_name) == 0) {
 								fieldRet = retornaFieldObjeto(p3->obj, dadosField->nomeField);
 								if (fieldRet != NULL) {
-									empilhaOperando(ae->pFrame, fieldRet->tipo, fieldRet->elemento);
+									empilhaOperando(ae->pFrame, fieldRet->tipo, &(fieldRet->elemento));
 									return 0;
 								}
 							}

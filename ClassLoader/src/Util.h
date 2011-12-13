@@ -7,6 +7,7 @@
 
 #ifndef ESTRUTURAS
 	#define ESTRUTURAS
+	#include <stdarg.h>
 	#include "Estruturas.h"
 #endif
 
