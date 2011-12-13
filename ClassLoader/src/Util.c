@@ -315,7 +315,7 @@ Array *iniciarArray(char *tipo, int n) {
 	return vetorList;
 }
 
-Array* alocarVetor__(char* tipo, int dimensao, int *tamanhos) {
+Array *alocarVetor__(char* tipo, int dimensao, int *tamanhos) {
 	Array *vet, *p1;
 	int i, *sub_tamanhos;
 
@@ -426,4 +426,16 @@ long long retornaLong(ClassFile *cf, int n) {
 	vlong = (high << sizeof(u4)*8) | low;
 
 	return vlong;
+}
+
+Array *obterValorArray(Array **array, int pos) {
+	Array *p1;
+	int cont;
+	p1 = *array;
+
+	for(cont = 0; cont < pos; cont++){
+		p1++;
+	}
+
+	return p1;
 }
