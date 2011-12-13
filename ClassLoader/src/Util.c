@@ -330,7 +330,7 @@ Array *iniciarArray(char *tipo, int n) {
 		vetorList->sp = n;
 		vetorList->tipo = malloc(n * sizeof(char *));
 		vetorList->elementos = malloc (n * sizeof(Tipo));
-		for(i = 1; i < n; i++) {
+		for(i = 0; i < n; i++) {
 			vetorList->tipo[i] = tipo;
 		}
 	} else {
@@ -462,6 +462,7 @@ Array *obterValorArray(Array **array, int pos) {
 	for(cont = 0; cont < pos; cont++){
 		p1++;
 	}
+	debugPause();
 
 	return p1;
 }

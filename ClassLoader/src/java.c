@@ -13,6 +13,7 @@
 #include "Heap.h"
 #include "RotinaExecucao.h"
 #include "FuncoesBasicas.h"
+#include "Debug.h"
 void iniciaExecucaoMetodo(char nomeClassFile[], AmbienteExecucao *ae,
 		char *nomeMetodo, char *descritor, u1 argumentos) {
 	Frame *frame = NULL;
@@ -49,6 +50,16 @@ void iniciaMain(char nomeClassFile[], AmbienteExecucao *ae, char *nomeMetodo,
 	execute_iteration(ae);
 }
 
+
+void checkDebugFlag(char *flag) {
+	if (strcmp(flag,"d") == 0 || strcmp(flag, "D") == 0) {
+		m_debug = 1;
+	}
+	else {
+		m_debug = 0;
+	}
+}
+
 /*
  * Funcao inicial da JVM
  *
@@ -61,6 +72,7 @@ int main(int argc, char *argv[]) {
 	ae.pFrame = NULL;
 	if (argc >= 2) {
 		nomeClassFile = argv[1];
+		checkDebugFlag(argv[2]);
 		iniciaMain(nomeClassFile, &ae, "main", "([Ljava/lang/String;)V");
 	} else {
 		printf(

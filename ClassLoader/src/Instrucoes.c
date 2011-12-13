@@ -2511,6 +2511,7 @@ int bastore(AmbienteExecucao *ae) {
 	while (referencias->tipo[referencias->sp][tamanho] == '[') {
 		tamanho++;
 	}
+	printf("\ntamanho: %d", tamanho);
 	if ((referencias->tipo[referencias->sp])[tamanho] == 'B') {
 		printf("a");
 		valorChar = (int) valor;

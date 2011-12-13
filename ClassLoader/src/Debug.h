@@ -11,9 +11,11 @@
 #include <stdio.h>
 #include "Estruturas.h"
 
-#endif /* DEBUG_H_ */
+int m_debug;
 
+#endif /* DEBUG_H_ */
 void debugPrintEmpilha(char *tipo, Frame *frame);
 void debugPrintDesempilha(PilhaOperandos *operando);
 void debugPrintEmpilhaTipo(PilhaOperandos *p1);
+void debugPause(void);
 void debugPrintLinha();
