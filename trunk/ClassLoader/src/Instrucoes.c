@@ -2402,36 +2402,39 @@ int saload(AmbienteExecucao *ae) {
 
 	return 0;
 }
+
+
 /*
- * @author Rubens
+ * @author Daniel
  */
-
 int baload(AmbienteExecucao *ae) {
-	int index, val_int, val_char;
-	PilhaOperandos *lista_ref;
-	int zero = 0;
-	int lista_size = 0;
+	int indice, valorInt, valorChar;
+	int tamanhoVetor;
+	int zero;
+	Array *vetorRef;
 
-	index = desempilhaOperando(ae->pFrame)->elementos[0].tipo_int;
-	lista_ref = (PilhaOperandos*) desempilhaOperando(ae->pFrame)->elementos[0].tipo_referencia;
+	zero = 0;
+	tamanhoVetor = 0;
 
-	while (*(lista_ref->tipo)[lista_size] == '[' ){
-		lista_size++;
+	indice = desempilhaOperando(ae->pFrame)->elementos[vetorRef->sp].tipo_int;
+	vetorRef = (Array*)desempilhaOperando(ae->pFrame)->elementos[vetorRef->sp].tipo_referencia;
+
+	while (vetorRef->tipo[tamanhoVetor] == "[") {
+		tamanhoVetor++;
 	}
-
-	if(*(lista_ref->tipo)[lista_size] == 'B') {
-		val_char = lista_ref->elementos[index].tipo_byte;
-		val_int = (int) val_char;
-		empilhaOperando(ae->pFrame, "I", &val_int);
-	} else if(*(lista_ref->tipo)[lista_size] == 'Z') {
-		val_char = lista_ref->elementos[index].tipo_boolean;
-		val_int = (zero | val_char);
-		empilhaOperando(ae->pFrame, "I", &val_int);
+	//Checar a forma de acesso abaixo
+	if(vetorRef->tipo[vetorRef->sp][tamanhoVetor] == 'B') {
+		valorChar = obterValorArray(&(vetorRef), indice)->elementos->tipo_byte;
+		valorInt = (int)valorChar;
+		empilhaOperando(ae->pFrame,"I", &valorInt);
+	} else if((vetorRef->tipo)[vetorRef->sp][tamanhoVetor] == 'Z') {
+		valorChar = obterValorArray(&(vetorRef), indice)->elementos->tipo_boolean;
+		valorInt = (zero | valorChar);
+		empilhaOperando(ae->pFrame,"I", &valorInt);
 	} else {
-		fprintf(stderr,"Problema em 'baload', tipo incorreto de dados passado.\n");
+		printf("Problema em 'baload', tipo incorreto de dados passado.\n");
 		exit(1);
 	}
-
 
 	return 0;
 }
