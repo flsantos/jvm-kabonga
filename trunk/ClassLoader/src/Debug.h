@@ -14,3 +14,6 @@
 #endif /* DEBUG_H_ */
 
 void debugPrintEmpilha(char *tipo, Frame *frame);
+void debugPrintDesempilha(PilhaOperandos *operando);
+void debugPrintEmpilhaTipo(PilhaOperandos *p1);
+void debugPrintLinha();
