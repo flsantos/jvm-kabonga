@@ -202,11 +202,14 @@ typedef union TIPO {
 	u1 *tipo_retorno;
 } Tipo;
 
+/*
+ * Nessa estrutura o sp representa o numero de elementos.
+ */
 typedef struct PILHA {
 	i2 sp;
 	Tipo *elementos;
 	char **tipo;
-} PilhaOperandos, PilhaVariaveisLocais, Array;
+} PilhaOperandos, VariaveisLocais, Array;
 
 typedef struct FRAME {
 	int enderecoPC;
@@ -214,7 +217,7 @@ typedef struct FRAME {
 	u1 *pcInicial;
 	cp_info *constant_pool;
 	PilhaOperandos *pilhaOperandos;
-	PilhaVariaveisLocais *pilhaVariaveisLocais;
+	VariaveisLocais *pilhaVariaveisLocais;
 	ClassFile *cf;
 	struct FRAME *frameAnterior;
 } Frame;
