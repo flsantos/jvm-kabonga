@@ -2791,6 +2791,23 @@ int instanceof(AmbienteExecucao *ae) {
 }
 
 int invokestatic(AmbienteExecucao *ae) {
+	DadosMetodo *dadosMetodo;
+	int arg_cont;
+	int indice;
+
+	indice = leU2doPC(ae->pFrame);
+
+	dadosMetodo = retornaDadosMetodo(ae->pFrame->cf, indice);
+
+	arg_cont = retornaContadorArgumentos(dadosMetodo->tipo);
+
+	if(strcmp(dadosMetodo->nomeClasse, "Object") == 0 &&
+			strcmp(dadosMetodo->nomeMetodo, "<init>") == 0) {
+		return 0;
+	}
+	iniciaExecucaoMetodo(dadosMetodo->nomeClasse, ae, dadosMetodo->nomeMetodo,
+				dadosMetodo->tipo, arg_cont);
+
 	return 0;
 }
 
