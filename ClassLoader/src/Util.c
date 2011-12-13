@@ -116,27 +116,39 @@ void empilhaOperando(Frame *frame, char *tipo, void *operando) {
 
 	frame->pilhaOperandos->tipo[sp] = tipo;
 	if (tipo[0] == 'B') {
-		frame->pilhaOperandos->elementos[sp].tipo_byte = *((i1 *) operando);
+		frame->pilhaOperandos->elementos[sp].tipo_byte = *((char *) operando);
+		printf("\n\n%d\n\n", frame->pilhaOperandos->elementos[sp].tipo_byte);
 	} else if (tipo[0] == 'C') {
-		frame->pilhaOperandos->elementos[sp].tipo_char = *((u1 *) operando);
+		frame->pilhaOperandos->elementos[sp].tipo_char = *((unsigned char *) operando);
+		printf("\n\n%c\n\n", frame->pilhaOperandos->elementos[sp].tipo_char);
 	} else if (tipo[0] == 'D') {
 		frame->pilhaOperandos->elementos[sp].tipo_double =
 				*((double *) operando);
+		printf("\n\n%f\n\n", frame->pilhaOperandos->elementos[sp].tipo_double);
 	} else if (tipo[0] == 'F') {
 		frame->pilhaOperandos->elementos[sp].tipo_float = *((float *) operando);
+		printf("\n\n%f\n\n", frame->pilhaOperandos->elementos[sp].tipo_float);
 	} else if (tipo[0] == 'I') {
-		frame->pilhaOperandos->elementos[sp].tipo_int = *((u4 *) operando);
+		frame->pilhaOperandos->elementos[sp].tipo_int = *((int *) operando);
+		printf("\n\n%d\n\n", frame->pilhaOperandos->elementos[sp].tipo_int);
 	} else if (tipo[0] == 'J') {
-		frame->pilhaOperandos->elementos[sp].tipo_long = *((long *) operando);
+		frame->pilhaOperandos->elementos[sp].tipo_long = *((long long *) operando);
+		printf("\n\n%d long\n\n", frame->pilhaOperandos->elementos[sp].tipo_long);
 	} else if (tipo[0] == 'L') {
 		frame->pilhaOperandos->elementos[sp].tipo_referencia = operando;
+		//printf("\n\n%f\n\n", frame->pilhaOperandos->elementos[sp].tipo_referencia[0]);
 	} else if (tipo[0] == 'S') {
-		frame->pilhaOperandos->elementos[sp].tipo_short = *((u2 *) operando);
+		frame->pilhaOperandos->elementos[sp].tipo_short = *((short *) operando);
+		printf("\n\n%d\n\n", frame->pilhaOperandos->elementos[sp].tipo_short);
 	} else if (tipo[0] == 'Z') {
 		frame->pilhaOperandos->elementos[sp].tipo_boolean =
 				*((char *) operando);
+		printf("\n\n%c\n\n", frame->pilhaOperandos->elementos[sp].tipo_boolean);
 	} else if (tipo[0] == '[') {
-		frame->pilhaOperandos->elementos[sp].tipo_referencia =  operando;
+		frame->pilhaOperandos->elementos[sp].tipo_referencia = operando;
+		//printf("\n\n%f\n\n", frame->pilhaOperandos->elementos[sp].tipo_referencia[0]);
+	} else if(tipo[0] == 'r') {
+		frame->pilhaOperandos->elementos[sp].tipo_retorno = ((char*)operando);
 	}
 }
 
@@ -146,6 +158,7 @@ void empilhaOperandoTipo(Frame *frame, char *tipo, Tipo elemento) {
 	p1 = frame->pilhaOperandos;
 	p1->sp++;
 	p1->elementos[p1->sp] = elemento;
+	p1->tipo[p1->sp] = tipo;
 }
 
 
@@ -155,14 +168,13 @@ PilhaOperandos *desempilhaOperando(Frame *frame) {
 	sp = frame->pilhaOperandos->sp;
 
 	operando = malloc(sizeof(PilhaOperandos));
-
 	if (sp > -1) {
 
 		operando->elementos = malloc(sizeof(Tipo));
 		operando->tipo = malloc(sizeof(char *));
 
 		operando->elementos[0] = frame->pilhaOperandos->elementos[sp];
-		operando->tipo = &(frame->pilhaOperandos->tipo[sp]);
+		operando->tipo[0] = frame->pilhaOperandos->tipo[sp];
 
 		operando->sp = 0;
 

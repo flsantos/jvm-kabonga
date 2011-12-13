@@ -809,6 +809,7 @@ int ldc(AmbienteExecucao *ae) {
 		indice = (int)leU2doPC(ae->pFrame);
 		break;
 	case LDC2_W:
+		printf("\n\n**************oi**************\n\n");
 		indice = (int)leU2doPC(ae->pFrame);
 		break;
 	case LDC:
@@ -2345,7 +2346,7 @@ int lastore(AmbienteExecucao *ae) {
 	lista = (PilhaOperandos*) desempilhaOperando(ae->pFrame)->elementos->tipo_referencia;
 
 	adicionaValorArray(lista, index, "J", &valor);
-
+	printf("Long: %d", lista->elementos[lista->sp].tipo_long);
 	return 0;
 }
 
@@ -2448,16 +2449,14 @@ int bastore(AmbienteExecucao *ae) {
 
 	valor = desempilhaOperando(ae->pFrame)->elementos[0].tipo_int;
 	indice= desempilhaOperando(ae->pFrame)->elementos[0].tipo_int;
-	referencias = (Array*)desempilhaOperando(ae->pFrame)->elementos[0].tipo_referencia;
+	referencias = (Array*)desempilhaOperando(ae->pFrame);//->elementos[0].tipo_referencia;
 	while (referencias->tipo[referencias->sp][tamanho] == '[' ){
 		tamanho++;
 	}
 	if((referencias->tipo[referencias->sp])[tamanho] == 'B') {
-		printf("a");
 		valorChar = (int)valor;
 		adicionaValorArray(referencias, indice, "B", &valorChar);
 	} else if((referencias->tipo)[referencias->sp][tamanho] == 'Z') {
-		printf("a");
 		valorChar = (valor & mascara);
 		adicionaValorArray(referencias, indice, "Z", &valorChar);
 	} else {
