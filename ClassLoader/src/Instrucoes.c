@@ -2568,6 +2568,22 @@ int multianewarray(AmbienteExecucao *ae) {
 }
 
 int anewarray(AmbienteExecucao *ae) {
+	int i;
+	Array *array;
+	char *tipo;
+
+	i = desempilhaOperando(ae->pFrame)->elementos[0].tipo_int;
+	tipo = retornaClassInfo(ae->pFrame->cf, leU2doPC(ae->pFrame));
+
+	tipo++;
+	if(i == 0) {
+		array = NULL;
+	} else {
+		array = alocarVetor(tipo, 1, i);
+	}
+
+	empilhaOperando(ae->pFrame, "[", array);
+
 	return 0;
 }
 
@@ -2730,7 +2746,48 @@ int checkcast(AmbienteExecucao *ae) {
 		empilhaOperando(ae->pFrame,ref->tipo[ref->sp],ref->elementos);
 	return 0;
 }
+/*
+ * @author Fernando
+ */
 int instanceof(AmbienteExecucao *ae) {
+	PilhaOperandos *refObjeto;
+	Objeto *obj;
+	Array *array;
+	int resultado = 0;
+	char *S, *T;
+	int indice;
+
+	indice = leU2doPC(ae->pFrame);
+
+	refObjeto = desempilhaOperando(ae->pFrame)->elementos[0].tipo_referencia;
+	if ( refObjeto == NULL ){
+		empilhaOperando(ae->pFrame, "I", &resultado);
+		return 0;
+	}
+
+	if( (signed int)ae->pFrame->cf->constant_pool[indice - 1].tag!=7 ){
+		printf("Erro em 'instanceof'.\n");
+		exit(1);
+	}
+
+	T = retornaClassInfo(ae->pFrame->cf, indice);
+	S = refObjeto->tipo[0];
+	if( refObjeto->tipo[refObjeto->sp][0]=='L' ){
+		obj = (Objeto *)refObjeto->elementos[0].tipo_referencia;
+		if( strcmp(T,obj->nomeClasse) ){
+			printf("Erro.\n");
+			empilhaOperando(ae->pFrame, "I", &resultado);
+		}
+
+	} else if ( refObjeto->tipo[refObjeto->sp][0]=='[' ){
+		array = (Array *)refObjeto->elementos[0].tipo_referencia;
+		if( strcmp(T, array->tipo) ){
+			printf("Erro.\n");
+			empilhaOperando(ae->pFrame, "I", &resultado);
+		}
+	}
+
+	empilhaOperando(ae->pFrame, "I", &resultado);
 	return 0;
 }
 
