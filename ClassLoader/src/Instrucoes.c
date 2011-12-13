@@ -797,7 +797,7 @@ int dstore(AmbienteExecucao *ae) {
  */
 
 int ldc(AmbienteExecucao *ae) {
-	char *string;
+	u1 *string;
 	int integer;
 	uFloat fvalue;
 	long long lvalue;
@@ -1289,7 +1289,6 @@ int getstatic(AmbienteExecucao *ae) {
 					superClasses = retornaSuperClasses(ae, p1->cf);
 					p2 = superClasses;
 					while (p2 != NULL) {
-						p3 = ae->pClassHeap;
 						while (p3 != NULL) {
 							if (strcmp((char *)p2->class_name, (char *)p3->class_name) == 0) {
 								fieldRet = retornaFieldObjeto(p3->obj, dadosField->nomeField);

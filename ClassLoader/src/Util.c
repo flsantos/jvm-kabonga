@@ -297,10 +297,11 @@ void adicionaValorArray(Array *array, int posicao, char *tipo, void *info) {
 
 //TODO entender essa porra
 Array *iniciarArray(char *tipo, int n) {
-	Array *vetorList, *p1, *p2;
+	Array *vetorList;
 	int i;
 	if(n > 0) {
 		vetorList = malloc(sizeof(Array));
+		vetorList->sp = n;
 		vetorList->tipo = malloc(n * sizeof(char *));
 		vetorList->elementos = malloc (n * sizeof(Tipo));
 		for(i = 1; i < n; i++) {
@@ -313,7 +314,6 @@ Array *iniciarArray(char *tipo, int n) {
 
 	return vetorList;
 }
-
 
 Array* alocarVetor__(char* tipo, int dimensao, int *tamanhos) {
 	Array *vet, *p1;
@@ -329,7 +329,7 @@ Array* alocarVetor__(char* tipo, int dimensao, int *tamanhos) {
 			sub_tamanhos[i-1] = tamanhos[i];
 		}
 		for(p1 = vet, i=0; i< tamanhos[0]; i++, p1 = vet + i) {
-			p1->elementos[0].tipo_referencia = alocarVetor__(tipo, dimensao-1, sub_tamanhos);
+			p1->elementos[p1->sp].tipo_referencia = alocarVetor__(tipo, dimensao-1, sub_tamanhos);
 		}
 	}
 
@@ -339,7 +339,7 @@ Array* alocarVetor__(char* tipo, int dimensao, int *tamanhos) {
 }
 
 
-Array* alocarVetor(char *tipo, int dimensao, ...) {
+Array *alocarVetor(char *tipo, int dimensao, ...) {
 	Array *vet;
 	int i;
 	int *tamanhos;
@@ -368,7 +368,6 @@ int defineFieldObjeto(Objeto *object, char *nomeField, char *tipo, Tipo info) {
 	tipo_info *p1;
 	int n, i;
 	n = object->numeroTipos;
-	printf("\n\ndefineFieldObjeto");
 	for(i=0, p1 = object->tipos; i < n; i++, p1++) {
 		if(strcmp(p1->nome, nomeField) == 0) {
 			p1->tipo = tipo;
@@ -406,7 +405,6 @@ tipo_info *retornaFieldObjeto(Objeto *object, char *nomeField) {
 	tipo_info *p1;
 	int n, i;
 	n = object->numeroTipos;
-
 	for(i=0, p1 = object->tipos; i<n; i++, p1++) {
 		if(strcmp(p1->nome, nomeField) == 0) {
 			return p1;
