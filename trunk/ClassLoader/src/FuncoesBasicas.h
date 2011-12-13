@@ -12,6 +12,8 @@
 #include "Util.h"
 #include "Heap.h"
 #include "ClassLoader.h"
+#include "Frame.h"
+#include "RotinaExecucao.h"
 
 ClassFile * verificarClassFile(AmbienteExecucao *ae, char *nomeClasse);
 

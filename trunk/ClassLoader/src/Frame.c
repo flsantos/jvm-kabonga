@@ -13,6 +13,10 @@ Frame *criaFrame(ClassFile *cf, char *nomeMetodo, char *descritor, Frame *frame)
 	int i;
 
 	metodo = retornaMetodoPorNome(cf, nomeMetodo, descritor);
+	if(metodo == NULL){
+		printf("Metodo %s não encontrado!", nomeMetodo);
+		exit(0);
+	}
 	for(i = 0; i < metodo->attributes_count; i++){
 		if(strcmp((char*) retornaUtf8(cf, metodo->attributes[i].attribute_name_index), "Code") == 0){
 			attribute = metodo->attributes[i];

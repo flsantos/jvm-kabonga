@@ -20,17 +20,18 @@ void iniciaExecucaoMetodo(char nomeClassFile[], AmbienteExecucao *ae,
 	int i;
 
 	cf = verificarClassFile(ae, nomeClassFile);
-	if (ae->pFrame == NULL) {
-		ae->pFrame = criaFrame(cf, nomeMetodo, descritor, frame);
-		ae->pFrame->frameAnterior = NULL;
-	} else {
-		frame = criaFrame(cf, nomeMetodo, descritor, frame);
-		frame->frameAnterior = ae->pFrame;
-		ae->pFrame = frame;
-		for (i = (argumentos - 1); i >= 0; i--) {
-			transferePilhaOperandosParaVariavelLocalPorFrames(ae->pFrame->frameAnterior, ae->pFrame, i);
-		}
+
+	ae->pFrame = criaFrame(cf, nomeMetodo, descritor, frame);
+	ae->pFrame->frameAnterior = NULL;
+
+	frame = criaFrame(cf, nomeMetodo, descritor, frame);
+	frame->frameAnterior = ae->pFrame;
+	ae->pFrame = frame;
+	for (i = (argumentos - 1); i >= 0; i--) {
+		transferePilhaOperandosParaVariavelLocalPorFrames(
+				ae->pFrame->frameAnterior, ae->pFrame, i);
 	}
+
 }
 
 void iniciaClasse(char nomeClassFile[], AmbienteExecucao *ae, char *nomeMetodo,
@@ -43,8 +44,6 @@ void iniciaClasse(char nomeClassFile[], AmbienteExecucao *ae, char *nomeMetodo,
 
 void iniciaMain(char nomeClassFile[], AmbienteExecucao *ae, char *nomeMetodo,
 		char *descritor) {
-
-	//TODO Adicionar Realloc!
 	iniciaExecucaoMetodo(nomeClassFile, ae, nomeMetodo, descritor, 0);
 	execute_iteration(ae);
 }

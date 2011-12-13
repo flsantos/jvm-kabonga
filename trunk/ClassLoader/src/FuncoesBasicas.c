@@ -14,12 +14,13 @@
 ClassFile * verificarClassFile(AmbienteExecucao *ae, char *nomeClasse) {
 	ClassFile *cf = NULL;
 	char *nomeArquivo;
+	Frame *frame = NULL;
 	int i;
 
 	cf = buscarClassePorNome(ae->pClassHeap, nomeClasse);
 	if (cf == NULL) {
 		nomeArquivo = malloc(strlen(nomeClasse) + 7 * sizeof(char));
-		for(i = 0; i <= strlen(nomeClasse); i++){
+		for (i = 0; i <= strlen(nomeClasse); i++) {
 			nomeArquivo[i] = nomeClasse[i];
 		}
 		strcat(nomeArquivo, ".class");
@@ -27,6 +28,39 @@ ClassFile * verificarClassFile(AmbienteExecucao *ae, char *nomeClasse) {
 		cf[0] = lerClassFile(nomeArquivo);
 		Objeto *obj = instanciaObjeto(cf, ae);
 		adicionaClasse(cf, &(ae->pClassHeap), obj);
+		if (ae->pFrame == NULL) {
+			if (retornaMetodoPorNome(cf, "<clinit>", "()V") != NULL) {
+				if (strcmp("java/lang/Object", nomeClasse) != 0
+						&& strcmp(nomeClasse, "Object") != 0
+						&& strcmp(nomeClasse, "java/lang/Class") != 0
+						&& strcmp(nomeClasse, "Class") != 0
+						&& strcmp(nomeClasse, "java/lang/Long") != 0
+						&& strcmp(nomeClasse, "Long") != 0
+						&& strcmp(nomeClasse, "java/lang/String") != 0
+						&& strcmp(nomeClasse, "String") != 0) {
+					printf("a");
+					ae->pFrame = criaFrame(cf, "<clinit>", "()V", frame);
+					ae->pFrame->frameAnterior = NULL;
+					execute_iteration(ae);
+				}
+			}
+		} else {
+			if (retornaMetodoPorNome(cf, "<clinit>", "()V") != NULL) {
+				if (strcmp("java/lang/Object", nomeClasse) != 0
+						&& strcmp(nomeClasse, "Object") != 0
+						&& strcmp(nomeClasse, "java/lang/Class") != 0
+						&& strcmp(nomeClasse, "Class") != 0
+						&& strcmp(nomeClasse, "java/lang/Long") != 0
+						&& strcmp(nomeClasse, "Long") != 0
+						&& strcmp(nomeClasse, "java/lang/String") != 0
+						&& strcmp(nomeClasse, "String") != 0) {
+					frame = criaFrame(cf, "<clinit>", "()V", frame);
+					frame->frameAnterior = ae->pFrame;
+					ae->pFrame = frame;
+					execute_iteration(ae);
+				}
+			}
+		}
 	}
 	return cf;
 }
@@ -178,12 +212,12 @@ int jumpback(AmbienteExecucao *ae, int n_return) {
 	if (ae->pFrame->frameAnterior != NULL) {
 		frame = ae->pFrame;
 		ae->pFrame = ae->pFrame->frameAnterior;
-
+		pilhaoperandos = ae->pFrame->pilhaOperandos;
 		for (i = 0; i < n_return; i++) {
 			pilhaoperandos = desempilhaOperando(frame);
-			empilhaOperandoTipo(ae->pFrame, pilhaoperandos->tipo[pilhaoperandos->sp],
+			empilhaOperandoTipo(ae->pFrame,
+					pilhaoperandos->tipo[pilhaoperandos->sp],
 					pilhaoperandos->elementos[pilhaoperandos->sp]);
-			printf("\npilha: %d", ae->pFrame->pilhaOperandos->elementos[ae->pFrame->pilhaOperandos->sp]);
 		}
 
 		return 0;

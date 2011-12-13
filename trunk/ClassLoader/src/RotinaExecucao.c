@@ -268,10 +268,10 @@ u4 leU4doPC(Frame *frame) {
 }
 
 int execute_iteration(AmbienteExecucao *ae) {
-
+	int i = 0;
 	while (1) {
 		instrucao = leU1doPC(ae->pFrame);
-		printf("\ninstrucao: %s", minemonicos[instrucao]);
+		printf("\n%d instrucao: %s",i++, minemonicos[instrucao]);
 		if(vetFunc[instrucao](ae) == -1 && instrucao == RETURN){
 			break;
 		}
