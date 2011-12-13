@@ -181,8 +181,9 @@ int jumpback(AmbienteExecucao *ae, int n_return) {
 
 		for (i = 0; i < n_return; i++) {
 			pilhaoperandos = desempilhaOperando(frame);
-			empilhaOperando(ae->pFrame, pilhaoperandos->tipo[pilhaoperandos->sp],
-					(int)&(pilhaoperandos->elementos[pilhaoperandos->sp]));
+			empilhaOperandoTipo(ae->pFrame, pilhaoperandos->tipo[pilhaoperandos->sp],
+					pilhaoperandos->elementos[pilhaoperandos->sp]);
+			printf("\npilha: %d", ae->pFrame->pilhaOperandos->elementos[ae->pFrame->pilhaOperandos->sp]);
 		}
 
 		return 0;
