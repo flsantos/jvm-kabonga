@@ -769,67 +769,68 @@ int dstore(AmbienteExecucao *ae) {
 	return 0;
 }
 
+/*
+ * @Author: Daniel
+ */
 
 int ldc(AmbienteExecucao *ae) {
-//	char *string;
-//	int integer;
-//	float fvalue;
-//	long long lvalue;
-//	double dvalue;
-//	u1 indice;
-//
-//	switch(instrucao){
-//	case LDC_W:
-//		break;
-//	case LDC2_W:
-//		break;
-//	case LDC:
-//		indice = leU1doPC(ae->pFrame);
-//		//switch((signed int)find_tag_info(interpreter->current_frame->class_file, cp_index)) {
-//		switch((signed int)(ae->pFrame->cf->constant_pool[indice -1]))
-//		case 8:
-//			/* CONSTANT_String */
-//
-////			string = find_string_info(interpreter->current_frame->class_file, cp_index);
-////			opstack_push(&(interpreter->current_frame->opstack), "[", string);
-//			string = ae->pFrame->cf->constant_pool[indice -1].u.Utf8.bytes;
-//			empilhaOperando(ae->pFrame, "[",string);
-//
-//			break;
-//		case 3:
-//			/* CONSTANT_Integer */
-//			integer = find_integer_info(interpreter->current_frame->class_file, cp_index);
-//			opstack_push(&(interpreter->current_frame->opstack), "I", &integer);
-//
-//			break;
-//		case 4:
-//			/* CONSTANT_Float */
-//			fvalue = find_float_info(interpreter->current_frame->class_file, cp_index);
-//			opstack_push(&(interpreter->current_frame->opstack), "F", &fvalue);
-//
-//			break;
-//		case 5:
-//			/* CONSTANT_Long */
-//			lvalue = find_long_info(interpreter->current_frame->class_file, cp_index);
-//			opstack_push(&(interpreter->current_frame->opstack), "J", &lvalue);
-//
-//			break;
-//		case 6:
-//			/* CONSTANT_Double */
-//			dvalue = find_double_info(interpreter->current_frame->class_file, cp_index);
-//			opstack_push(&(interpreter->current_frame->opstack), "D", &dvalue);
-//
-//			break;
-//
-//		default:
-//			fprintf(stderr,"Erro em 'ldc' tag: %d\n", (signed int)find_tag_info(interpreter->current_frame->class_file, cp_index));
-//			exit(1);
-//			break;
-//		}
-//
-//		return 0;
-//		break;
-//	}
+	char *string;
+	int integer;
+	uFloat fvalue;
+	long long lvalue;
+	uDouble dvalue;
+	u2 indice;
+
+	switch(instrucao){
+	case LDC_W:
+		indice = (int)leU1doPC(ae->pFrame);
+		break;
+	case LDC2_W:
+		indice = (int)leU2doPC(ae->pFrame);
+		break;
+	case LDC:
+		indice = (int)leU2doPC(ae->pFrame);
+		break;
+	}
+
+	switch((signed int)(ae->pFrame->cf->constant_pool[indice -1].tag)){
+	case 8:
+		/* CONSTANT_String */
+		string = ae->pFrame->cf->constant_pool[indice -1].u.Utf8.bytes;
+		empilhaOperando(ae->pFrame, "[",string);
+		break;
+	case 3:
+		/* CONSTANT_Integer */
+		integer = ae->pFrame->cf->constant_pool[indice -1].u.Integer.bytes;
+		empilhaOperando(ae->pFrame,"I", &integer);
+
+		break;
+	case 4:
+		/* CONSTANT_Float */
+		fvalue = ae->pFrame->cf->constant_pool[indice -1].u.Float.bytes;
+		empilhaOperando(ae->pFrame,"F", &fvalue);
+
+		break;
+	case 5:
+		/* CONSTANT_Long */
+		lvalue = retornaLong(ae->pFrame->cf, indice -1);
+		empilhaOperando(ae->pFrame,"J", &lvalue);
+
+		break;
+	case 6:
+		/* CONSTANT_Double */
+
+		dvalue = ae->pFrame->cf->constant_pool[indice -1].u.Double.bytes;
+		empilhaOperando(ae->pFrame,"D", &dvalue);
+
+		break;
+
+	default:
+		printf("Erro em 'ldc' tag: %d\n", (signed int)ae->pFrame->cf->constant_pool[indice -1].tag);
+		exit(1);
+		break;
+	}
+
 	return 0;
 }
 
@@ -1838,6 +1839,9 @@ int idiv_(AmbienteExecucao *ae) {
 	empilhaOperando(ae->pFrame, "I", &div);
 	return 0;
 }
+/*
+ * @Author: Daniel
+ */
 
 int ldiv_(AmbienteExecucao *ae) {
 	long long a, b, div;
