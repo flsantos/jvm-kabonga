@@ -40,7 +40,7 @@ void adicionaClasse (ClassFile *cf, List_Classfile **lcf, Objeto *obj){
 		aux->cf = cf;
 		aux->class_name = malloc(sizeof(cf->constant_pool[cf->constant_pool[cf->this_class -1].u.Class.name_index -1].u.Utf8.length));
 		aux->class_name = cf->constant_pool[cf->constant_pool[cf->this_class -1].u.Class.name_index -1].u.Utf8.bytes;
-		(*lcf)->obj = obj;
+		aux->obj = obj;
 		(*lcf) = aux;
 	}
 }

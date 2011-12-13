@@ -112,11 +112,9 @@ DadosField *retornaDadosField(ClassFile *class, int n) {
 void empilhaOperando(Frame *frame, char *tipo, void *operando) {
 	i2 sp = 0;
 	frame->pilhaOperandos->sp++;
-
 	sp = frame->pilhaOperandos->sp;
 
 	frame->pilhaOperandos->tipo[sp] = tipo;
-
 	if (tipo[0] == 'B') {
 		frame->pilhaOperandos->elementos[sp].tipo_byte = *((i1 *) operando);
 	} else if (tipo[0] == 'C') {
@@ -138,7 +136,7 @@ void empilhaOperando(Frame *frame, char *tipo, void *operando) {
 		frame->pilhaOperandos->elementos[sp].tipo_boolean =
 				*((char *) operando);
 	} else if (tipo[0] == '[') {
-		frame->pilhaOperandos->elementos[sp].tipo_retorno = *((u1 **) operando);
+		frame->pilhaOperandos->elementos[sp].tipo_retorno =  operando;
 	}
 }
 
@@ -157,7 +155,7 @@ PilhaOperandos *desempilhaOperando(Frame *frame) {
 		operando->elementos[0] = frame->pilhaOperandos->elementos[sp];
 		operando->tipo = &(frame->pilhaOperandos->tipo[sp]);
 
-		operando->sp = sp;
+		operando->sp = 0;
 
 		frame->pilhaOperandos->sp--;
 	} else {
@@ -390,7 +388,7 @@ int defineFieldObjeto(Objeto *object, char *nomeField, char *tipo, Tipo info) {
 	tipo_info *p1;
 	int n, i;
 	n = object->numeroTipos;
-
+	printf("\n\ndefineFieldObjeto");
 	for(i=0, p1 = object->tipos; i < n; i++, p1++) {
 		if(strcmp(p1->nome, nomeField) == 0) {
 			p1->tipo = tipo;
