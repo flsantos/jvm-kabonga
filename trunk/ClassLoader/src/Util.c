@@ -344,4 +344,20 @@ tipo_info *retornaFieldObjeto(Objeto *object, char *nomeField) {
 			return p1;
 		}
 	}
-	return NULL;}
+	return NULL;
+}
+
+long long retornaLong(ClassFile *cf, int n) {
+	long long high, low;
+	long long vlong;
+
+	high = (cf->constant_pool + n - 1)->u.Long.high_bytes;
+	low = (cf->constant_pool + n - 1)->u.Long.low_bytes;
+
+
+	vlong = 0;
+
+	vlong = (high << sizeof(u4)*8) | low;
+
+	return vlong;
+}
