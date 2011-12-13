@@ -150,6 +150,8 @@ void empilhaOperando(Frame *frame, char *tipo, void *operando) {
 	} else if(tipo[0] == 'r') {
 		frame->pilhaOperandos->elementos[sp].tipo_retorno = ((char*)operando);
 	}
+
+	debugPrintEmpilha(tipo, frame);
 }
 
 void empilhaOperandoTipo(Frame *frame, char *tipo, Tipo elemento) {
@@ -159,6 +161,7 @@ void empilhaOperandoTipo(Frame *frame, char *tipo, Tipo elemento) {
 	p1->sp++;
 	p1->elementos[p1->sp] = elemento;
 	p1->tipo[p1->sp] = tipo;
+
 
 }
 
@@ -184,6 +187,7 @@ PilhaOperandos *desempilhaOperando(Frame *frame) {
 		printf("\nErro! Pilha vazia.");
 		exit(1);
 	}
+	printf("\n    desempilha: %s", (operando->tipo)[0]);
 	return operando;
 }
 
