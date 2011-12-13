@@ -1979,16 +1979,70 @@ int newarray(AmbienteExecucao *ae) {
 
 	return 0;
 }
+
+/*
+ * @author Rubens
+ */
 int aaload(AmbienteExecucao *ae) {
+	int index;
+	PilhaOperandos *lista;
+	void *ref;
+
+	index = desempilhaOperando(ae->pFrame)->elementos[0].tipo_int;
+	lista = (PilhaOperandos*) desempilhaOperando(ae->pFrame)->elementos[0].tipo_referencia;
+	ref = lista->elementos[index].tipo_referencia;
+
+
+	empilhaOperando(ae->pFrame, (lista->tipo)[index], ref);
 	return 0;
 }
+
+/*
+ * @author Rubens
+ */
 int iaload(AmbienteExecucao *ae) {
+	int integer, index;
+	PilhaOperandos *lista;
+
+	index = desempilhaOperando(ae->pFrame)->elementos[0].tipo_int;
+	lista = (PilhaOperandos*) desempilhaOperando(ae->pFrame)->elementos[0].tipo_referencia;
+	integer = lista->elementos[index].tipo_int;
+
+	empilhaOperando(ae->pFrame, "I", &integer);
+
 	return 0;
 }
+/*
+ * @author Rubens
+ */
 int aastore(AmbienteExecucao *ae) {
+	int index;
+	char *tipo;
+	PilhaOperandos *opvalor, *lista;
+
+	opvalor = desempilhaOperando(ae->pFrame);
+	tipo = *(opvalor->tipo);
+	index = desempilhaOperando(ae->pFrame)->elementos[0].tipo_int;
+	lista = (PilhaOperandos*) desempilhaOperando(ae->pFrame)->elementos->tipo_referencia;
+
+	adicionaValorArray(lista, index, tipo, opvalor->elementos[0].tipo_referencia);
+
 	return 0;
 }
+/*
+ * @author Rubens
+ */
 int iastore(AmbienteExecucao *ae) {
+	int valor, index;
+	PilhaOperandos *lista;
+
+	valor = desempilhaOperando(ae->pFrame)->elementos[0].tipo_int;
+	index = desempilhaOperando(ae->pFrame)->elementos[0].tipo_int;
+	lista = (PilhaOperandos*) desempilhaOperando(ae->pFrame)->elementos->tipo_referencia;
+
+
+	adicionaValorArray(lista, index, "I", &valor);
+
 	return 0;
 }
 
@@ -2180,37 +2234,206 @@ int ifnull(AmbienteExecucao *ae) {
 	return 0;
 }
 
-int fastore(AmbienteExecucao *ae) {
-	return 0;
-}
+/*
+ * @author Rubens
+ */
 int faload(AmbienteExecucao *ae) {
+	int index;
+	float valor;
+	PilhaOperandos *lista;
+
+	index = desempilhaOperando(ae->pFrame)->elementos[0].tipo_int;
+	lista = (PilhaOperandos*) desempilhaOperando(ae->pFrame)->elementos[0].tipo_referencia;
+	valor = lista->elementos[index].tipo_float;
+
+	empilhaOperando(ae->pFrame, "F", &valor);
+
 	return 0;
 }
-int daload(AmbienteExecucao *ae) {
+
+/*
+ * @author Rubens
+ */
+int fastore(AmbienteExecucao *ae) {
+	int index;
+	float valor;
+	PilhaOperandos *lista;
+
+	valor = desempilhaOperando(ae->pFrame)->elementos[0].tipo_float;
+	index = desempilhaOperando(ae->pFrame)->elementos[0].tipo_int;
+	lista = (PilhaOperandos*) desempilhaOperando(ae->pFrame)->elementos->tipo_referencia;
+
+	adicionaValorArray(lista, index, "F", &valor);
+
 	return 0;
 }
+
+/*
+ * @author Rubens
+ */
 int dastore(AmbienteExecucao *ae) {
+	int index;
+	double valor;
+	PilhaOperandos *lista;
+
+	valor = desempilhaOperando(ae->pFrame)->elementos[0].tipo_double;
+	index = desempilhaOperando(ae->pFrame)->elementos[0].tipo_int;
+	lista = (PilhaOperandos*) desempilhaOperando(ae->pFrame)->elementos->tipo_referencia;
+
+	adicionaValorArray(lista, index, "D", &valor);
+
 	return 0;
 }
-int caload(AmbienteExecucao *ae) {
+
+/*
+ * @author Rubens
+ */
+int daload(AmbienteExecucao *ae) {
+	int index;
+	double valor;
+	PilhaOperandos *lista;
+
+	index = desempilhaOperando(ae->pFrame)->elementos[0].tipo_int;
+	lista = (PilhaOperandos*) desempilhaOperando(ae->pFrame)->elementos[0].tipo_referencia;
+	valor = lista->elementos[index].tipo_double;
+
+	empilhaOperando(ae->pFrame, "D", &valor);
+
 	return 0;
 }
+
+/*
+ * @author Rubens
+ */
 int castore(AmbienteExecucao *ae) {
+	int index;
+	char valor;
+	PilhaOperandos *lista;
+
+	valor = desempilhaOperando(ae->pFrame)->elementos[0].tipo_char;
+	index = desempilhaOperando(ae->pFrame)->elementos[0].tipo_int;
+	lista = (PilhaOperandos*) desempilhaOperando(ae->pFrame)->elementos->tipo_referencia;
+
+	adicionaValorArray(lista, index, "C", &valor);
+
 	return 0;
 }
-int laload(AmbienteExecucao *ae) {
+
+/*
+ * @author Rubens
+ */
+int caload(AmbienteExecucao *ae) {
+	int index;
+	char valor;
+	PilhaOperandos *lista;
+
+	index = desempilhaOperando(ae->pFrame)->elementos[0].tipo_int;
+	lista = (PilhaOperandos*) desempilhaOperando(ae->pFrame)->elementos[0].tipo_referencia;
+	valor = lista->elementos[index].tipo_char;
+
+	empilhaOperando(ae->pFrame, "D", &valor);
+
 	return 0;
 }
+
+/*
+ * @author Rubens
+ */
 int lastore(AmbienteExecucao *ae) {
+	int index;
+	long long valor;
+	PilhaOperandos *lista;
+
+	valor = desempilhaOperando(ae->pFrame)->elementos[0].tipo_long;
+	index = desempilhaOperando(ae->pFrame)->elementos[0].tipo_int;
+	lista = (PilhaOperandos*) desempilhaOperando(ae->pFrame)->elementos->tipo_referencia;
+
+	adicionaValorArray(lista, index, "J", &valor);
+
 	return 0;
 }
-int saload(AmbienteExecucao *ae) {
+
+/*
+ * @author Rubens
+ */
+int laload(AmbienteExecucao *ae) {
+	int index;
+	long long valor;
+	PilhaOperandos *lista;
+
+	index = desempilhaOperando(ae->pFrame)->elementos[0].tipo_int;
+	lista = (PilhaOperandos*) desempilhaOperando(ae->pFrame)->elementos[0].tipo_referencia;
+	valor = lista->elementos[index].tipo_long;
+
+	empilhaOperando(ae->pFrame, "J", &valor);
+
 	return 0;
 }
+
+/*
+ * @author Rubens
+ */
 int sastore(AmbienteExecucao *ae) {
+	int index;
+	short valor;
+	PilhaOperandos *lista;
+
+	valor = desempilhaOperando(ae->pFrame)->elementos[0].tipo_short;
+	index = desempilhaOperando(ae->pFrame)->elementos[0].tipo_int;
+	lista = (PilhaOperandos*) desempilhaOperando(ae->pFrame)->elementos->tipo_referencia;
+
+	adicionaValorArray(lista, index, "S", &valor);
+
 	return 0;
 }
+
+/*
+ * @author Rubens
+ */
+int saload(AmbienteExecucao *ae) {
+	int index;
+	short valor;
+	PilhaOperandos *lista;
+
+	index = desempilhaOperando(ae->pFrame)->elementos[0].tipo_int;
+	lista = (PilhaOperandos*) desempilhaOperando(ae->pFrame)->elementos[0].tipo_referencia;
+	valor = lista->elementos[index].tipo_short;
+
+	empilhaOperando(ae->pFrame, "S", &valor);
+
+	return 0;
+}
+/*
+ * @author Rubens
+ */
+
 int baload(AmbienteExecucao *ae) {
+	int index, val_int, val_char;
+	PilhaOperandos *lista_ref;
+	int zero = 0;
+	int lista_size = 0;
+
+	index = desempilhaOperando(ae->pFrame)->elementos[0].tipo_int;
+	lista_ref = (PilhaOperandos*) desempilhaOperando(ae->pFrame)->elementos[0].tipo_referencia;
+
+	while (*(lista_ref->tipo)[lista_size] == '[' ){
+		lista_size++;
+	}
+
+	if(*(lista_ref->tipo)[lista_size] == 'B') {
+		val_char = lista_ref->elementos[index].tipo_byte;
+		val_int = (int) val_char;
+		empilhaOperando(ae->pFrame, "I", &val_int);
+	} else if(*(lista_ref->tipo)[lista_size] == 'Z') {
+		val_char = lista_ref->elementos[index].tipo_boolean;
+		val_int = (zero | val_char);
+		empilhaOperando(ae->pFrame, "I", &val_int);
+	} else {
+		fprintf(stderr,"Problema em 'baload', tipo incorreto de dados passado.\n");
+		exit(1);
+	}
+
+
 	return 0;
 }
 /*
