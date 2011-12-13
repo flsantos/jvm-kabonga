@@ -20,13 +20,17 @@ void iniciaExecucaoMetodo(char nomeClassFile[], AmbienteExecucao *ae,
 	int i;
 
 	cf = verificarClassFile(ae, nomeClassFile);
-
-	frame = criaFrame(cf, nomeMetodo, descritor, frame);
-	frame->frameAnterior = ae->pFrame;
-	ae->pFrame = frame;
-	for (i = (argumentos - 1); i >= 0; i--) {
-		transferePilhaOperandosParaVariavelLocalPorFrames(
-				ae->pFrame->frameAnterior, ae->pFrame, i);
+	if (ae->pFrame == NULL) {
+		ae->pFrame = criaFrame(cf, nomeMetodo, descritor, frame);
+		ae->pFrame->frameAnterior = NULL;
+	} else {
+		frame = criaFrame(cf, nomeMetodo, descritor, frame);
+		frame->frameAnterior = ae->pFrame;
+		ae->pFrame = frame;
+		for (i = (argumentos - 1); i >= 0; i--) {
+			transferePilhaOperandosParaVariavelLocalPorFrames(
+					ae->pFrame->frameAnterior, ae->pFrame, i);
+		}
 	}
 
 }

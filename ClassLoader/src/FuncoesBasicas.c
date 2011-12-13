@@ -42,6 +42,9 @@ ClassFile * verificarClassFile(AmbienteExecucao *ae, char *nomeClasse) {
 					ae->pFrame = criaFrame(cf, "<clinit>", "()V", frame);
 					ae->pFrame->frameAnterior = NULL;
 					execute_iteration(ae);
+					frame = ae->pFrame;
+					ae->pFrame = ae->pFrame->frameAnterior;
+					free(frame);
 				}
 			}
 		} else {
@@ -58,6 +61,9 @@ ClassFile * verificarClassFile(AmbienteExecucao *ae, char *nomeClasse) {
 					frame->frameAnterior = ae->pFrame;
 					ae->pFrame = frame;
 					execute_iteration(ae);
+					frame = ae->pFrame;
+					ae->pFrame = ae->pFrame->frameAnterior;
+					free(frame);
 				}
 			}
 		}
@@ -207,19 +213,17 @@ int jumpback(AmbienteExecucao *ae, int n_return) {
 	int i;
 	PilhaOperandos *pilhaoperandos;
 	Frame *frame;
-	frame = ae->pFrame;
 
 	if (ae->pFrame->frameAnterior != NULL) {
 		frame = ae->pFrame;
 		ae->pFrame = ae->pFrame->frameAnterior;
-		pilhaoperandos = ae->pFrame->pilhaOperandos;
 		for (i = 0; i < n_return; i++) {
 			pilhaoperandos = desempilhaOperando(frame);
 			empilhaOperandoTipo(ae->pFrame,
 					pilhaoperandos->tipo[pilhaoperandos->sp],
 					pilhaoperandos->elementos[pilhaoperandos->sp]);
 		}
-
+		free(frame);
 		return 0;
 	}
 	return -1;
