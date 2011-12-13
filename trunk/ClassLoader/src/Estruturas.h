@@ -198,7 +198,7 @@ typedef union TIPO {
 	double tipo_double;
 	long long tipo_long;
 	char tipo_boolean;
-	Objeto *tipo_referencia;
+	void *tipo_referencia;
 	u1 *tipo_retorno;
 } Tipo;
 

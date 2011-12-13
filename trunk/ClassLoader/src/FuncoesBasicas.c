@@ -44,7 +44,7 @@ List_Classfile *retornaSuperClasses(AmbienteExecucao *ae, ClassFile *cf) {
 		str = (char *) retornaClassInfo(p1, p1->super_class);
 		p1 = verificarClassFile(ae,
 				(char *) retornaClassInfo(p1, p1->super_class));
-		adicionaClasse(p1, &listaClasses, NULL);
+		adicionaClasse(p1, &listaClasses, instanciaObjeto(p1, ae));
 	}
 	return listaClasses;
 }
@@ -81,11 +81,9 @@ Objeto * instanciaObjeto(ClassFile *cf, AmbienteExecucao *ae) {
 	for (i = 0; i < count; i++) {
 
 		index = cf->fields[i].name_index;
-		index--;
 		newObjeto->tipos[tiposIndex].nome = (char *) retornaUtf8(cf, index);
 
 		index = cf->fields[i].descriptor_index;
-		index--;
 		newObjeto->tipos[tiposIndex].tipo = (char *) retornaUtf8(cf, index);
 
 		tiposIndex++;
@@ -95,11 +93,9 @@ Objeto * instanciaObjeto(ClassFile *cf, AmbienteExecucao *ae) {
 		count = p1->cf->fields_count;
 		for (i = 0; i < count; i++) {
 			index = p1->cf->fields[i].name_index;
-			index--;
 			newObjeto->tipos[tiposIndex].nome = (char *) retornaUtf8(cf, index);
 
 			index = p1->cf->fields[i].descriptor_index;
-			index--;
 			newObjeto->tipos[tiposIndex].tipo = (char *) retornaUtf8(cf, index);
 
 			tiposIndex++;
