@@ -190,10 +190,10 @@ typedef struct CLASSFILE {
 } ClassFile;
 
 typedef union TIPO {
-	i1 tipo_byte;
-	u1 tipo_char;
-	u2 tipo_short;
-	u4 tipo_int;
+	char tipo_byte;
+	unsigned char tipo_char;
+	short tipo_short;
+	int tipo_int;
 	float tipo_float;
 	double tipo_double;
 	long long tipo_long;
