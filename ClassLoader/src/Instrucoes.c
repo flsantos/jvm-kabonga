@@ -2066,6 +2066,16 @@ int bastore(AmbienteExecucao *ae) {
 }
 
 int arraylength(AmbienteExecucao *ae) {
+	Array *array;
+	int length;
+
+	array = (Array*)desempilhaOperando(ae->pFrame)->elementos[0].tipo_referencia;
+
+	length = (int) array->sp;
+
+
+	empilhaOperando(ae->pFrame, "I", &length);
+
 	return 0;
 }
 
@@ -2077,6 +2087,15 @@ int return1(AmbienteExecucao *ae) {
 }
 
 int athrow(AmbienteExecucao *ae) {
+	void *refObjeto;
+	refObjeto = desempilhaOperando(ae->pFrame)->elementos[0].tipo_referencia;
+
+	if (refObjeto == NULL){
+		printf("Erro em 'athrow' -> NullPointerException\n");
+		exit(1);
+	}
+	return1(ae);
+
 	return 0;
 }
 
@@ -2087,7 +2106,7 @@ int ret(AmbienteExecucao *ae) {
 	u1 indice;
 	indice = leU1doPC(ae->pFrame);
 	//Dúvida no acesso abaixo
-	PilhaVariaveisLocais localvar = (ae->pFrame->pilhaVariaveisLocais)[indice];
+	VariaveisLocais localvar = (ae->pFrame->pilhaVariaveisLocais)[indice];
 	if ( (localvar.tipo)[localvar.sp][0] != 'r'){
 			printf("Endereco de retorno invalido, tipo errado.\n");
 			exit(1);

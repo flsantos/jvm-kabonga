@@ -30,7 +30,7 @@ Frame *criaFrame(ClassFile *cf, char *nomeMetodo, char *descritor, Frame *frame)
 	frame->pilhaOperandos->elementos = malloc(retornaTamanhoPilha(&attribute) * sizeof(Tipo));
 	frame->pilhaOperandos->sp = -1;
 
-	frame->pilhaVariaveisLocais = malloc(sizeof(PilhaVariaveisLocais));
+	frame->pilhaVariaveisLocais = malloc(sizeof(VariaveisLocais));
 	frame->pilhaVariaveisLocais->tipo = malloc(retornaTamanhoVariaveisLocais(&attribute) * sizeof(char *));
 	frame->pilhaVariaveisLocais->elementos = malloc(retornaTamanhoVariaveisLocais(&attribute)*sizeof(Tipo));
 	frame->pilhaVariaveisLocais->sp = retornaTamanhoVariaveisLocais(&attribute);
