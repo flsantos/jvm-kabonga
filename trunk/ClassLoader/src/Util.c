@@ -278,9 +278,9 @@ int retornaContadorArgumentos(char *descriptor) {
 
 void adicionaValorArray(Array *array, int posicao, char *tipo, void *info) {
 	if(tipo[0] == 'B') {
-		array->elementos[posicao].tipo_byte = *((i1 *)info);
+		array->elementos[posicao].tipo_byte = *((char *)info);
 	} else if(tipo[0] == 'C') {
-		array->elementos[posicao].tipo_char = *((u1 *)info);
+		array->elementos[posicao].tipo_char = *((unsigned char *)info);
 	} else if(tipo[0] == 'D') {
 		array->elementos[posicao].tipo_double = *((double*)info);
 	} else if(tipo[0] == 'F') {
@@ -288,17 +288,17 @@ void adicionaValorArray(Array *array, int posicao, char *tipo, void *info) {
 	} else if(tipo[0] == 'I') {
 		array->elementos[posicao].tipo_int = *((int*)info);
 	} else if(tipo[0] == 'J') {
-		array->elementos[posicao].tipo_long = *((long*)info);
+		array->elementos[posicao].tipo_long = *((long long*)info);
 	} else if(tipo[0] == 'L') {
 		array->elementos[posicao].tipo_referencia = info;
 	} else if(tipo[0] == 'S') {
-		array->elementos[posicao].tipo_short = *((u2*)info);
+		array->elementos[posicao].tipo_short = *((short*)info);
 	} else if(tipo[0] == 'Z') {
 		array->elementos[posicao].tipo_boolean = *((char*)info);
 	} else if(tipo[0] == '[') {
 		array->elementos[posicao].tipo_referencia = info;
 	} else if(tipo[0] == 'r') {
-		array->elementos[posicao].tipo_retorno = *((u1 **) info);
+		array->elementos[posicao].tipo_retorno = ((char *) info);
 	}
 	array->tipo[posicao] = tipo;
 }
