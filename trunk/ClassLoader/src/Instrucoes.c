@@ -384,8 +384,6 @@ int new_(AmbienteExecucao *ae) {
 	u2 indice = leU2doPC(ae->pFrame);
 	char *nomeClasse;
 	Objeto *objeto;
-	printf("\nnew");
-	//getchar();
 	nomeClasse = (char *) retornaClassInfo(ae->pFrame->cf, indice);
 	/* ajustando para o caso da StringBuffer */
 	if ((strcmp(nomeClasse, "java/lang/StringBuffer") == 0
@@ -554,29 +552,29 @@ int invokevirtual(AmbienteExecucao *ae) {
 		if (ae->pFrame->pilhaOperandos->tipo[ae->pFrame->pilhaOperandos->sp][0]
 				!= '#') {
 			data = desempilhaOperando(ae->pFrame);
-			tipo = data->tipo[ae->pFrame->pilhaOperandos->sp];
+			tipo = data->tipo[data->sp];
 			if (tipo[0] == 'B') {
-				printf("%d", data->elementos[data->sp].tipo_byte);
+				printf("\n%d", data->elementos[data->sp].tipo_byte);
 			} else if (tipo[0] == 'C') {
-				printf("%c", (unsigned char) data->elementos[data->sp].tipo_char);
+				printf("\n%c", (unsigned char) data->elementos[data->sp].tipo_char);
 			} else if (tipo[0] == 'D') {
-				printf("%f", data->elementos[data->sp].tipo_double);
+				printf("\n%f", data->elementos[data->sp].tipo_double);
 			} else if (tipo[0] == 'F') {
-				printf("%f", data->elementos[data->sp].tipo_float);
+				printf("\n%f", data->elementos[data->sp].tipo_float);
 			} else if (tipo[0] == 'I') {
-				printf("%d", data->elementos[data->sp].tipo_int);
+				printf("\n%d", data->elementos[data->sp].tipo_int);
 			} else if (tipo[0] == 'J') {
-				printf("%d", data->elementos[data->sp].tipo_long);
+				printf("\n%d", data->elementos[data->sp].tipo_long);
 			} else if (tipo[0] == 'L') {
-				printf("Impressao de um objeto?! Não implementado!");
+				printf("\nImpressao de um objeto nao implementado!");
 			} else if (tipo[0] == 'S') {
-				printf("%d", data->elementos[data->sp].tipo_short);
+				printf("\n%d", data->elementos[data->sp].tipo_short);
 			} else if (tipo[0] == 'Z') {
-				printf("%d", data->elementos[data->sp].tipo_boolean);
+				printf("\n%d", data->elementos[data->sp].tipo_boolean);
 			} else if (tipo[0] == '[') {
-				printf("%s", (char*) data->elementos[data->sp].tipo_referencia);
+				printf("\n%s", (char*) data->elementos[data->sp].tipo_referencia);
 			} else if (tipo[0] == 'r') {
-				printf("Impressao de uma referencia. Arrumar.");
+				printf("\nImpressao de uma referencia. Arrumar.");
 			}
 		}
 		desempilhaOperando(ae->pFrame);
@@ -605,30 +603,30 @@ int invokevirtual(AmbienteExecucao *ae) {
 			&& strcmp(dadosMetodo->nomeMetodo, "append") == 0) {
 		string_append = calloc(50, sizeof(char));
 		data = desempilhaOperando(ae->pFrame);
-		tipo = data->tipo[ae->pFrame->pilhaOperandos->sp];
+		tipo = data->tipo[data->sp];
 		string_to_append =
-				(char*) desempilhaOperando(ae->pFrame)->elementos[0].tipo_referencia;
+				(char*) desempilhaOperando(ae->pFrame)->elementos[data->sp].tipo_referencia;
 		if (tipo[0] == 'B') {
-			sprintf(string_append, "%d", data->elementos[0].tipo_byte);
+			sprintf(string_append, "%d", data->elementos[data->sp].tipo_byte);
 		} else if (tipo[0] == 'C') {
 			sprintf(string_append, "%c",
-					(unsigned char) data->elementos[0].tipo_char);
+					(unsigned char) data->elementos[data->sp].tipo_char);
 		} else if (tipo[0] == 'D') {
-			sprintf(string_append, "%f", data->elementos[0].tipo_double);
+			sprintf(string_append, "%f", data->elementos[data->sp].tipo_double);
 		} else if (tipo[0] == 'F') {
-			sprintf(string_append, "%f", data->elementos[0].tipo_float);
+			sprintf(string_append, "%f", data->elementos[data->sp].tipo_float);
 		} else if (tipo[0] == 'I') {
-			sprintf(string_append, "%d", data->elementos[0].tipo_int);
+			sprintf(string_append, "%d", data->elementos[data->sp].tipo_int);
 		} else if (tipo[0] == 'J') {
-			sprintf(string_append, "%d", data->elementos[0].tipo_long);
+			sprintf(string_append, "%d", data->elementos[data->sp].tipo_long);
 		} else if (tipo[0] == 'L') {
 			sprintf(string_append, "Impressao de um objeto?!");
 		} else if (tipo[0] == 'S') {
-			sprintf(string_append, "%d", data->elementos[0].tipo_short);
+			sprintf(string_append, "%d", data->elementos[data->sp].tipo_short);
 		} else if (tipo[0] == 'Z') {
-			sprintf(string_append, "%d", data->elementos[0].tipo_boolean);
+			sprintf(string_append, "%d", data->elementos[data->sp].tipo_boolean);
 		} else if (tipo[0] == '[') {
-			string_append = (char*) data->elementos[0].tipo_referencia;
+			string_append = (char*) data->elementos[data->sp].tipo_referencia;
 		} else if (tipo[0] == 'r') {
 			sprintf(string_append, "Impressao de uma referencia. Arrumar.");
 		}
@@ -2475,6 +2473,41 @@ int invokestatic(AmbienteExecucao *ae) {
 }
 
 int putstatic(AmbienteExecucao *ae) {
+	DadosField *dadosField;
+	PilhaOperandos *pilha;
+	List_Classfile *lista1, *lista3;
+	List_Classfile *superClasses, *lista2;
+	int erro, erro2, indice;
+	indice = leU2doPC(ae->pFrame);
+	dadosField = retornaDadosField(ae->pFrame->cf, indice);
+	pilha = desempilhaOperando(ae->pFrame);
+	lista1 = ae->pClassHeap;
+	while(lista1 != NULL) {
+		if(strcmp((char *)lista1->class_name, dadosField->nomeClasse) == 0) {
+			erro = defineFieldObjeto(lista1->obj, dadosField->nomeField, pilha->tipo[pilha->sp], pilha->elementos[pilha->sp]);
+			if(erro == -1) {
+				superClasses = retornaSuperClasses(ae, lista1->cf);
+				lista2 = superClasses;
+				while(lista2 != NULL) {
+					lista3 = ae->pClassHeap;
+					while(lista3 != NULL) {
+						if(strcmp((char *)lista3->class_name, (char *)lista2->class_name) == 0) {
+							erro2 = defineFieldObjeto(lista3->obj, dadosField->nomeField, pilha->tipo[pilha->sp], pilha->elementos[pilha->sp]);
+							if(erro2 != -1) return 0;
+						}
+						lista3 = lista3->prox;
+					}
+					lista2 = lista2->prox;
+				}
+			}
+			return 0;
+		}
+		lista1 = lista1->prox;
+	}
+
+	fprintf(stderr,"Falha em 'putstatic'. Nao acho o elemento buscado na lista de classes.");
+	exit(1);
+
 	return 0;
 }
 

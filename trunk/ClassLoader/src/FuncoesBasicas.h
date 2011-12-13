@@ -15,6 +15,8 @@
 
 ClassFile * verificarClassFile(AmbienteExecucao *ae, char *nomeClasse);
 
+List_Classfile *retornaSuperClasses(AmbienteExecucao *ae, ClassFile *cf);
+
 Objeto * instanciaObjeto(ClassFile *cf, AmbienteExecucao *ae);
 
 int jumpback(AmbienteExecucao *ambienteexecucao, int n_return);
