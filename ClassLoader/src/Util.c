@@ -136,7 +136,7 @@ void empilhaOperando(Frame *frame, char *tipo, void *operando) {
 		frame->pilhaOperandos->elementos[sp].tipo_boolean =
 				*((char *) operando);
 	} else if (tipo[0] == '[') {
-		frame->pilhaOperandos->elementos[sp].tipo_retorno =  operando;
+		frame->pilhaOperandos->elementos[sp].tipo_referencia =  operando;
 	}
 }
 
@@ -200,8 +200,8 @@ void transferePilhaOperandosParaVariavelLocalPorFrames(Frame *frame1, Frame *fra
 }
 
 void transfereVariavelLocalParaPilhaOperandos(Frame *frame, u1 indiceVariavel) {
-	empilhaOperando(frame, frame->pilhaVariaveisLocais->tipo[indiceVariavel],
-			(int *)&(frame->pilhaVariaveisLocais->elementos[indiceVariavel]));
+	empilhaOperandoTipo(frame, frame->pilhaVariaveisLocais->tipo[indiceVariavel],
+			frame->pilhaVariaveisLocais->elementos[indiceVariavel]);
 }
 
 int retornaContadorArgumentos(char *descriptor) {
@@ -432,7 +432,7 @@ long long retornaLong(ClassFile *cf, int n) {
 
 	vlong = 0;
 
-	vlong = (high << sizeof(u4)*8) | low;
+	vlong = (high << sizeof(u4)*8) + low;
 
 	return vlong;
 }

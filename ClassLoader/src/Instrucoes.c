@@ -797,11 +797,11 @@ int dstore(AmbienteExecucao *ae) {
  */
 
 int ldc(AmbienteExecucao *ae) {
-	int *string;
+	char *string;
 	int integer;
-	uFloat fvalue;
+	float fvalue;
 	long long lvalue;
-	uDouble dvalue;
+	double dvalue;
 	int indice;
 
 	switch(instrucao){
@@ -819,7 +819,7 @@ int ldc(AmbienteExecucao *ae) {
 	switch((signed int)(ae->pFrame->cf->constant_pool[indice -1].tag)){
 	case 8:
 		/* CONSTANT_String */
-		string = ae->pFrame->cf->constant_pool[indice -1].u.Utf8.bytes;
+		string = (char *)retornaUtf8(ae->pFrame->cf, indice);
 		empilhaOperando(ae->pFrame, "[",string);
 		break;
 	case 3:
@@ -830,20 +830,20 @@ int ldc(AmbienteExecucao *ae) {
 		break;
 	case 4:
 		/* CONSTANT_Float */
-		fvalue = ae->pFrame->cf->constant_pool[indice -1].u.Float.bytes;
+		fvalue = ae->pFrame->cf->constant_pool[indice -1].u.Float.bytes.uf.valor;
 		empilhaOperando(ae->pFrame,"F", &fvalue);
 
 		break;
 	case 5:
 		/* CONSTANT_Long */
-		lvalue = retornaLong(ae->pFrame->cf, indice -1);
+		lvalue = retornaLong(ae->pFrame->cf, indice);
 		empilhaOperando(ae->pFrame,"J", &lvalue);
 
 		break;
 	case 6:
 		/* CONSTANT_Double */
 
-		dvalue = ae->pFrame->cf->constant_pool[indice -1].u.Double.bytes;
+		dvalue = ae->pFrame->cf->constant_pool[indice -1].u.Double.bytes.ud.valor;
 		empilhaOperando(ae->pFrame,"D", &dvalue);
 
 		break;
@@ -1263,8 +1263,8 @@ int getstatic(AmbienteExecucao *ae) {
 	int indiceDF;
 	DadosField *dadosField;
 	tipo_info *fieldRet;
-	List_Classfile *p1, *p2, *p3;
-	List_Classfile *superClasses;
+	List_Classfile *p1, *p3;
+	List_Classfile *superClasses, *p2;
 
 	indiceDF = leU2doPC(ae->pFrame);
 
@@ -2359,7 +2359,7 @@ int laload(AmbienteExecucao *ae) {
 
 	index = desempilhaOperando(ae->pFrame)->elementos[0].tipo_int;
 	lista = (PilhaOperandos*) desempilhaOperando(ae->pFrame)->elementos[0].tipo_referencia;
-	valor = lista->elementos[index].tipo_long;
+	valor = lista->elementos[index-1].tipo_long;
 
 	empilhaOperando(ae->pFrame, "J", &valor);
 
@@ -2413,19 +2413,19 @@ int baload(AmbienteExecucao *ae) {
 	zero = 0;
 	tamanhoVetor = 0;
 
-	indice = desempilhaOperando(ae->pFrame)->elementos[vetorRef->sp].tipo_int;
-	vetorRef = (Array*)desempilhaOperando(ae->pFrame)->elementos[vetorRef->sp].tipo_referencia;
+	indice = desempilhaOperando(ae->pFrame)->elementos[0].tipo_int;
+	vetorRef = (Array*)desempilhaOperando(ae->pFrame)->elementos[0].tipo_referencia;
 
 	while (strcmp(vetorRef->tipo[tamanhoVetor],"[")) {
 		tamanhoVetor++;
 	}
 	//Checar a forma de acesso abaixo
 	if(vetorRef->tipo[vetorRef->sp][tamanhoVetor] == 'B') {
-		valorChar = obterValorArray(&(vetorRef), indice)->elementos->tipo_byte;
+		valorChar = vetorRef->elementos[indice-1].tipo_byte;
 		valorInt = (int)valorChar;
 		empilhaOperando(ae->pFrame,"I", &valorInt);
 	} else if((vetorRef->tipo)[vetorRef->sp][tamanhoVetor] == 'Z') {
-		valorChar = obterValorArray(&(vetorRef), indice)->elementos->tipo_boolean;
+		valorChar = vetorRef->elementos[indice-1].tipo_boolean;
 		valorInt = (zero | valorChar);
 		empilhaOperando(ae->pFrame,"I", &valorInt);
 	} else {
@@ -2452,7 +2452,6 @@ int bastore(AmbienteExecucao *ae) {
 	while (referencias->tipo[referencias->sp][tamanho] == '[' ){
 		tamanho++;
 	}
-
 	if((referencias->tipo[referencias->sp])[tamanho] == 'B') {
 		printf("a");
 		valorChar = (int)valor;
@@ -2803,7 +2802,9 @@ int putstatic(AmbienteExecucao *ae) {
 	List_Classfile *superClasses, *lista2;
 	int erro, erro2, indice;
 	indice = leU2doPC(ae->pFrame);
+
 	dadosField = retornaDadosField(ae->pFrame->cf, indice);
+
 	pilha = desempilhaOperando(ae->pFrame);
 	lista1 = ae->pClassHeap;
 	while(lista1 != NULL) {
@@ -2827,6 +2828,7 @@ int putstatic(AmbienteExecucao *ae) {
 			return 0;
 		}
 		lista1 = lista1->prox;
+
 	}
 
 	fprintf(stderr,"Falha em 'putstatic'. Nao acho o elemento buscado na lista de classes.");
