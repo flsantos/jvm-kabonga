@@ -12,6 +12,18 @@
 #include "java.h"
 #include "FuncoesBasicas.h"
 
+
+/*Newarray tags*/
+#define T_BOOLEAN	4
+#define T_CHAR   	5
+#define T_FLOAT 	6
+#define T_DOUBLE 	7
+#define T_BYTE      8
+#define T_SHORT 	9
+#define T_INT       10
+#define T_LONG      11
+
+
 int (*vetFunc[])(AmbienteExecucao *p) = {
 	nop,
 	aconst_null,
@@ -223,18 +235,34 @@ int ireturn(AmbienteExecucao *ae) {
 
 	return return_v;
 }
+
+/*
+ * @author Bruno Capu
+ */
 int l2i(AmbienteExecucao *ae) {
-//	PilhaOperandos *a;
-//	int b;
-//	a = desempilhaOperando(ae->pFrame);
-//	b = (int) a->elementos->tipo_long;
-//
-//	empilhaOperando(ae->pFrame, "I", &(b));
-//
+	long long a;
+	int b;
+	a = desempilhaOperando(ae->pFrame)->elementos[0].tipo_long;
+	b = (int) a;
+
+	empilhaOperando(ae->pFrame, "I", &b);
+
 	return 0;
 }
 
+
+/*
+ * @author Bruno Capu
+ */
 int lrem(AmbienteExecucao *ae){
+	long long a, b, rem;
+	rem = 0;
+
+	a = desempilhaOperando(ae->pFrame)->elementos[0].tipo_long;
+	b = desempilhaOperando(ae->pFrame)->elementos[0].tipo_long;
+	rem = b%a;
+	empilhaOperando(ae->pFrame, "J", &rem);
+
 	return 0;
 }
 
@@ -334,10 +362,6 @@ int invokespecial(AmbienteExecucao *ae) {
 	return 0;
 }
 
-int newarray(AmbienteExecucao *ae){
-	return 0;
-}
-
 int dup(AmbienteExecucao *ae) {
 
 	//t_opstack *a = desempilhaOperando((&interpreter->current_frame->opstack));
@@ -393,6 +417,7 @@ int if_icmplt(AmbienteExecucao *ae) {
 	int a, b;
 	//b = desempilhaOperando(&(interpreter->current_frame->opstack))->data.data_int;
 	//a = desempilhaOperando(&(interpreter->current_frame->opstack))->data.data_int;
+
 	b = desempilhaOperando(ae->pFrame)->elementos[0].tipo_int;
 	a = desempilhaOperando(ae->pFrame)->elementos[0].tipo_int;
 
@@ -1006,10 +1031,24 @@ int fconst(AmbienteExecucao *ae) {
 	return 0;
 }
 
-int dconst(AmbienteExecucao *ae) {
 
-//	empilhaOperando(ae->pFrame, "D", &valor);
-//
+/*
+ * @author Bruno Capu
+ */
+int dconst(AmbienteExecucao *ae) {
+	double valor;
+	valor = 0;
+
+	switch (instrucao) {
+	case DCONST_0 :
+		valor = 0;
+		break;
+	case DCONST_1 :
+		valor = 1;
+		break;
+	}
+
+	empilhaOperando(ae->pFrame, "D", &valor);
 	return 0;
 }
 
@@ -1219,7 +1258,60 @@ int lmul(AmbienteExecucao *ae) {
 	return 0;
 }
 
+/*
+ * @author Bruno Capu
+ */
 int getstatic(AmbienteExecucao *ae) {
+	u2 indiceDF;
+	DadosField *dadosField;
+	tipo_info *fieldRet;
+	List_Classfile *p1, *p2, *p3;
+	List_Classfile superClasses;
+
+	indiceDF = leU2doPC(ae->pFrame);
+
+	dadosField = retornaDadosField(ae->pFrame->cf, indiceDF);
+
+	if (strcmp(dadosField->nomeClasse, "java/lang/System") == 0 &&
+			strcmp(dadosField->nomeField, "out") == 0 &&
+			strcmp(dadosField->tipo, "Ljava/io/PrintStream;") == 0) {
+
+		empilhaOperando(ae->pFrame, "#", NULL);
+	}
+	else {
+		p1 = ae->pClassHeap;
+		while (p1 != NULL) {
+			if (strcmp(p1->class_name, dadosField->nomeClasse) == 0) {
+				fieldRet = retornaFieldObjeto(p1->obj, dadosField->nomeField);
+				if (fieldRet != NULL) {
+					empilhaOperando(ae->pFrame, fieldRet->tipo, fieldRet->elemento);
+					return 0;
+				}
+				else {
+					superClasses = retornaSuperClasses(ae, p1->cf);
+					p2 = superClasses;
+					while (p2 != NULL) {
+						p3 = ae->pClassHeap;
+						while (p3 != NULL) {
+							if (strcmp(p2->class_name, p3->class_name) == 0) {
+								fieldRet = retornaFieldObjeto(p3->obj, dadosField->nomeField);
+								if (fieldRet != NULL) {
+									empilhaOperando(ae->pFrame, fieldRet->tipo, fieldRet->elemento);
+									return 0;
+								}
+							}
+							p3 = p3->prox;
+						}
+						p2 = p2->prox;
+					}
+				}
+			}
+			p1 = p1->prox;
+		}
+		fprintf(stderr,"Algum problema com o 'getstatic'.\n");
+		exit(1);
+	}
+
 	return 0;
 }
 
@@ -1514,7 +1606,7 @@ int frem(AmbienteExecucao *ae) {
 }
 
 /*
- * @author Capu
+ * @author Bruno Capu
  */
 int drem_(AmbienteExecucao *ae) {
 	double a, b, rem;
@@ -1801,17 +1893,94 @@ int dup2_x2(AmbienteExecucao *ae){
 	return 0;
 }
 
+/*
+ * @author Bruno Capu
+ */
 int goto_w(AmbienteExecucao *ae) {
+	u4 branchOffset;
+	branchOffset = leU4doPC(ae->pFrame);
+	ae->pFrame->pc += branchOffset;
 	return 0;
 }
 
+/*
+ * @author Bruno Capu
+ */
 int jsr(AmbienteExecucao *ae) {
-	return 0;
-}
-int jsr_w(AmbienteExecucao *ae) {
+	u2 branchOffset;
+	branchOffset = leU2doPC(ae->pFrame);
+	empilhaOperando(ae->pFrame, "tipo_retorno", ae->pFrame->pc);
+	ae->pFrame->pc += branchOffset;
+	ae->pFrame->enderecoPC += branchOffset;
 	return 0;
 }
 
+/*
+ * @author Bruno Capu
+ */
+int jsr_w(AmbienteExecucao *ae) {
+	u4 branchOffset;
+	branchOffset = leU4doPC(ae->pFrame);
+	empilhaOperando(ae->pFrame, "tipo_retorno", ae->pFrame->pc);
+	ae->pFrame->pc += branchOffset;
+	ae->pFrame->enderecoPC += branchOffset;
+	return 0;
+}
+
+
+/*
+ * @author Bruno Capu
+ */
+int newarray(AmbienteExecucao *ae) {
+	u1 valor;
+	int tamanho;
+	Array *vetor;
+	valor = leU1doPC(ae->pFrame);
+
+	tamanho = desempilhaOperando(ae->pFrame)->elementos[0].tipo_int;
+
+	switch (valor) {
+	case T_BOOLEAN:
+		vetor = alocarVetor("Z", 1, tamanho);
+		empilhaOperando(ae->pFrame, "[Z", vetor);
+		break;
+	case T_CHAR:
+		vetor = alocarVetor("C", 1, tamanho);
+		empilhaOperando(ae->pFrame, "[C", vetor);
+		break;
+	case T_FLOAT:
+		vetor = alocarVetor("F", 1, tamanho);
+		empilhaOperando(ae->pFrame, "[F", vetor);
+		break;
+	case T_DOUBLE:
+		vetor = alocarVetor("D", 1, tamanho);
+		empilhaOperando(ae->pFrame, "[D", vetor);
+		break;
+
+	case T_BYTE:
+		vetor = alocarVetor("B", 1, tamanho);
+		empilhaOperando(ae->pFrame, "[B", vetor);
+		break;
+	case T_SHORT:
+		vetor = alocarVetor("S", 1, tamanho);
+		empilhaOperando(ae->pFrame, "[S", vetor);
+		break;
+	case T_INT:
+		vetor = alocarVetor("I", 1, tamanho);
+		empilhaOperando(ae->pFrame, "[I", vetor);
+		break;
+	case T_LONG:
+		vetor = alocarVetor("J", 1, tamanho);
+		empilhaOperando(ae->pFrame, "[J", vetor);
+		break;
+	default:
+		fprintf(stderr,"Problema em 'anewarray', tipo de array nao reconhecido\n");
+		exit(1);
+		break;
+	}
+
+	return 0;
+}
 int aaload(AmbienteExecucao *ae) {
 	return 0;
 }
@@ -1982,6 +2151,16 @@ int ifge(AmbienteExecucao *ae) {
 	return 0;
 }
 int ifnonnull(AmbienteExecucao *ae) {
+	void *a;
+	u2 branchOffset;
+
+	branchOffset = leU2doPC(ae->pFrame);
+
+	a = desempilhaOperando(ae->pFrame)->elementos[0].tipo_referencia;
+	if (a != NULL) {
+		ae->pFrame->pc += branchOffset;
+		ae->pFrame->enderecoPC += branchOffset;
+	}
 	return 0;
 }
 
@@ -2299,9 +2478,6 @@ int putstatic(AmbienteExecucao *ae) {
 	return 0;
 }
 
-/*
- * @author: Daniel
- */
 int lookupswitch(AmbienteExecucao *ae) {
 	int bytepads;
 	u4 npairs;

@@ -296,6 +296,96 @@ void adicionaValorArray(Array *array, int posicao, char *tipo, void *info) {
 	array->tipo[posicao] = tipo;
 }
 
+
+//TODO entender essa porra
+Array *iniciarArray(char *tipo, int n) {
+	Array *vetorList, *p1, *p2;
+	int i;
+	if(n > 0) {
+		vetorList = malloc(sizeof(n*Array));
+		vetorList->tipo = tipo;
+		p1 = vetorList;
+		for(i = 1; i < n; i++) {
+			p1->tipo = tipo;
+			vetorList->sp = 0;
+			p1 = vetorList + i;
+
+		}
+	} else {
+		fprintf(stderr,"Erro no localvar_init_structure\n");
+		exit(1);
+	}
+
+	return vetorList;
+}
+
+
+Array* alocarVetor__(char* tipo, int dimensao, int *tamanhos) {
+	Array *vet, *p1;
+	int i, *sub_tamanhos;
+
+	if(dimensao == 1) {
+		vet = iniciarArray(tipo, tamanhos[0]);
+	} else {
+		vet = iniciarArray("[", tamanhos[0]);
+
+		sub_tamanhos = calloc(dimensao-1, sizeof(int));
+		for(i= 1; i < dimensao; i++) {
+			sub_tamanhos[i-1] = tamanhos[i];
+		}
+		for(p1 = vet, i=0; i< tamanhos[0]; i++, p1 = vet + i) {
+			p1->elementos[0].tipo_referencia = alocarVetor__(tipo, dimensao-1, sub_tamanhos);
+		}
+	}
+
+
+	return vet;
+
+}
+
+
+Array* alocarVetor(char *tipo, int dimensao, ...) {
+	Array *vet;
+	int contador;
+	int *tamanhos, *p1;
+	va_list argptr;
+
+	tamanhos = calloc(dimensao, sizeof(int));
+
+	va_start(argptr, dimensao);
+
+	if(dimensao == 0) {
+		vet = NULL;
+		return vet;
+	}
+
+	for(contador = 0, p1 = tamanhos; contador < dimensao; contador++, p1++) {
+		*p1 = va_arg(argptr, int);
+	}
+
+	vet = alocarVetor__(tipo, dimensao, tamanhos);
+
+	vet->sp = 0;
+	return vet;
+}
+
+
+Array *caputarVetor(char *tipo, int dimensao, int tamanho) {
+	Array *vetor, p1;
+
+	if (dimensao < 1) {
+		return NULL;
+	}
+	else if (dimensao == 1) {
+		//vetor = malloc(vetor->);
+	}
+	else if (dimensao > 1) {
+		//TODO
+	}
+
+	return vetor;
+}
+
 int defineFieldObjeto(Objeto *object, char *nomeField, char *tipo, Tipo info) {
 	tipo_info *p1;
 	int n, i;
