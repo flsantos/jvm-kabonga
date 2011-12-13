@@ -146,7 +146,6 @@ void empilhaOperandoTipo(Frame *frame, char *tipo, Tipo elemento) {
 	p1 = frame->pilhaOperandos;
 	p1->sp++;
 	p1->elementos[p1->sp] = elemento;
-	p1->tipo = tipo;
 }
 
 
@@ -202,7 +201,7 @@ void transferePilhaOperandosParaVariavelLocalPorFrames(Frame *frame1, Frame *fra
 
 void transfereVariavelLocalParaPilhaOperandos(Frame *frame, u1 indiceVariavel) {
 	empilhaOperando(frame, frame->pilhaVariaveisLocais->tipo[indiceVariavel],
-			&(frame->pilhaVariaveisLocais->elementos[indiceVariavel]));
+			(int *)&(frame->pilhaVariaveisLocais->elementos[indiceVariavel]));
 }
 
 int retornaContadorArgumentos(char *descriptor) {
@@ -287,7 +286,7 @@ void adicionaValorArray(Array *array, int posicao, char *tipo, void *info) {
 	} else if(tipo[0] == 'F') {
 		array->elementos[posicao].tipo_float= *((float*)info);
 	} else if(tipo[0] == 'I') {
-		array->elementos[posicao].tipo_int = *((u4*)info);
+		array->elementos[posicao].tipo_int = *((int*)info);
 	} else if(tipo[0] == 'J') {
 		array->elementos[posicao].tipo_long = *((long*)info);
 	} else if(tipo[0] == 'L') {

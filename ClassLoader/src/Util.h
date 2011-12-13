@@ -45,6 +45,8 @@ DadosField *retornaDadosField(ClassFile *class, int n);
 
 int retornaContadorArgumentos(char *descriptor);
 
+Array *alocarVetor__(char* tipo, int dimensao, int *tamanhos);
+
 Array *alocarVetor(char *tipo, int dimensao, ...);
 
 void adicionaValorArray(Array *array, int posicao, char *tipo, void *info);
