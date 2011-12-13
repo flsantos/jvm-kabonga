@@ -140,6 +140,16 @@ void empilhaOperando(Frame *frame, char *tipo, void *operando) {
 	}
 }
 
+void empilhaOperandoTipo(Frame *frame, char *tipo, Tipo elemento) {
+	PilhaOperandos *p1;
+
+	p1 = frame->pilhaOperandos;
+	p1->sp++;
+	p1->elementos[p1->sp] = elemento;
+	p1->tipo = tipo;
+}
+
+
 PilhaOperandos *desempilhaOperando(Frame *frame) {
 	i2 sp = 0;
 	PilhaOperandos *operando = NULL;
