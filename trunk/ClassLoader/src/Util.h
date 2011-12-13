@@ -56,3 +56,5 @@ tipo_info *retornaFieldObjeto(Objeto *object, char *nomeField);
 long long retornaLong(ClassFile *cf, int n);
 
 Array *obterValorArray(Array **array, int pos);
+
+void empilhaOperandoTipo(Frame *frame, char *tipo, Tipo elemento);
