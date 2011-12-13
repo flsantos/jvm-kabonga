@@ -2520,6 +2520,50 @@ int ret(AmbienteExecucao *ae) {
 }
 
 int multianewarray(AmbienteExecucao *ae) {
+	char *tipox, *p1, *p2, *tipo;
+	int cont, i;
+	int *tamanhos, *pi;
+	Array *arr;
+	u2 indice = leU2doPC(ae->pFrame);
+	u1 tamanho = leU1doPC(ae->pFrame);
+
+	if((signed int)ae->pFrame->cf->constant_pool[indice-1].tag == 7) {
+		tipox = retornaClassInfo(ae->pFrame->cf,indice);
+		p1 = tipox;
+		cont = 0;
+		while(*p1 != '[') {
+			p1++;
+			cont++;
+		}
+		tipo = calloc(strlen(tipox) - cont + 2, sizeof(char));
+		p2 = tipo;
+		while(*p1 != '\0') {
+			*p2 = *p1;
+			p1++;
+			p2++;
+		}
+
+		p2 = '\0';
+
+
+		tamanhos = calloc(tamanho, sizeof(int));
+		pi = tamanhos + tamanho -1 ;
+
+		for(i = 0; i < tamanho; i ++ ) {
+			*pi = desempilhaOperando(ae->pFrame)->elementos[0].tipo_int;
+			pi--;
+		}
+
+
+		arr = alocarVetor__(tipo,tamanho,tamanhos);
+		/* TODO: arrumar o tipo abaixo */
+		empilhaOperando(ae->pFrame, "[", arr);
+
+
+	} else {
+		printf("Erro em multinewarray, tipo inapropriado.\n");
+		exit(1);
+	}
 	return 0;
 }
 
