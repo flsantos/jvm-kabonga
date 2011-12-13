@@ -157,7 +157,6 @@ void empilhaOperandoTipo(Frame *frame, char *tipo, Tipo elemento) {
 
 	p1 = frame->pilhaOperandos;
 	p1->sp++;
-	printf("%d", p1->sp);
 	p1->elementos[p1->sp] = elemento;
 	p1->tipo[p1->sp] = tipo;
 

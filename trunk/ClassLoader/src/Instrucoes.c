@@ -2854,22 +2854,17 @@ int invokestatic(AmbienteExecucao *ae) {
 	int arg_cont;
 	int indice;
 	int i = 0;
-	printf("%d ", i++);
+
 	indice = leU2doPC(ae->pFrame);
-	printf("%d ", i++);
 
 	dadosMetodo = retornaDadosMetodo(ae->pFrame->cf, indice);
-	printf("%d ", i++);
 
 	arg_cont = retornaContadorArgumentos(dadosMetodo->tipo);
-	printf("%d ", i++);
 
 	if (strcmp(dadosMetodo->nomeClasse, "Object") == 0
 			&& strcmp(dadosMetodo->nomeMetodo, "<init>") == 0) {
-		printf("%d ", i++);
 		return 0;
 	}
-	printf("%d ", i++);
 	iniciaExecucaoMetodo(dadosMetodo->nomeClasse, ae, dadosMetodo->nomeMetodo,
 			dadosMetodo->tipo, arg_cont);
 

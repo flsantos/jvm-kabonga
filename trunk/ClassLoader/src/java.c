@@ -21,9 +21,6 @@ void iniciaExecucaoMetodo(char nomeClassFile[], AmbienteExecucao *ae,
 
 	cf = verificarClassFile(ae, nomeClassFile);
 
-	ae->pFrame = criaFrame(cf, nomeMetodo, descritor, frame);
-	ae->pFrame->frameAnterior = NULL;
-
 	frame = criaFrame(cf, nomeMetodo, descritor, frame);
 	frame->frameAnterior = ae->pFrame;
 	ae->pFrame = frame;
