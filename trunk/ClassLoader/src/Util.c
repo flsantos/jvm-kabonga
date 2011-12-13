@@ -300,14 +300,11 @@ Array *iniciarArray(char *tipo, int n) {
 	Array *vetorList, *p1, *p2;
 	int i;
 	if(n > 0) {
-		vetorList = malloc(sizeof(n*Array));
-		vetorList->tipo = tipo;
-		p1 = vetorList;
+		vetorList = malloc(sizeof(Array));
+		vetorList->tipo = malloc(n * sizeof(char *));
+		vetorList->elementos = malloc (n * sizeof(Tipo));
 		for(i = 1; i < n; i++) {
-			p1->tipo = tipo;
-			vetorList->sp = 0;
-			p1 = vetorList + i;
-
+			vetorList->tipo[i] = tipo;
 		}
 	} else {
 		fprintf(stderr,"Erro no localvar_init_structure\n");
@@ -344,8 +341,8 @@ Array* alocarVetor__(char* tipo, int dimensao, int *tamanhos) {
 
 Array* alocarVetor(char *tipo, int dimensao, ...) {
 	Array *vet;
-	int contador;
-	int *tamanhos, *p1;
+	int i;
+	int *tamanhos;
 	va_list argptr;
 
 	tamanhos = calloc(dimensao, sizeof(int));
@@ -356,32 +353,15 @@ Array* alocarVetor(char *tipo, int dimensao, ...) {
 		vet = NULL;
 		return vet;
 	}
+	for(i = 0; i < dimensao; i++) {
+		tamanhos[i] = va_arg(argptr, int);
 
-	for(contador = 0, p1 = tamanhos; contador < dimensao; contador++, p1++) {
-		*p1 = va_arg(argptr, int);
 	}
 
 	vet = alocarVetor__(tipo, dimensao, tamanhos);
 
 	vet->sp = 0;
 	return vet;
-}
-
-
-Array *caputarVetor(char *tipo, int dimensao, int tamanho) {
-	Array *vetor, p1;
-
-	if (dimensao < 1) {
-		return NULL;
-	}
-	else if (dimensao == 1) {
-		//vetor = malloc(vetor->);
-	}
-	else if (dimensao > 1) {
-		//TODO
-	}
-
-	return vetor;
 }
 
 int defineFieldObjeto(Objeto *object, char *nomeField, char *tipo, Tipo info) {
