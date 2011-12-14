@@ -22,10 +22,10 @@ void iniciaExecucaoMetodo(char nomeClassFile[], AmbienteExecucao *ae,
 
 	cf = verificarClassFile(ae, nomeClassFile);
 	if (ae->pFrame == NULL) {
-		ae->pFrame = criaFrame(cf, nomeMetodo, descritor, frame);
+		ae->pFrame = criaFrame(ae->pClassHeap, cf, nomeMetodo, descritor, frame);
 		ae->pFrame->frameAnterior = NULL;
 	} else {
-		frame = criaFrame(cf, nomeMetodo, descritor, frame);
+		frame = criaFrame(ae->pClassHeap, cf, nomeMetodo, descritor, frame);
 		frame->frameAnterior = ae->pFrame;
 		ae->pFrame = frame;
 		for (i = (argumentos - 1); i >= 0; i--) {
@@ -38,18 +38,16 @@ void iniciaExecucaoMetodo(char nomeClassFile[], AmbienteExecucao *ae,
 
 void iniciaClasse(char nomeClassFile[], AmbienteExecucao *ae, char *nomeMetodo,
 		char *descritor, u1 argumentos) {
-
+	List_Classfile *lista;
 	//TODO Adicionar Realloc!
 	iniciaExecucaoMetodo(nomeClassFile, ae, nomeMetodo, descritor, argumentos);
+	lista = ae->pClassHeap;
+	while(strcmp((char *)ae->pClassHeap->class_name, (char *)retornaNomeClasse(ae->pFrame->cf)) != 0){
+		ae->pClassHeap = ae->pClassHeap->prox;
+	}
 	execute_iteration(ae);
+	ae->pClassHeap = lista;
 }
-
-void iniciaMain(char nomeClassFile[], AmbienteExecucao *ae, char *nomeMetodo,
-		char *descritor) {
-	iniciaExecucaoMetodo(nomeClassFile, ae, nomeMetodo, descritor, 0);
-	execute_iteration(ae);
-}
-
 
 void checkDebugFlag(char *flag) {
 	if (strcmp(flag,"-d") == 0) {
@@ -78,7 +76,7 @@ int main(int argc, char *argv[]) {
 		if (argc >= 3) {
 			checkDebugFlag(argv[2]);
 		}
-		iniciaMain(nomeClassFile, &ae, "main", "([Ljava/lang/String;)V");
+		iniciaClasse(nomeClassFile, &ae, "main", "([Ljava/lang/String;)V", 0);
 	} else {
 		printf(
 				"O nome do arquivo .class deve ser passado como parametro.\nFavor verificar documentacao.\n"

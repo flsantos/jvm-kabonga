@@ -13,7 +13,7 @@
 
 u1 * retornaUtf8(ClassFile *cf, u2 index);
 
-method_info *retornaMetodoPorNome(ClassFile *cf, char *nomeMetodo, char *nomeDescritor);
+method_info *retornaMetodoPorNome(List_Classfile *lcf, ClassFile **cf, char *nomeMetodo, char *nomeDescritor);
 
 u1 * retornaNomeMetodo(ClassFile *cf, method_info *mi);
 

@@ -29,17 +29,13 @@ ClassFile * verificarClassFile(AmbienteExecucao *ae, char *nomeClasse) {
 		Objeto *obj = instanciaObjeto(cf, ae);
 		adicionaClasse(cf, &(ae->pClassHeap), obj);
 		if (ae->pFrame == NULL) {
-			if (retornaMetodoPorNome(cf, "<clinit>", "()V") != NULL) {
-				if (strcmp("java/lang/Object", nomeClasse) != 0
-						&& strcmp(nomeClasse, "Object") != 0
-						&& strcmp(nomeClasse, "java/lang/Class") != 0
-						&& strcmp(nomeClasse, "Class") != 0
-						&& strcmp(nomeClasse, "java/lang/Long") != 0
-						&& strcmp(nomeClasse, "Long") != 0
-						&& strcmp(nomeClasse, "java/lang/String") != 0
-						&& strcmp(nomeClasse, "String") != 0) {
+			if (retornaMetodoPorNome(ae->pClassHeap, &cf, "<clinit>", "()V") != NULL) {
+				if (strcmp("java/lang/Object", nomeClasse) != 0 && strcmp(nomeClasse, "Object") != 0
+						&& strcmp(nomeClasse, "java/lang/Class") != 0 && strcmp(nomeClasse, "Class") != 0
+						&& strcmp(nomeClasse, "java/lang/Long") != 0 && strcmp(nomeClasse, "Long") != 0
+						&& strcmp(nomeClasse, "java/lang/String") != 0 && strcmp(nomeClasse, "String") != 0) {
 					printf("a");
-					ae->pFrame = criaFrame(cf, "<clinit>", "()V", frame);
+					ae->pFrame = criaFrame(ae->pClassHeap, cf, "<clinit>", "()V", frame);
 					ae->pFrame->frameAnterior = NULL;
 					execute_iteration(ae);
 					frame = ae->pFrame;
@@ -48,16 +44,12 @@ ClassFile * verificarClassFile(AmbienteExecucao *ae, char *nomeClasse) {
 				}
 			}
 		} else {
-			if (retornaMetodoPorNome(cf, "<clinit>", "()V") != NULL) {
-				if (strcmp("java/lang/Object", nomeClasse) != 0
-						&& strcmp(nomeClasse, "Object") != 0
-						&& strcmp(nomeClasse, "java/lang/Class") != 0
-						&& strcmp(nomeClasse, "Class") != 0
-						&& strcmp(nomeClasse, "java/lang/Long") != 0
-						&& strcmp(nomeClasse, "Long") != 0
-						&& strcmp(nomeClasse, "java/lang/String") != 0
-						&& strcmp(nomeClasse, "String") != 0) {
-					frame = criaFrame(cf, "<clinit>", "()V", frame);
+			if (retornaMetodoPorNome(ae->pClassHeap, &cf, "<clinit>", "()V") != NULL) {
+				if (strcmp("java/lang/Object", nomeClasse) != 0 && strcmp(nomeClasse, "Object") != 0
+						&& strcmp(nomeClasse, "java/lang/Class") != 0 && strcmp(nomeClasse, "Class") != 0
+						&& strcmp(nomeClasse, "java/lang/Long") != 0 && strcmp(nomeClasse, "Long") != 0
+						&& strcmp(nomeClasse, "java/lang/String") != 0 && strcmp(nomeClasse, "String") != 0) {
+					frame = criaFrame(ae->pClassHeap, cf, "<clinit>", "()V", frame);
 					frame->frameAnterior = ae->pFrame;
 					ae->pFrame = frame;
 					execute_iteration(ae);
@@ -82,8 +74,7 @@ List_Classfile *retornaSuperClasses(AmbienteExecucao *ae, ClassFile *cf) {
 	p1 = cf;
 	while (p1->super_class != 0) {
 		str = (char *) retornaClassInfo(p1, p1->super_class);
-		p1 = verificarClassFile(ae,
-				(char *) retornaClassInfo(p1, p1->super_class));
+		p1 = verificarClassFile(ae, (char *) retornaClassInfo(p1, p1->super_class));
 		adicionaClasse(p1, &listaClasses, instanciaObjeto(p1, ae));
 	}
 	return listaClasses;
@@ -219,8 +210,7 @@ int jumpback(AmbienteExecucao *ae, int n_return) {
 		ae->pFrame = ae->pFrame->frameAnterior;
 		for (i = 0; i < n_return; i++) {
 			pilhaoperandos = desempilhaOperando(frame);
-			empilhaOperandoTipo(ae->pFrame,
-					pilhaoperandos->tipo[pilhaoperandos->sp],
+			empilhaOperandoTipo(ae->pFrame, pilhaoperandos->tipo[pilhaoperandos->sp],
 					pilhaoperandos->elementos[pilhaoperandos->sp]);
 		}
 		free(frame);
