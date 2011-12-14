@@ -1346,8 +1346,8 @@ int dsub(AmbienteExecucao *ae) {
 
 int fadd(AmbienteExecucao *ae) {
 	float a, b, sum;
-	a = desempilhaOperando(ae->pFrame)->elementos->tipo_double;
-	b = desempilhaOperando(ae->pFrame)->elementos->tipo_double;
+	a = desempilhaOperando(ae->pFrame)->elementos->tipo_float;
+	b = desempilhaOperando(ae->pFrame)->elementos->tipo_float;
 	sum = a + b;
 
 	empilhaOperando(ae->pFrame, "F", &sum);
@@ -1545,8 +1545,8 @@ int dcmpl(AmbienteExecucao *ae) {
 int fcmpg(AmbienteExecucao *ae) {
 	float a, b;
 	int pushval;
-	a = desempilhaOperando(ae->pFrame)->elementos->tipo_float;
 	b = desempilhaOperando(ae->pFrame)->elementos->tipo_float;
+	a = desempilhaOperando(ae->pFrame)->elementos->tipo_float;
 	if (a > b)
 		pushval = 1;
 	else if (a == b) {
