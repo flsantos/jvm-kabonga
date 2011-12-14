@@ -9,10 +9,9 @@
  * Le um byte do PC.
  * @param frame a variavel do frame atual
  */
-#include "Estruturas.h"
-#include "Instrucoes.h"
+#include "RotinaExecucao.h"
 
-char* minemonicos[]={
+char* mnemonicos[]={
 	"nop",
 	"aconst_null",
 	"iconst_m1",
@@ -272,7 +271,7 @@ int execute_iteration(AmbienteExecucao *ae) {
 	while (1) {
 		instrucao = leU1doPC(ae->pFrame);
 		debugPrintLinha();
-		printf("\n%d instrucao: %s",i++, minemonicos[instrucao]);
+		debugPrintInstrucoes(mnemonicos[instrucao], i++);
 		if(vetFunc[instrucao](ae) == -1 && instrucao == RETURN){
 			break;
 		}

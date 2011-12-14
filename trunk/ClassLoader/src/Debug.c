@@ -9,7 +9,7 @@
 
 void debugPrintEmpilha(char *tipo, Frame *frame) {
 
-	if (m_debug != 0) {
+	if (m_debug > 1) {
 		i2 sp = frame->pilhaOperandos->sp;
 
 		if (tipo[0] == 'B') {
@@ -50,7 +50,7 @@ void debugPrintEmpilha(char *tipo, Frame *frame) {
 
 void debugPrintDesempilha(PilhaOperandos *operando) {
 
-	if (m_debug != 0) {
+	if (m_debug > 1) {
 		if (operando->tipo[operando->sp][0] == 'B') {
 			printf("\n    desempilha: B  %d", operando->elementos[0].tipo_byte);
 		} else if (operando->tipo[operando->sp][0] == 'C') {
@@ -88,7 +88,7 @@ void debugPrintDesempilha(PilhaOperandos *operando) {
 }
 
 void debugPrintEmpilhaTipo(PilhaOperandos *p1) {
-	if (m_debug != 0) {
+	if (m_debug > 1) {
 		if (p1->tipo[p1->sp][0] == 'B') {
 			printf("\n    empilha: B  %d", p1->elementos[p1->sp].tipo_boolean);
 		} else if (p1->tipo[p1->sp][0] == 'C') {
@@ -102,16 +102,22 @@ void debugPrintEmpilhaTipo(PilhaOperandos *p1) {
 		} else if (p1->tipo[p1->sp][0] == 'J') {
 			printf("\n    empilha: J  %d", p1->elementos[p1->sp].tipo_long);
 		} else if (p1->tipo[p1->sp][0] == 'L') {
-			printf("\n    empilha: L  %s", (char *)(p1->elementos[p1->sp].tipo_referencia));
+			printf("\n    empilha: L  0x%X", (char *)(p1->elementos[p1->sp].tipo_referencia));
 		} else if (p1->tipo[p1->sp][0] == 'S') {
 			printf("\n    empilha: S  %d", p1->elementos[p1->sp].tipo_short);
 		} else if (p1->tipo[p1->sp][0] == 'Z') {
 			printf("\n    empilha: Z  %s", p1->elementos[p1->sp].tipo_boolean);
 		} else if (p1->tipo[p1->sp][0] == '[') {
-			printf("\n    empilha: [  %s", (char *)p1->elementos[p1->sp].tipo_referencia);
+			printf("\n    empilha: [  0x%X", (char *)p1->elementos[p1->sp].tipo_referencia);
 		} else if(p1->tipo[p1->sp][0] == 'r') {
 			printf("\n    empilha: retorno");
 		}
+	}
+}
+
+void debugPrintInstrucoes(char *instrucao, int i) {
+	if (m_debug > 0) {
+		printf("\n%d instrucao: %s",i, instrucao);
 	}
 }
 
