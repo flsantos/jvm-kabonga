@@ -312,7 +312,6 @@ int aload(AmbienteExecucao *ae) {
 }
 
 int istore(AmbienteExecucao *ae) {
-	/*transfer_opstack_to_localvar(&(interpreter->current_frame->opstack), &(interpreter->current_frame->local_variables), pos);*/
 	int pos;
 
 	switch (instrucao) {
@@ -361,7 +360,6 @@ int invokespecial(AmbienteExecucao *ae) {
 
 int dup(AmbienteExecucao *ae) {
 
-	/*t_opstack *a = desempilhaOperando((&interpreter->current_frame->opstack));*/
 	PilhaOperandos *a = desempilhaOperando(ae->pFrame);
 	if (((a->tipo[a->sp][0]) == 'J') || ((a->tipo[a->sp][0]) == 'D')) {
 		printf(
@@ -435,9 +433,7 @@ int ifne(AmbienteExecucao *ae) {
 	a = desempilhaOperando(ae->pFrame)->elementos[0].tipo_int;
 
 	if (a != 0) {
-		/*interpreter->current_frame->pc += branchoffset -3;*/
 		ae->pFrame->pc += branchoffset - 3;
-		/*interpreter->current_frame->pc_address += branchoffset -3;*/
 		ae->pFrame->enderecoPC += branchoffset - 3;
 	}
 
