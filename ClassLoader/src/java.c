@@ -52,8 +52,11 @@ void iniciaMain(char nomeClassFile[], AmbienteExecucao *ae, char *nomeMetodo,
 
 
 void checkDebugFlag(char *flag) {
-	if (strcmp(flag,"-d") == 0 || strcmp(flag, "-D") == 0) {
+	if (strcmp(flag,"-d") == 0) {
 		m_debug = 1;
+	}
+	else if (strcmp(flag, "-D") == 0) {
+		m_debug = 2;
 	}
 	else {
 		m_debug = 0;
@@ -72,7 +75,9 @@ int main(int argc, char *argv[]) {
 	ae.pFrame = NULL;
 	if (argc >= 2) {
 		nomeClassFile = argv[1];
-		checkDebugFlag(argv[2]);
+		if (argc >= 3) {
+			checkDebugFlag(argv[2]);
+		}
 		iniciaMain(nomeClassFile, &ae, "main", "([Ljava/lang/String;)V");
 	} else {
 		printf(

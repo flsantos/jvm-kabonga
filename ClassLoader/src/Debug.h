@@ -17,5 +17,6 @@ int m_debug;
 void debugPrintEmpilha(char *tipo, Frame *frame);
 void debugPrintDesempilha(PilhaOperandos *operando);
 void debugPrintEmpilhaTipo(PilhaOperandos *p1);
+void debugPrintInstrucoes(char *instrucao, int i);
 void debugPause(void);
 void debugPrintLinha();
