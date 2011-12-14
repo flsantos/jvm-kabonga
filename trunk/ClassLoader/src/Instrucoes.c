@@ -2231,19 +2231,74 @@ int if_icmpge(AmbienteExecucao *ae) {
 	return 0;
 }
 int ifeq(AmbienteExecucao *ae) {
+	int a;
+	int offset;
+
+	offset = leU2doPC(ae->pFrame);
+	a = desempilhaOperando(ae->pFrame)->elementos[0].tipo_int;
+
+	if (a == 0){
+		ae->pFrame->pc += offset -3;
+		ae->pFrame->enderecoPC += offset -3;
+	}
+
 	return 0;
 }
 
 int iflt(AmbienteExecucao *ae) {
+	int a;
+	int offset;
+
+	offset = leU2doPC(ae->pFrame);
+	a = desempilhaOperando(ae->pFrame)->elementos[0].tipo_int;
+
+	if (a < 0){
+		ae->pFrame->pc += offset -3;
+		ae->pFrame->enderecoPC += offset -3;
+	}
+
 	return 0;
 }
 int ifle(AmbienteExecucao *ae) {
+	int a;
+	int offset;
+
+	offset = leU2doPC(ae->pFrame);
+	a = desempilhaOperando(ae->pFrame)->elementos[0].tipo_int;
+
+	if (a <= 0){
+		ae->pFrame->pc += offset -3;
+		ae->pFrame->enderecoPC += offset -3;
+	}
+
 	return 0;
 }
 int ifgt(AmbienteExecucao *ae) {
+	int a;
+	int offset;
+
+	offset = leU2doPC(ae->pFrame);
+	a = desempilhaOperando(ae->pFrame)->elementos[0].tipo_int;
+
+	if (a > 0){
+		ae->pFrame->pc += offset -3;
+		ae->pFrame->enderecoPC += offset -3;
+	}
+
 	return 0;
 }
 int ifge(AmbienteExecucao *ae) {
+	int a;
+	int offset;
+
+	offset = leU2doPC(ae->pFrame);
+	a = desempilhaOperando(ae->pFrame)->elementos[0].tipo_int;
+
+	if (a >= 0){
+		ae->pFrame->pc += offset -3;
+		ae->pFrame->enderecoPC += offset -3;
+	}
+
 	return 0;
 }
 int ifnonnull(AmbienteExecucao *ae) {
@@ -2473,6 +2528,7 @@ int baload(AmbienteExecucao *ae) {
 	indice = desempilhaOperando(ae->pFrame)->elementos[0].tipo_int;
 	vetorRef =
 			(Array*) desempilhaOperando(ae->pFrame)->elementos[0].tipo_referencia;
+
 
 	while (strcmp(vetorRef->tipo[tamanhoVetor], "[")) {
 		tamanhoVetor++;
