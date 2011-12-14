@@ -797,6 +797,7 @@ int ldc(AmbienteExecucao *ae) {
 	long long lvalue;
 	double dvalue;
 	int indice;
+	printf("tenas	");
 
 	switch (instrucao) {
 	case LDC_W:
@@ -809,7 +810,8 @@ int ldc(AmbienteExecucao *ae) {
 		indice = (int) leU1doPC(ae->pFrame);
 		break;
 	}
-
+	printf("Indeice %d", indice);
+	printf("A entrda foi no %d\n", ae->pFrame->cf->constant_pool[indice - 1].tag);
 	switch ((signed int) (ae->pFrame->cf->constant_pool[indice - 1].tag)) {
 	case 8:
 		/* CONSTANT_String */
@@ -2303,8 +2305,8 @@ int ifnonnull(AmbienteExecucao *ae) {
 
 	a = desempilhaOperando(ae->pFrame)->elementos[0].tipo_referencia;
 	if (a != NULL) {
-		ae->pFrame->pc += branchOffset;
-		ae->pFrame->enderecoPC += branchOffset;
+		ae->pFrame->pc += branchOffset -3;
+		ae->pFrame->enderecoPC += branchOffset-3;
 	}
 	return 0;
 }
@@ -2525,7 +2527,6 @@ int baload(AmbienteExecucao *ae) {
 
 	while (vetorRef->tipo[vetorRef->sp][tamanhoVetor] == '['){
 		tamanhoVetor++;
-
 	}
 	if (vetorRef->tipo[vetorRef->sp][tamanhoVetor] == 'B') {
 		valorChar = vetorRef->elementos[indice].tipo_byte;
@@ -2768,12 +2769,15 @@ int getfield(AmbienteExecucao *ae) {
 	Objeto *obj;
 	DadosField *dadosField;
 	tipo_info *tipo;
-
+	printf("Comeco do getcield\n");
 	dadosField = retornaDadosField(ae->pFrame->cf, leU2doPC(ae->pFrame));
-	obj = (Objeto*) desempilhaOperando(ae->pFrame)->elementos->tipo_referencia;
+	printf("antes do obj\n");
+	obj = (Objeto*) desempilhaOperando(ae->pFrame)->elementos[0].tipo_referencia;
+	printf("nome da clasee %s\n",obj->nomeClasse);
+	printf("depois do obj\n");
 
 	tipo = retornaFieldObjeto(obj, dadosField->nomeField);
-
+	printf("depois do tipo\n");
 	empilhaOperandoTipo(ae->pFrame, tipo->tipo, tipo->elemento);
 
 	return 0;
@@ -2930,6 +2934,7 @@ int putstatic(AmbienteExecucao *ae) {
 
 	pilha = desempilhaOperando(ae->pFrame);
 	lista1 = ae->pClassHeap;
+
 	while (lista1 != NULL) {
 		if (strcmp((char *) lista1->class_name, dadosField->nomeClasse) == 0) {
 			erro = defineFieldObjeto(lista1->obj, dadosField->nomeField,
