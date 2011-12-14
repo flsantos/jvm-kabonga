@@ -34,7 +34,6 @@ ClassFile * verificarClassFile(AmbienteExecucao *ae, char *nomeClasse) {
 						&& strcmp(nomeClasse, "java/lang/Class") != 0 && strcmp(nomeClasse, "Class") != 0
 						&& strcmp(nomeClasse, "java/lang/Long") != 0 && strcmp(nomeClasse, "Long") != 0
 						&& strcmp(nomeClasse, "java/lang/String") != 0 && strcmp(nomeClasse, "String") != 0) {
-					printf("a");
 					ae->pFrame = criaFrame(ae->pClassHeap, cf, "<clinit>", "()V", frame);
 					ae->pFrame->frameAnterior = NULL;
 					execute_iteration(ae);
