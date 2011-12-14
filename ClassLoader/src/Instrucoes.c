@@ -2090,7 +2090,7 @@ int idiv_(AmbienteExecucao *ae) {
 	a = desempilhaOperando(ae->pFrame)->elementos[0].tipo_int;
 	b = desempilhaOperando(ae->pFrame)->elementos[0].tipo_int;
 
-	div = a / b;
+	div = b / a;
 
 	empilhaOperando(ae->pFrame, "I", &div);
 	return 0;
@@ -2780,8 +2780,8 @@ int getfield(AmbienteExecucao *ae) {
  */
 int fdiv(AmbienteExecucao *ae) {
 	float a, b, div;
-	b = desempilhaOperando(ae->pFrame)->elementos[0].tipo_float;
 	a = desempilhaOperando(ae->pFrame)->elementos[0].tipo_float;
+	b = desempilhaOperando(ae->pFrame)->elementos[0].tipo_float;
 
 	div = b / a;
 
@@ -2793,8 +2793,8 @@ int fdiv(AmbienteExecucao *ae) {
  */
 int ddiv(AmbienteExecucao *ae) {
 	double a, b, div;
-	b = desempilhaOperando(ae->pFrame)->elementos[0].tipo_double;
 	a = desempilhaOperando(ae->pFrame)->elementos[0].tipo_double;
+	b = desempilhaOperando(ae->pFrame)->elementos[0].tipo_double;
 
 	div = b / a;
 
