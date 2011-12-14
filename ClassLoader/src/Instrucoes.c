@@ -2766,15 +2766,11 @@ int getfield(AmbienteExecucao *ae) {
 	Objeto *obj;
 	DadosField *dadosField;
 	tipo_info *tipo;
-	printf("Comeco do getcield\n");
 	dadosField = retornaDadosField(ae->pFrame->cf, leU2doPC(ae->pFrame));
-	printf("antes do obj\n");
 	obj = (Objeto*) desempilhaOperando(ae->pFrame)->elementos[0].tipo_referencia;
-	printf("nome da clasee %s\n",obj->nomeClasse);
-	printf("depois do obj\n");
 
 	tipo = retornaFieldObjeto(obj, dadosField->nomeField);
-	printf("depois do tipo\n");
+
 	empilhaOperandoTipo(ae->pFrame, tipo->tipo, tipo->elemento);
 
 	return 0;
