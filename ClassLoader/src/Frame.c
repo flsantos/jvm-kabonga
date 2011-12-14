@@ -23,13 +23,11 @@ Frame *criaFrame(List_Classfile *lcf, ClassFile *cf, char *nomeMetodo, char *des
 			break;
 		}
 	}
-	//TODO Verificar se funciona com as setinhas
 	frame = malloc(sizeof(Frame));
 	frame->pc = attribute.u.Code.code;
 	frame->pcInicial = frame->pc;
 	frame->constant_pool = cf->constant_pool;
 	frame->pilhaOperandos = malloc(sizeof(PilhaOperandos));
-	//TODO verificar se esse ->tipo nao term q ser pilhaOperandos[0]->tipo
 	frame->pilhaOperandos->tipo = malloc(retornaTamanhoPilha(&attribute) * sizeof(char *));
 	frame->pilhaOperandos->elementos = malloc(retornaTamanhoPilha(&attribute) * sizeof(Tipo));
 	frame->pilhaOperandos->sp = -1;

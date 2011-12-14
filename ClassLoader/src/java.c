@@ -39,7 +39,6 @@ void iniciaExecucaoMetodo(char nomeClassFile[], AmbienteExecucao *ae,
 void iniciaClasse(char nomeClassFile[], AmbienteExecucao *ae, char *nomeMetodo,
 		char *descritor, u1 argumentos) {
 	List_Classfile *lista;
-	//TODO Adicionar Realloc!
 	iniciaExecucaoMetodo(nomeClassFile, ae, nomeMetodo, descritor, argumentos);
 	lista = ae->pClassHeap;
 	while(strcmp((char *)ae->pClassHeap->class_name, (char *)retornaNomeClasse(ae->pFrame->cf)) != 0){
