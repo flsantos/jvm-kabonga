@@ -7,14 +7,14 @@
 #include "Estruturas.h"
 #include "Util.h"
 
-Frame *criaFrame(ClassFile *cf, char *nomeMetodo, char *descritor, Frame *frame){
+Frame *criaFrame(List_Classfile *lcf, ClassFile *cf, char *nomeMetodo, char *descritor, Frame *frame){
 	method_info *metodo = NULL;
 	attribute_info attribute;
 	int i;
 
-	metodo = retornaMetodoPorNome(cf, nomeMetodo, descritor);
+	metodo = retornaMetodoPorNome(lcf ,&cf, nomeMetodo, descritor);
 	if(metodo == NULL){
-		printf("Metodo %s não encontrado!", nomeMetodo);
+		printf("\nMetodo %s nao encontrado!", nomeMetodo);
 		exit(0);
 	}
 	for(i = 0; i < metodo->attributes_count; i++){

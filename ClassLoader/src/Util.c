@@ -22,18 +22,21 @@ u1 * retornaUtf8(ClassFile *cf, u2 index) {
 	return cf->constant_pool[index - 1].u.Utf8.bytes;
 }
 
-method_info *retornaMetodoPorNome(ClassFile *cf, char *nomeMetodo,
-		char *nomeDescritor) {
+method_info *retornaMetodoPorNome(List_Classfile *lcf, ClassFile **classfile, char *nomeMetodo, char *nomeDescritor) {
 	int i = 0;
+	ClassFile *cf = *classfile;
 	for (i = 0; i < cf->methods_count; i++) {
-		if (strcmp(nomeMetodo,
-				(char *) retornaUtf8(cf, cf->methods[i].name_index)) == 0
-				&& strcmp(
-						nomeDescritor,
-						(char *) retornaUtf8(cf,
-								cf->methods[i].descriptor_index)) == 0) {
+		if (strcmp(nomeMetodo, (char *) retornaUtf8(cf, cf->methods[i].name_index)) == 0
+				&& strcmp(nomeDescritor, (char *) retornaUtf8(cf, cf->methods[i].descriptor_index)) == 0) {
 			return &(cf->methods[i]);
 		}
+	}
+	if (strcmp(nomeMetodo, "<clinit>") != 0 && cf->super_class != 0) {
+		while (strcmp((char *) retornaNomeClasse(lcf->cf), (char *) retornaClassInfo(cf, cf->super_class)) != 0) {
+			lcf = lcf->prox;
+		}
+		*classfile = lcf->cf;
+		return retornaMetodoPorNome(lcf, classfile, nomeMetodo, nomeDescritor);
 	}
 	return NULL;
 
@@ -44,8 +47,7 @@ u1 * retornaNomeMetodo(ClassFile *cf, method_info *mi) {
 }
 
 u1 * retornaNomeClasse(ClassFile *cf) {
-	return retornaUtf8(cf,
-			cf->constant_pool[cf->this_class - 1].u.Class.name_index);
+	return retornaUtf8(cf, cf->constant_pool[cf->this_class - 1].u.Class.name_index);
 }
 
 u2 retornaTamanhoPilha(attribute_info *ai) {
@@ -57,7 +59,7 @@ u2 retornaTamanhoVariaveisLocais(attribute_info *ai) {
 }
 
 u1 *retornaClassInfo(ClassFile *cf, int indice) {
-	return retornaUtf8(cf, cf->constant_pool[indice-1].u.Class.name_index);
+	return retornaUtf8(cf, cf->constant_pool[indice - 1].u.Class.name_index);
 }
 
 DadosNameAndType *retornaDadosNameAndTypeInfo(ClassFile *cf, int n) {
@@ -80,10 +82,8 @@ DadosMetodo *retornaDadosMetodo(ClassFile *cf, int n) {
 
 	dadosMetodo = malloc(sizeof(DadosMetodo));
 
-	dadosMetodo->nomeClasse = (char *)retornaClassInfo(cf,
-			(cf->constant_pool[n - 1]).u.Fieldref.class_index);
-	dadosNameAndType = retornaDadosNameAndTypeInfo(cf,
-			(cf->constant_pool[n - 1]).u.Fieldref.name_and_type_index);
+	dadosMetodo->nomeClasse = (char *) retornaClassInfo(cf, (cf->constant_pool[n - 1]).u.Fieldref.class_index);
+	dadosNameAndType = retornaDadosNameAndTypeInfo(cf, (cf->constant_pool[n - 1]).u.Fieldref.name_and_type_index);
 	dadosMetodo->nomeMetodo = dadosNameAndType->nome;
 	dadosMetodo->tipo = dadosNameAndType->tipo;
 
@@ -96,7 +96,7 @@ DadosField *retornaDadosField(ClassFile *class, int n) {
 
 	dadosField = malloc(sizeof(DadosField));
 
-	dadosField->nomeClasse = (char *)retornaClassInfo(class, (class->constant_pool + n -1)->u.Fieldref.class_index);
+	dadosField->nomeClasse = (char *) retornaClassInfo(class, (class->constant_pool + n - 1)->u.Fieldref.class_index);
 
 	dadosNameAndType = retornaDadosNameAndTypeInfo(class, (class->constant_pool + n - 1)->u.Fieldref.name_and_type_index);
 	dadosField->nomeField = dadosNameAndType->nome;
@@ -122,8 +122,7 @@ void empilhaOperando(Frame *frame, char *tipo, void *operando) {
 		frame->pilhaOperandos->elementos[sp].tipo_char = *((unsigned char *) operando);
 		//printf("\n\n%c\n\n", frame->pilhaOperandos->elementos[sp].tipo_char);
 	} else if (tipo[0] == 'D') {
-		frame->pilhaOperandos->elementos[sp].tipo_double =
-				*((double *) operando);
+		frame->pilhaOperandos->elementos[sp].tipo_double = *((double *) operando);
 		//printf("\n\ndouble %f\n\n", frame->pilhaOperandos->elementos[sp].tipo_double);
 	} else if (tipo[0] == 'F') {
 		frame->pilhaOperandos->elementos[sp].tipo_float = *((float *) operando);
@@ -141,14 +140,13 @@ void empilhaOperando(Frame *frame, char *tipo, void *operando) {
 		frame->pilhaOperandos->elementos[sp].tipo_short = *((short *) operando);
 		//printf("\n\nshort %d\n\n", frame->pilhaOperandos->elementos[sp].tipo_short);
 	} else if (tipo[0] == 'Z') {
-		frame->pilhaOperandos->elementos[sp].tipo_boolean =
-				*((char *) operando);
+		frame->pilhaOperandos->elementos[sp].tipo_boolean = *((char *) operando);
 		//printf("\n\nboolean %c\n\n", frame->pilhaOperandos->elementos[sp].tipo_boolean);
 	} else if (tipo[0] == '[') {
 		frame->pilhaOperandos->elementos[sp].tipo_referencia = operando;
 		//printf("\n\n%f\n\n", frame->pilhaOperandos->elementos[sp].tipo_referencia[0]);
-	} else if(tipo[0] == 'r') {
-		frame->pilhaOperandos->elementos[sp].tipo_retorno = ((char*)operando);
+	} else if (tipo[0] == 'r') {
+		frame->pilhaOperandos->elementos[sp].tipo_retorno = ((char*) operando);
 	}
 
 	debugPrintEmpilha(tipo, frame);
@@ -164,7 +162,6 @@ void empilhaOperandoTipo(Frame *frame, char *tipo, Tipo elemento) {
 
 	debugPrintEmpilhaTipo(p1);
 }
-
 
 PilhaOperandos *desempilhaOperando(Frame *frame) {
 	i2 sp = 0;
@@ -291,50 +288,47 @@ int retornaContadorArgumentos(char *descriptor) {
 	return count;
 }
 
-
-
 void adicionaValorArray(Array *array, int posicao, char *tipo, void *info) {
-	if(tipo[0] == 'B') {
-		array->elementos[posicao].tipo_byte = *((char *)info);
-	} else if(tipo[0] == 'C') {
-		array->elementos[posicao].tipo_char = *((unsigned char *)info);
-	} else if(tipo[0] == 'D') {
-		array->elementos[posicao].tipo_double = *((double*)info);
-	} else if(tipo[0] == 'F') {
-		array->elementos[posicao].tipo_float= *((float*)info);
-	} else if(tipo[0] == 'I') {
-		array->elementos[posicao].tipo_int = *((int*)info);
-	} else if(tipo[0] == 'J') {
-		array->elementos[posicao].tipo_long = *((long long*)info);
-	} else if(tipo[0] == 'L') {
+	if (tipo[0] == 'B') {
+		array->elementos[posicao].tipo_byte = *((char *) info);
+	} else if (tipo[0] == 'C') {
+		array->elementos[posicao].tipo_char = *((unsigned char *) info);
+	} else if (tipo[0] == 'D') {
+		array->elementos[posicao].tipo_double = *((double*) info);
+	} else if (tipo[0] == 'F') {
+		array->elementos[posicao].tipo_float = *((float*) info);
+	} else if (tipo[0] == 'I') {
+		array->elementos[posicao].tipo_int = *((int*) info);
+	} else if (tipo[0] == 'J') {
+		array->elementos[posicao].tipo_long = *((long long*) info);
+	} else if (tipo[0] == 'L') {
 		array->elementos[posicao].tipo_referencia = info;
-	} else if(tipo[0] == 'S') {
-		array->elementos[posicao].tipo_short = *((short*)info);
-	} else if(tipo[0] == 'Z') {
-		array->elementos[posicao].tipo_boolean = *((char*)info);
-	} else if(tipo[0] == '[') {
+	} else if (tipo[0] == 'S') {
+		array->elementos[posicao].tipo_short = *((short*) info);
+	} else if (tipo[0] == 'Z') {
+		array->elementos[posicao].tipo_boolean = *((char*) info);
+	} else if (tipo[0] == '[') {
 		array->elementos[posicao].tipo_referencia = info;
-	} else if(tipo[0] == 'r') {
+	} else if (tipo[0] == 'r') {
 		array->elementos[posicao].tipo_retorno = ((char *) info);
 	}
 	array->tipo[posicao] = tipo;
 }
 
-
 //TODO entender essa porra
 Array *iniciarArray(char *tipo, int n) {
 	Array *vetorList;
 	int i;
-	if(n > 0) {
+	if (n > 0) {
 		vetorList = malloc(sizeof(Array));
 		vetorList->sp = n;
 		vetorList->tipo = malloc(n * sizeof(char *));
-		vetorList->elementos = malloc (n * sizeof(Tipo));
-		for(i = 0; i < n; i++) {
+		vetorList->elementos = malloc(n * sizeof(Tipo));
+		for (i = 0; i < n; i++) {
 			vetorList->tipo[i] = tipo;
 		}
 	} else {
-		fprintf(stderr,"Erro no localvar_init_structure\n");
+		fprintf(stderr, "Erro no localvar_init_structure\n");
 		exit(1);
 	}
 
@@ -345,25 +339,23 @@ Array *alocarVetor__(char* tipo, int dimensao, int *tamanhos) {
 	Array *vet, *p1;
 	int i, *sub_tamanhos;
 
-	if(dimensao == 1) {
+	if (dimensao == 1) {
 		vet = iniciarArray(tipo, tamanhos[0]);
 	} else {
 		vet = iniciarArray("[", tamanhos[0]);
 
-		sub_tamanhos = calloc(dimensao-1, sizeof(int));
-		for(i= 0; i < dimensao; i++) {
-			sub_tamanhos[i-1] = tamanhos[i];
+		sub_tamanhos = calloc(dimensao - 1, sizeof(int));
+		for (i = 0; i < dimensao; i++) {
+			sub_tamanhos[i - 1] = tamanhos[i];
 		}
-		for(p1 = vet, i=0; i< tamanhos[0]; i++, p1 = vet + i) {
-			p1->elementos[p1->sp].tipo_referencia = alocarVetor__(tipo, dimensao-1, sub_tamanhos);
+		for (p1 = vet, i = 0; i < tamanhos[0]; i++, p1 = vet + i) {
+			p1->elementos[p1->sp].tipo_referencia = alocarVetor__(tipo, dimensao - 1, sub_tamanhos);
 		}
 	}
-
 
 	return vet;
 
 }
-
 
 Array *alocarVetor(char *tipo, int dimensao, ...) {
 	Array *vet;
@@ -394,30 +386,30 @@ int defineFieldObjeto(Objeto *object, char *nomeField, char *tipo, Tipo info) {
 	tipo_info *p1;
 	int n, i;
 	n = object->numeroTipos;
-	for(i=0, p1 = object->tipos; i < n; i++, p1++) {
-		if(strcmp(p1->nome, nomeField) == 0) {
+	for (i = 0, p1 = object->tipos; i < n; i++, p1++) {
+		if (strcmp(p1->nome, nomeField) == 0) {
 			p1->tipo = tipo;
-			if(tipo[0] == 'B') {
+			if (tipo[0] == 'B') {
 				p1->elemento.tipo_byte = info.tipo_byte;
-			} else if(tipo[0] == 'C') {
+			} else if (tipo[0] == 'C') {
 				p1->elemento.tipo_char = info.tipo_char;
-			} else if(tipo[0] == 'D') {
+			} else if (tipo[0] == 'D') {
 				p1->elemento.tipo_double = info.tipo_double;
-			} else if(tipo[0] == 'F') {
-				p1->elemento.tipo_float= info.tipo_float;
-			} else if(tipo[0] == 'I') {
+			} else if (tipo[0] == 'F') {
+				p1->elemento.tipo_float = info.tipo_float;
+			} else if (tipo[0] == 'I') {
 				p1->elemento.tipo_int = info.tipo_int;
-			} else if(tipo[0] == 'J') {
+			} else if (tipo[0] == 'J') {
 				p1->elemento.tipo_long = info.tipo_long;
-			} else if(tipo[0] == 'L') {
+			} else if (tipo[0] == 'L') {
 				p1->elemento.tipo_referencia = info.tipo_referencia;
-			} else if(tipo[0] == 'S') {
+			} else if (tipo[0] == 'S') {
 				p1->elemento.tipo_short = info.tipo_short;
-			} else if(tipo[0] == 'Z') {
+			} else if (tipo[0] == 'Z') {
 				p1->elemento.tipo_boolean = info.tipo_boolean;
-			} else if(tipo[0] == '[') {
+			} else if (tipo[0] == '[') {
 				p1->elemento.tipo_referencia = info.tipo_referencia;
-			} else if(tipo[0] == 'r') {
+			} else if (tipo[0] == 'r') {
 				p1->elemento.tipo_retorno = info.tipo_retorno;
 			}
 			return 1;
@@ -426,17 +418,17 @@ int defineFieldObjeto(Objeto *object, char *nomeField, char *tipo, Tipo info) {
 	return -1;
 }
 
-
 tipo_info *retornaFieldObjeto(Objeto *object, char *nomeField) {
 	tipo_info *p1;
 	int n, i;
 	n = object->numeroTipos;
-	for(i=0, p1 = object->tipos; i<n; i++, p1++) {
-		if(strcmp(p1->nome, nomeField) == 0) {
+	for (i = 0, p1 = object->tipos; i < n; i++, p1++) {
+		if (strcmp(p1->nome, nomeField) == 0) {
 			return p1;
 		}
 	}
-	return NULL;
+	return NULL;
+
 }
 
 long long retornaLong(ClassFile *cf, int n) {
@@ -446,10 +438,9 @@ long long retornaLong(ClassFile *cf, int n) {
 	high = (cf->constant_pool + n - 1)->u.Long.high_bytes;
 	low = (cf->constant_pool + n - 1)->u.Long.low_bytes;
 
-
 	vlong = 0;
 
-	vlong = (high << sizeof(u4)*8) + low;
+	vlong = (high << sizeof(u4) * 8) + low;
 
 	return vlong;
 }
@@ -459,7 +450,7 @@ Array *obterValorArray(Array **array, int pos) {
 	int cont;
 	p1 = *array;
 
-	for(cont = 0; cont < pos; cont++){
+	for (cont = 0; cont < pos; cont++) {
 		p1++;
 	}
 	debugPause();
