@@ -361,7 +361,7 @@ int invokespecial(AmbienteExecucao *ae) {
 
 int dup(AmbienteExecucao *ae) {
 
-	//t_opstack *a = desempilhaOperando((&interpreter->current_frame->opstack));
+
 	PilhaOperandos *a = desempilhaOperando(ae->pFrame);
 	if (((a->tipo[a->sp][0]) == 'J') || ((a->tipo[a->sp][0]) == 'D')) {
 		printf(
@@ -369,9 +369,9 @@ int dup(AmbienteExecucao *ae) {
 		exit(1);
 	}
 
-	//empilhaOperando_data(&(interpreter->current_frame->opstack),a->type,a->data);
+
 	empilhaOperandoTipo(ae->pFrame, a->tipo[a->sp], a->elementos[a->sp]);
-	//empilhaOperando_data(&(interpreter->current_frame->opstack),a->type,a->data);
+
 	empilhaOperandoTipo(ae->pFrame, a->tipo[a->sp], a->elementos[a->sp]);
 
 	return 0;
@@ -388,16 +388,15 @@ int new_(AmbienteExecucao *ae) {
 		char * strvazia;
 		strvazia = calloc(1, sizeof(char));
 		*strvazia = '\0';
-		//empilhaOperando(&(interpreter->current_frame->opstack), "[C", strvazia);
+
 		empilhaOperando(ae->pFrame, "[C", strvazia);
 		return 0;
 	}
 
-	//class_file = leitura_class_file(interpreter, nomeClasse);
+
 	verificarClassFile(ae, nomeClasse);
 	objeto = ae->pClassHeap->obj;
 
-	//empilhaOperando(&(interpreter->current_frame->opstack), "L", object);
 	empilhaOperando(ae->pFrame, "L", objeto);
 
 	return 0;
@@ -410,16 +409,12 @@ int new_(AmbienteExecucao *ae) {
 int if_icmplt(AmbienteExecucao *ae) {
 	i2 offsetDestino = leU2doPC(ae->pFrame);
 	int a, b;
-	//b = desempilhaOperando(&(interpreter->current_frame->opstack))->data.data_int;
-	//a = desempilhaOperando(&(interpreter->current_frame->opstack))->data.data_int;
 
 	b = desempilhaOperando(ae->pFrame)->elementos[0].tipo_int;
 	a = desempilhaOperando(ae->pFrame)->elementos[0].tipo_int;
 
 	if (a < b) {
-		//interpreter->current_frame->pc += branchoffset -3;
 		ae->pFrame->pc += offsetDestino - 3;
-		//interpreter->current_frame->pc_address += branchoffset -3;
 		ae->pFrame->enderecoPC += offsetDestino - 3;
 
 	}
@@ -431,7 +426,6 @@ int iinc(AmbienteExecucao *ae) {
 	int indice = leU1doPC(ae->pFrame);
 	int const_ = leU1doPC(ae->pFrame);
 
-	//(interpreter->current_frame->local_variables)[index].data.data_int += const_;
 	ae->pFrame->pilhaVariaveisLocais->elementos[indice].tipo_int += const_;
 	return 0;
 }
@@ -1512,8 +1506,8 @@ int fneg(AmbienteExecucao *ae) {
 int dcmpg(AmbienteExecucao *ae) {
 	double a, b;
 	int pushval;
-	a = desempilhaOperando(ae->pFrame)->elementos->tipo_double;
 	b = desempilhaOperando(ae->pFrame)->elementos->tipo_double;
+	a = desempilhaOperando(ae->pFrame)->elementos->tipo_double;
 
 	if (a > b)
 		pushval = 1;
@@ -1532,8 +1526,8 @@ int dcmpg(AmbienteExecucao *ae) {
 int dcmpl(AmbienteExecucao *ae) {
 	double a, b;
 	int pushval;
-	a = desempilhaOperando(ae->pFrame)->elementos->tipo_double;
 	b = desempilhaOperando(ae->pFrame)->elementos->tipo_double;
+	a = desempilhaOperando(ae->pFrame)->elementos->tipo_double;
 	if (a > b)
 		pushval = 1;
 	else if (a == b) {
@@ -1569,8 +1563,8 @@ int fcmpg(AmbienteExecucao *ae) {
 int fcmpl(AmbienteExecucao *ae) {
 	float a, b;
 	int pushval;
-	a = desempilhaOperando(ae->pFrame)->elementos->tipo_float;
 	b = desempilhaOperando(ae->pFrame)->elementos->tipo_float;
+	a = desempilhaOperando(ae->pFrame)->elementos->tipo_float;
 	if (a > b)
 		pushval = 1;
 	else if (a == b) {
@@ -1587,8 +1581,8 @@ int fcmpl(AmbienteExecucao *ae) {
 int lcmp(AmbienteExecucao *ae) {
 	signed long long a, b;
 	int pushval;
-	a = desempilhaOperando(ae->pFrame)->elementos->tipo_long;
 	b = desempilhaOperando(ae->pFrame)->elementos->tipo_long;
+	a = desempilhaOperando(ae->pFrame)->elementos->tipo_long;
 	if (a > b)
 		pushval = 1;
 	else {
@@ -2567,13 +2561,10 @@ int bastore(AmbienteExecucao *ae) {
 	while (referencias->tipo[referencias->sp][tamanho] == '[') {
 		tamanho++;
 	}
-	printf("\ntamanho: %d", tamanho);
 	if ((referencias->tipo[referencias->sp])[tamanho] == 'B') {
-		printf("a");
 		valorChar = (int) valor;
 		adicionaValorArray(referencias, indice, "B", &valorChar);
 	} else if ((referencias->tipo)[referencias->sp][tamanho] == 'Z') {
-		printf("a");
 		valorChar = (valor & mascara);
 		adicionaValorArray(referencias, indice, "Z", &valorChar);
 	} else {
