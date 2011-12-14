@@ -229,7 +229,7 @@ int (*vetFunc[])(AmbienteExecucao *p) = {
 
 int ireturn(AmbienteExecucao *ae) {
 	int return_v;
-	return_v = jumpback(ae, 1);
+	return_v = RetornaFrame(ae, 1);
 
 	return return_v;
 }
@@ -2578,10 +2578,10 @@ int arraylength(AmbienteExecucao *ae) {
 }
 
 int return0(AmbienteExecucao *ae) {
-	return jumpback(ae, 0);
+	return RetornaFrame(ae, 0);
 }
 int return1(AmbienteExecucao *ae) {
-	return jumpback(ae, 1);
+	return RetornaFrame(ae, 1);
 }
 
 int athrow(AmbienteExecucao *ae) {
