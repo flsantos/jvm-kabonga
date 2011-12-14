@@ -348,7 +348,7 @@ Array *alocarVetor__(char* tipo, int dimensao, int *tamanhos) {
 		for (i = 0; i < dimensao; i++) {
 			sub_tamanhos[i - 1] = tamanhos[i];
 		}
-		for (p1 = vet, i = 0; i < tamanhos[0]; i++, p1 = vet + i) {
+		for(p1 = vet, i=0; i< tamanhos[0]; i++, p1 = p1+sizeof(p1)) {
 			p1->elementos[p1->sp].tipo_referencia = alocarVetor__(tipo, dimensao - 1, sub_tamanhos);
 		}
 	}
