@@ -797,7 +797,6 @@ int ldc(AmbienteExecucao *ae) {
 	long long lvalue;
 	double dvalue;
 	int indice;
-	printf("tenas	");
 
 	switch (instrucao) {
 	case LDC_W:
@@ -810,8 +809,6 @@ int ldc(AmbienteExecucao *ae) {
 		indice = (int) leU1doPC(ae->pFrame);
 		break;
 	}
-	printf("Indeice %d", indice);
-	printf("A entrda foi no %d\n", ae->pFrame->cf->constant_pool[indice - 1].tag);
 	switch ((signed int) (ae->pFrame->cf->constant_pool[indice - 1].tag)) {
 	case 8:
 		/* CONSTANT_String */
