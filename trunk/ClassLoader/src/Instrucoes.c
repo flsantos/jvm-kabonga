@@ -369,7 +369,6 @@ int dup(AmbienteExecucao *ae) {
 		exit(1);
 	}
 
-
 	empilhaOperandoTipo(ae->pFrame, a->tipo[a->sp], a->elementos[a->sp]);
 
 	empilhaOperandoTipo(ae->pFrame, a->tipo[a->sp], a->elementos[a->sp]);
@@ -1741,7 +1740,7 @@ int dup2(AmbienteExecucao *ae) {
 	if ((*(a->tipo)[0] == 'J') || (*(a->tipo)[0] == 'D')) {
 		/*float type e double type*/
 		empilhaOperandoTipo(ae->pFrame, (a->tipo)[0], a->elementos[a->sp]);
-		empilhaOperandoTipo(ae->pFrame, (b->tipo)[0], b->elementos[b->sp]);
+		empilhaOperandoTipo(ae->pFrame, (a->tipo)[0], a->elementos[a->sp]);
 		return 0;
 	}
 
@@ -2897,7 +2896,6 @@ int invokestatic(AmbienteExecucao *ae) {
 	DadosMetodo *dadosMetodo;
 	int arg_cont;
 	int indice;
-	int i = 0;
 
 	indice = leU2doPC(ae->pFrame);
 
