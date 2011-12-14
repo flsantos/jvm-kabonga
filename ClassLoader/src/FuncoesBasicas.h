@@ -21,6 +21,6 @@ List_Classfile *retornaSuperClasses(AmbienteExecucao *ae, ClassFile *cf);
 
 Objeto * instanciaObjeto(ClassFile *cf, AmbienteExecucao *ae);
 
-int jumpback(AmbienteExecucao *ambienteexecucao, int n_return);
+int RetornaFrame(AmbienteExecucao *ambienteexecucao, int n_return);
 
 #endif /* FUNCOESBASICAS_H_ */
