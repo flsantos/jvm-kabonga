@@ -52,7 +52,7 @@ void iniciaMain(char nomeClassFile[], AmbienteExecucao *ae, char *nomeMetodo,
 
 
 void checkDebugFlag(char *flag) {
-	if (strcmp(flag,"d") == 0 || strcmp(flag, "D") == 0) {
+	if (strcmp(flag,"-d") == 0 || strcmp(flag, "-D") == 0) {
 		m_debug = 1;
 	}
 	else {
