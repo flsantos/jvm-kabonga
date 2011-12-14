@@ -351,7 +351,7 @@ Array *alocarVetor__(char* tipo, int dimensao, int *tamanhos) {
 		vet = iniciarArray("[", tamanhos[0]);
 
 		sub_tamanhos = calloc(dimensao-1, sizeof(int));
-		for(i= 1; i < dimensao; i++) {
+		for(i= 0; i < dimensao; i++) {
 			sub_tamanhos[i-1] = tamanhos[i];
 		}
 		for(p1 = vet, i=0; i< tamanhos[0]; i++, p1 = vet + i) {
