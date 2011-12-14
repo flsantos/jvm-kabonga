@@ -361,7 +361,7 @@ int invokespecial(AmbienteExecucao *ae) {
 
 int dup(AmbienteExecucao *ae) {
 
-
+	//t_opstack *a = desempilhaOperando((&interpreter->current_frame->opstack));
 	PilhaOperandos *a = desempilhaOperando(ae->pFrame);
 	if (((a->tipo[a->sp][0]) == 'J') || ((a->tipo[a->sp][0]) == 'D')) {
 		printf(
@@ -545,24 +545,24 @@ int invokevirtual(AmbienteExecucao *ae) {
 			data = desempilhaOperando(ae->pFrame);
 			tipo = data->tipo[data->sp];
 			if (tipo[0] == 'B') {
-				printf("\n%d", data->elementos[data->sp].tipo_byte);
+				printf("\nbyte %d", data->elementos[data->sp].tipo_byte);
 			} else if (tipo[0] == 'C') {
-				printf("\n%c",
+				printf("\nchar %c",
 						(unsigned char) data->elementos[data->sp].tipo_char);
 			} else if (tipo[0] == 'D') {
-				printf("\n%f", data->elementos[data->sp].tipo_double);
+				printf("\ndouble %f", data->elementos[data->sp].tipo_double);
 			} else if (tipo[0] == 'F') {
-				printf("\n%f", data->elementos[data->sp].tipo_float);
+				printf("\nfloat %f", data->elementos[data->sp].tipo_float);
 			} else if (tipo[0] == 'I') {
 				printf("\n%d", data->elementos[data->sp].tipo_int);
 			} else if (tipo[0] == 'J') {
-				printf("\n%d", data->elementos[data->sp].tipo_long);
+				printf("\nlong %d", data->elementos[data->sp].tipo_long);
 			} else if (tipo[0] == 'L') {
 				printf("\nImpressao de um objeto nao implementado!");
 			} else if (tipo[0] == 'S') {
-				printf("\n%d", data->elementos[data->sp].tipo_short);
+				printf("\nshort %d", data->elementos[data->sp].tipo_short);
 			} else if (tipo[0] == 'Z') {
-				printf("\n%d", data->elementos[data->sp].tipo_boolean);
+				printf("\nboolean %d", data->elementos[data->sp].tipo_boolean);
 			} else if (tipo[0] == '[') {
 				printf("\n%s",
 						(char*) data->elementos[data->sp].tipo_referencia);
@@ -2464,7 +2464,7 @@ int laload(AmbienteExecucao *ae) {
 	index = desempilhaOperando(ae->pFrame)->elementos[0].tipo_int;
 	lista =
 			(PilhaOperandos*) desempilhaOperando(ae->pFrame)->elementos[0].tipo_referencia;
-	valor = lista->elementos[index - 1].tipo_long;
+	valor = lista->elementos[index].tipo_long;
 
 	empilhaOperando(ae->pFrame, "J", &valor);
 
@@ -2523,17 +2523,16 @@ int baload(AmbienteExecucao *ae) {
 	vetorRef =
 			(Array*) desempilhaOperando(ae->pFrame)->elementos[0].tipo_referencia;
 
-
-	while (strcmp(vetorRef->tipo[tamanhoVetor], "[")) {
+	while (vetorRef->tipo[vetorRef->sp][tamanhoVetor] == '['){
 		tamanhoVetor++;
+
 	}
-	//Checar a forma de acesso abaixo
 	if (vetorRef->tipo[vetorRef->sp][tamanhoVetor] == 'B') {
-		valorChar = vetorRef->elementos[indice - 1].tipo_byte;
+		valorChar = vetorRef->elementos[indice].tipo_byte;
 		valorInt = (int) valorChar;
 		empilhaOperando(ae->pFrame, "I", &valorInt);
 	} else if ((vetorRef->tipo)[vetorRef->sp][tamanhoVetor] == 'Z') {
-		valorChar = vetorRef->elementos[indice - 1].tipo_boolean;
+		valorChar = vetorRef->elementos[indice].tipo_boolean;
 		valorInt = (zero | valorChar);
 		empilhaOperando(ae->pFrame, "I", &valorInt);
 	} else {
