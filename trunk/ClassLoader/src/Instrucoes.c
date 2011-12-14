@@ -208,8 +208,8 @@ int (*vetFunc[])(AmbienteExecucao *p) = {
 	invokevirtual,
 	invokespecial,
 	invokestatic,
-	nop, //TODO: invokeinterface,
-		nop,//TODO: Mudar para vazio
+	nop,
+		nop,
 		new_,
 		newarray,
 		anewarray,
@@ -217,8 +217,8 @@ int (*vetFunc[])(AmbienteExecucao *p) = {
 		athrow,
 		checkcast,
 		instanceof,
-		nop,//TODO: monitorenter,
-		nop,//TODO: monitorexit,
+		nop,
+		nop,
 		wide,
 		multianewarray,
 		ifnull,
@@ -312,7 +312,7 @@ int aload(AmbienteExecucao *ae) {
 }
 
 int istore(AmbienteExecucao *ae) {
-	//transfer_opstack_to_localvar(&(interpreter->current_frame->opstack), &(interpreter->current_frame->local_variables), pos);
+	/*transfer_opstack_to_localvar(&(interpreter->current_frame->opstack), &(interpreter->current_frame->local_variables), pos);*/
 	int pos;
 
 	switch (instrucao) {
@@ -361,7 +361,7 @@ int invokespecial(AmbienteExecucao *ae) {
 
 int dup(AmbienteExecucao *ae) {
 
-	//t_opstack *a = desempilhaOperando((&interpreter->current_frame->opstack));
+	/*t_opstack *a = desempilhaOperando((&interpreter->current_frame->opstack));*/
 	PilhaOperandos *a = desempilhaOperando(ae->pFrame);
 	if (((a->tipo[a->sp][0]) == 'J') || ((a->tipo[a->sp][0]) == 'D')) {
 		printf(
@@ -435,9 +435,9 @@ int ifne(AmbienteExecucao *ae) {
 	a = desempilhaOperando(ae->pFrame)->elementos[0].tipo_int;
 
 	if (a != 0) {
-		//interpreter->current_frame->pc += branchoffset -3;
+		/*interpreter->current_frame->pc += branchoffset -3;*/
 		ae->pFrame->pc += branchoffset - 3;
-		//interpreter->current_frame->pc_address += branchoffset -3;
+		/*interpreter->current_frame->pc_address += branchoffset -3;*/
 		ae->pFrame->enderecoPC += branchoffset - 3;
 	}
 
@@ -525,7 +525,6 @@ int invokevirtual(AmbienteExecucao *ae) {
 	 * virtual de excecao para o println, apenas!
 	 */
 	int cp_indice = leU2doPC(ae->pFrame);
-	//TODO:
 	DadosMetodo *dadosMetodo;
 	PilhaOperandos *data;
 	char *tipo;
@@ -703,8 +702,6 @@ int invokevirtual(AmbienteExecucao *ae) {
 
 		argumento = retornaContadorArgumentos(dadosMetodo->tipo) + 1;
 
-//				jump(ae, dadosMetodo->nomeClasse, dadosMetodo->nomeMetodo,
-//						dadosMetodo->tipo, argumento);
 
 		iniciaExecucaoMetodo(dadosMetodo->nomeClasse, ae,
 				dadosMetodo->nomeMetodo, dadosMetodo->tipo, argumento);
@@ -1091,7 +1088,6 @@ int d2f(AmbienteExecucao *ae) {
 
 	return 0;
 }
-//
 int d2l(AmbienteExecucao *ae) {
 	PilhaOperandos *a;
 	long long b;
@@ -2028,7 +2024,7 @@ int aaload(AmbienteExecucao *ae) {
 			(PilhaOperandos*) desempilhaOperando(ae->pFrame)->elementos[0].tipo_referencia;
 	ref = lista->elementos[index].tipo_referencia;
 
-	empilhaOperando(ae->pFrame, (lista->tipo)[index], ref);
+	empilhaOperando(ae->pFrame, lista->tipo[index], ref);
 	return 0;
 }
 
@@ -2076,7 +2072,7 @@ int iastore(AmbienteExecucao *ae) {
 
 	valor = desempilhaOperando(ae->pFrame)->elementos[0].tipo_int;
 	index = desempilhaOperando(ae->pFrame)->elementos[0].tipo_int;
-	lista = (Array*) desempilhaOperando(ae->pFrame)->elementos->tipo_referencia;
+	lista = (Array*) desempilhaOperando(ae->pFrame)->elementos[0].tipo_referencia;
 	adicionaValorArray(lista, index, "I", &valor);
 	return 0;
 }
@@ -2611,13 +2607,11 @@ int athrow(AmbienteExecucao *ae) {
 int ret(AmbienteExecucao *ae) {
 	int indice;
 	indice = leU1doPC(ae->pFrame);
-	//Dúvida no acesso abaixo
 	VariaveisLocais localvar = (ae->pFrame->pilhaVariaveisLocais)[indice];
 	if ((localvar.tipo)[localvar.sp][0] != 'r') {
 		printf("Endereco de retorno invalido, tipo errado.\n");
 		exit(1);
 	}
-	//Checar o acesso abaixo
 	ae->pFrame->pc = (u1 *)localvar.elementos->tipo_retorno;
 	return 0;
 }
@@ -3052,21 +3046,15 @@ int tableswitch(AmbienteExecucao *ae) {
 		exit(1);
 	} else {
 		/* Recuando para o endereco original da funcao */
-		//interpreter->current_frame->pc += - ( 3*sizeof(int) + switchsize*sizeof(int) + 1 + padbytes);
 		ae->pFrame->pc += -(3 * sizeof(int) + switchsize * sizeof(int) + 1
 				+ bytepads);
-		//interpreter->current_frame->pc_address += - ( 3*sizeof(int) + switchsize*sizeof(int) + 1 + padbytes);
 		ae->pFrame->enderecoPC += -(3 * sizeof(int) + switchsize * sizeof(int)
 				+ 1 + bytepads);
 		if ((case_value > (int) highbyte) || (case_value < (int) lowbyte)) {
-			//interpreter->current_frame->pc += defaultbyte;
 			ae->pFrame->pc += defaultbyte;
-			//interpreter->current_frame->pc_address += defaultbyte;
 			ae->pFrame->enderecoPC += defaultbyte;
 		} else {
-			//interpreter->current_frame->pc += offsets[objref->data.data_int - lowbyte];
 			ae->pFrame->pc += offsets[objref->elementos->tipo_int - lowbyte];
-			//interpreter->current_frame->pc_address += offsets[objref->data.data_int - lowbyte];
 			ae->pFrame->enderecoPC += offsets[objref->elementos->tipo_int
 					- lowbyte];
 		}

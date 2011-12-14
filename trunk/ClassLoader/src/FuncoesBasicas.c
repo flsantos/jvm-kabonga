@@ -154,40 +154,40 @@ Objeto * instanciaObjeto(ClassFile *cf, AmbienteExecucao *ae) {
  * @return void
  *
  */
+/*
+void jump(AmbienteExecucao *ae, char *classPath, char *methodName, char *descriptor, int n_arguments) {
+	t_class_file *class_file;
+	t_method_and_class *metclass;
+	Frame *frame_novo;
+	int i;
+	u2 mask = 0x0100;
 
-//void jump(AmbienteExecucao *ae, char *classPath, char *methodName, char *descriptor, int n_arguments) {
-//	t_class_file *class_file;
-//	t_method_and_class *metclass;
-//	Frame *frame_novo;
-//	int i;
-//	u2 mask = 0x0100;
-//
-//	class_file = leitura_class_file(ae, classPath);
-//	metclass = find_method_by_name(class_file, methodName, descriptor, ae);
-//	if((metclass->method_info->acess_flags & mask) == 0x0100) {
-//		printf("Metodos nativos nao suportados\n");
-//		exit(1);
-//	}
-//	frame_novo = malloc(sizeof(t_frame));
-//	frame_novo->opstack = NULL;
-//	frame_novo->class_file = metclass->class_file;
-//	frame_novo->pc_address = 0;
-//
-//	frame_novo->pc = find_method_attribute_by_name(metclass->class_file, metclass->method_info, "Code")->_info.code.code;
-//	frame_novo->pc_inicial = frame_novo->pc;
-//	frame_novo->local_variables = calloc(find_method_attribute_by_name(metclass->class_file, metclass->method_info, "Code")->_info.code.max_locals, sizeof(t_local_variable_list));
-//
-//
-//	frame_stack_push(&(ae->frame_stack), ae->current_frame);
-//	if(ae->current_frame != NULL) {
-//
-//		for(i=(n_arguments-1); i!= -1; i--) {
-//			transfer_opstack_to_localvar(&(ae->current_frame->opstack),&(frame_novo->local_variables), i);
-//		}
-//	}
-//
-//	ae->current_frame = frame_novo;
-//}
+	class_file = leitura_class_file(ae, classPath);
+	metclass = find_method_by_name(class_file, methodName, descriptor, ae);
+	if((metclass->method_info->acess_flags & mask) == 0x0100) {
+		printf("Metodos nativos nao suportados\n");
+		exit(1);
+	}
+	frame_novo = malloc(sizeof(t_frame));
+	frame_novo->opstack = NULL;
+	frame_novo->class_file = metclass->class_file;
+	frame_novo->pc_address = 0;
+
+	frame_novo->pc = find_method_attribute_by_name(metclass->class_file, metclass->method_info, "Code")->_info.code.code;
+	frame_novo->pc_inicial = frame_novo->pc;
+	frame_novo->local_variables = calloc(find_method_attribute_by_name(metclass->class_file, metclass->method_info, "Code")->_info.code.max_locals, sizeof(t_local_variable_list));
+
+
+	frame_stack_push(&(ae->frame_stack), ae->current_frame);
+	if(ae->current_frame != NULL) {
+
+		for(i=(n_arguments-1); i!= -1; i--) {
+			transfer_opstack_to_localvar(&(ae->current_frame->opstack),&(frame_novo->local_variables), i);
+		}
+	}
+
+	ae->current_frame = frame_novo;
+}*/
 /**
  * Jumpback faz o contrario do jump - ele retorna o ambiente de execucao para o frame que esta no topo da pilha
  * de frames, ou seja, o frame anterior.
