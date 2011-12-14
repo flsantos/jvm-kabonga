@@ -8,6 +8,7 @@
 #ifndef ESTRUTURAS
 	#define ESTRUTURAS
 	#include <stdarg.h>
+	#include "Debug.h"
 	#include "Estruturas.h"
 #endif
 
