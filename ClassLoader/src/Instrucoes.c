@@ -209,30 +209,23 @@ int (*vetFunc[])(AmbienteExecucao *p) = {
 	invokespecial,
 	invokestatic,
 	nop,
-		nop,
-		new_,
-		newarray,
-		anewarray,
-		arraylength,
-		athrow,
-		checkcast,
-		instanceof,
-		nop,
-		nop,
-		wide,
-		multianewarray,
-		ifnull,
-		ifnonnull,
-		goto_w,
-		jsr_w
+	nop,
+	new_,
+	newarray,
+	anewarray,
+	arraylength,
+	athrow,
+	checkcast,
+	instanceof,
+	nop,
+	nop,
+	wide,
+	multianewarray,
+	ifnull,
+	ifnonnull,
+	goto_w,
+	jsr_w
 };
-
-int ireturn(AmbienteExecucao *ae) {
-	int return_v;
-	return_v = RetornaFrame(ae, 1);
-
-	return return_v;
-}
 
 /*
  * @author Bruno Capu
@@ -349,11 +342,7 @@ int invokespecial(AmbienteExecucao *ae) {
 	}
 
 	argumento = retornaContadorArgumentos(dadosMetodo->tipo) + 1;
-
-	/*jump(ae, dadosMetodo->nomeClasse, dadosMetodo->nomeMetodo,
-	 dadosMetodo->tipo, argumento);*/
-	iniciaExecucaoMetodo(dadosMetodo->nomeClasse, ae, dadosMetodo->nomeMetodo,
-			dadosMetodo->tipo, argumento);
+	iniciaExecucaoMetodo(dadosMetodo->nomeClasse, ae, dadosMetodo->nomeMetodo, dadosMetodo->tipo, argumento);
 
 	return 0;
 }
@@ -362,8 +351,7 @@ int dup(AmbienteExecucao *ae) {
 
 	PilhaOperandos *a = desempilhaOperando(ae->pFrame);
 	if (((a->tipo[a->sp][0]) == 'J') || ((a->tipo[a->sp][0]) == 'D')) {
-		printf(
-				"Instrucao 'dup' nao permitida para valores 'double' ou 'long'.\n");
+		printf("Instrucao 'dup' nao permitida para valores 'double' ou 'long'.\n");
 		exit(1);
 	}
 
@@ -380,8 +368,7 @@ int new_(AmbienteExecucao *ae) {
 	Objeto *objeto;
 	nomeClasse = (char *) retornaClassInfo(ae->pFrame->cf, indice);
 	/* ajustando para o caso da StringBuffer */
-	if ((strcmp(nomeClasse, "java/lang/StringBuffer") == 0
-			|| strcmp(nomeClasse, "java/lang/StringBuilder") == 0)) {
+	if ((strcmp(nomeClasse, "java/lang/StringBuffer") == 0 || strcmp(nomeClasse, "java/lang/StringBuilder") == 0)) {
 		char * strvazia;
 		strvazia = calloc(1, sizeof(char));
 		*strvazia = '\0';
@@ -390,8 +377,7 @@ int new_(AmbienteExecucao *ae) {
 		return 0;
 	}
 
-
-	verificarClassFile(ae, nomeClasse);
+	verificarClassFile(ae, nomeClasse); //TODO: Criar metodo
 	objeto = ae->pClassHeap->obj;
 
 	empilhaOperando(ae->pFrame, "L", objeto);
@@ -419,6 +405,7 @@ int if_icmplt(AmbienteExecucao *ae) {
 	return 0;
 }
 
+//TODO: VERIFICAR
 int iinc(AmbienteExecucao *ae) {
 	int indice = leU1doPC(ae->pFrame);
 	int const_ = leU1doPC(ae->pFrame);
@@ -477,7 +464,7 @@ int irem(AmbienteExecucao *ae) {
 }
 
 int goto_(AmbienteExecucao *ae) {
-	int branchoffset = leU2doPC(ae->pFrame);
+	short int branchoffset = leU2doPC(ae->pFrame);
 
 	ae->pFrame->pc += branchoffset - 3;
 
@@ -531,37 +518,33 @@ int invokevirtual(AmbienteExecucao *ae) {
 	dadosMetodo = retornaDadosMetodo(ae->pFrame->cf, cp_indice);
 
 	if (strcmp(dadosMetodo->nomeClasse, "java/io/PrintStream") == 0
-			&& (strcmp(dadosMetodo->nomeMetodo, "println") == 0
-					|| strcmp(dadosMetodo->nomeMetodo, "print") == 0)) {
+			&& (strcmp(dadosMetodo->nomeMetodo, "println") == 0 || strcmp(dadosMetodo->nomeMetodo, "print") == 0)) {
 		/* realiza o println */
-		if (ae->pFrame->pilhaOperandos->tipo[ae->pFrame->pilhaOperandos->sp][0]
-				!= '#') {
+		if (ae->pFrame->pilhaOperandos->tipo[ae->pFrame->pilhaOperandos->sp][0] != '#') {
 			data = desempilhaOperando(ae->pFrame);
 			tipo = data->tipo[data->sp];
 			if (tipo[0] == 'B') {
-				printf("\nbyte %d", data->elementos[data->sp].tipo_byte);
+				printf("%d", data->elementos[data->sp].tipo_byte);
 			} else if (tipo[0] == 'C') {
-				printf("\nchar %c",
-						(unsigned char) data->elementos[data->sp].tipo_char);
+				printf("%c", (unsigned char) data->elementos[data->sp].tipo_char);
 			} else if (tipo[0] == 'D') {
-				printf("\ndouble %f", data->elementos[data->sp].tipo_double);
+				printf("%f", data->elementos[data->sp].tipo_double);
 			} else if (tipo[0] == 'F') {
-				printf("\nfloat %f", data->elementos[data->sp].tipo_float);
+				printf("%f", data->elementos[data->sp].tipo_float);
 			} else if (tipo[0] == 'I') {
-				printf("\n%d", data->elementos[data->sp].tipo_int);
+				printf("%d", data->elementos[data->sp].tipo_int);
 			} else if (tipo[0] == 'J') {
-				printf("\nlong %d", data->elementos[data->sp].tipo_long);
+				printf("%lld", data->elementos[data->sp].tipo_long);
 			} else if (tipo[0] == 'L') {
-				printf("\nImpressao de um objeto nao implementado!");
+				printf("Impressao de um objeto nao implementada!");
 			} else if (tipo[0] == 'S') {
-				printf("\nshort %d", data->elementos[data->sp].tipo_short);
+				printf("%d", data->elementos[data->sp].tipo_short);
 			} else if (tipo[0] == 'Z') {
 				printf("\nboolean %d", data->elementos[data->sp].tipo_boolean);
 			} else if (tipo[0] == '[') {
-				printf("\n%s",
-						(char*) data->elementos[data->sp].tipo_referencia);
+				printf("\n%s", (char*) data->elementos[data->sp].tipo_referencia);
 			} else if (tipo[0] == 'r') {
-				printf("\nImpressao de uma referencia. Arrumar.");
+				printf("\nImpressao de uma referencia. Nao implementado.");
 			}
 		}
 		desempilhaOperando(ae->pFrame);
@@ -569,12 +552,9 @@ int invokevirtual(AmbienteExecucao *ae) {
 		if ((strcmp(dadosMetodo->nomeMetodo, "println") == 0)) {
 			printf("\n");
 		}
-	} else if (strcmp(dadosMetodo->nomeClasse, "java/lang/String") == 0
-			&& strcmp(dadosMetodo->nomeMetodo, "equals") == 0) {
-		string1 =
-				(char*) desempilhaOperando(ae->pFrame)->elementos[0].tipo_referencia;
-		string2 =
-				(char*) desempilhaOperando(ae->pFrame)->elementos[0].tipo_referencia;
+	} else if (strcmp(dadosMetodo->nomeClasse, "java/lang/String") == 0 && strcmp(dadosMetodo->nomeMetodo, "equals") == 0) {
+		string1 = (char*) desempilhaOperando(ae->pFrame)->elementos[0].tipo_referencia;
+		string2 = (char*) desempilhaOperando(ae->pFrame)->elementos[0].tipo_referencia;
 
 		if (strcmp(string1, string2) == 0) {
 			result_strcmp = 1;
@@ -591,13 +571,11 @@ int invokevirtual(AmbienteExecucao *ae) {
 		string_append = calloc(50, sizeof(char));
 		data = desempilhaOperando(ae->pFrame);
 		tipo = data->tipo[data->sp];
-		string_to_append =
-				(char*) desempilhaOperando(ae->pFrame)->elementos[data->sp].tipo_referencia;
+		string_to_append = (char*) desempilhaOperando(ae->pFrame)->elementos[data->sp].tipo_referencia;
 		if (tipo[0] == 'B') {
 			sprintf(string_append, "%d", data->elementos[data->sp].tipo_byte);
 		} else if (tipo[0] == 'C') {
-			sprintf(string_append, "%c",
-					(unsigned char) data->elementos[data->sp].tipo_char);
+			sprintf(string_append, "%c", (unsigned char) data->elementos[data->sp].tipo_char);
 		} else if (tipo[0] == 'D') {
 			sprintf(string_append, "%f", data->elementos[data->sp].tipo_double);
 		} else if (tipo[0] == 'F') {
@@ -611,17 +589,14 @@ int invokevirtual(AmbienteExecucao *ae) {
 		} else if (tipo[0] == 'S') {
 			sprintf(string_append, "%d", data->elementos[data->sp].tipo_short);
 		} else if (tipo[0] == 'Z') {
-			sprintf(string_append, "%d",
-					data->elementos[data->sp].tipo_boolean);
+			sprintf(string_append, "%d", data->elementos[data->sp].tipo_boolean);
 		} else if (tipo[0] == '[') {
 			string_append = (char*) data->elementos[data->sp].tipo_referencia;
 		} else if (tipo[0] == 'r') {
 			sprintf(string_append, "Impressao de uma referencia. Arrumar.");
 		}
 
-		string_appended = calloc(
-				strlen(string_append) + strlen(string_to_append) + 1,
-				sizeof(char));
+		string_appended = calloc(strlen(string_append) + strlen(string_to_append) + 1, sizeof(char));
 		*string_appended = '\0';
 		strcat(string_appended, string_to_append);
 		strcat(string_appended, string_append);
@@ -633,39 +608,31 @@ int invokevirtual(AmbienteExecucao *ae) {
 			|| strcmp(dadosMetodo->nomeClasse, "java/lang/StringBuilder") == 0)
 			&& strcmp(dadosMetodo->nomeMetodo, "toString") == 0) {
 		return 0;
-	} else if (strcmp(dadosMetodo->nomeClasse, "java/lang/String") == 0
-			&& strcmp(dadosMetodo->nomeMetodo, "length") == 0) {
+	} else if (strcmp(dadosMetodo->nomeClasse, "java/lang/String") == 0 && strcmp(dadosMetodo->nomeMetodo, "length") == 0) {
 		int len;
-		string1 =
-				(char*) desempilhaOperando(ae->pFrame)->elementos[0].tipo_referencia;
+		string1 = (char*) desempilhaOperando(ae->pFrame)->elementos[0].tipo_referencia;
 
 		len = strlen(string1);
 
 		empilhaOperando(ae->pFrame, "I", &len);
 
 		return 0;
-	} else if (strcmp(dadosMetodo->nomeClasse, "java/lang/String") == 0
-			&& strcmp(dadosMetodo->nomeMetodo, "compareTo") == 0) {
+	} else if (strcmp(dadosMetodo->nomeClasse, "java/lang/String") == 0 && strcmp(dadosMetodo->nomeMetodo, "compareTo") == 0) {
 		int strcm;
-		string1 =
-				(char*) desempilhaOperando(ae->pFrame)->elementos[0].tipo_referencia;
-		string2 =
-				(char*) desempilhaOperando(ae->pFrame)->elementos[0].tipo_referencia;
+		string1 = (char*) desempilhaOperando(ae->pFrame)->elementos[0].tipo_referencia;
+		string2 = (char*) desempilhaOperando(ae->pFrame)->elementos[0].tipo_referencia;
 
 		strcm = strcmp(string1, string2);
 
 		empilhaOperando(ae->pFrame, "I", &strcm);
 
 		return 0;
-	} else if (strcmp(dadosMetodo->nomeMetodo, "java/lang/String") == 0
-			&& strcmp(dadosMetodo->nomeMetodo, "indexOf") == 0
+	} else if (strcmp(dadosMetodo->nomeMetodo, "java/lang/String") == 0 && strcmp(dadosMetodo->nomeMetodo, "indexOf") == 0
 			&& strcmp(dadosMetodo->tipo, "(Ljava/lang/String;)I") == 0) {
 		int strstr_value;
 		char *strstr_char;
-		string1 =
-				(char*) desempilhaOperando(ae->pFrame)->elementos[0].tipo_referencia;
-		string2 =
-				(char*) desempilhaOperando(ae->pFrame)->elementos[0].tipo_referencia;
+		string1 = (char*) desempilhaOperando(ae->pFrame)->elementos[0].tipo_referencia;
+		string2 = (char*) desempilhaOperando(ae->pFrame)->elementos[0].tipo_referencia;
 
 		strstr_char = strstr(string1, string2);
 		strstr_value = strstr_char - string1;
@@ -673,15 +640,12 @@ int invokevirtual(AmbienteExecucao *ae) {
 		empilhaOperando(ae->pFrame, "I", &strstr_value);
 
 		return 0;
-	} else if (strcmp(dadosMetodo->nomeMetodo, "java/lang/String") == 0
-			&& strcmp(dadosMetodo->nomeMetodo, "startsWith") == 0
+	} else if (strcmp(dadosMetodo->nomeMetodo, "java/lang/String") == 0 && strcmp(dadosMetodo->nomeMetodo, "startsWith") == 0
 			&& strcmp(dadosMetodo->tipo, "(Ljava/lang/String;)Z") == 0) {
 		char bool_return;
 		char *strstr_char;
-		string1 =
-				(char*) desempilhaOperando(ae->pFrame)->elementos[0].tipo_referencia;
-		string2 =
-				(char*) desempilhaOperando(ae->pFrame)->elementos[0].tipo_referencia;
+		string1 = (char*) desempilhaOperando(ae->pFrame)->elementos[0].tipo_referencia;
+		string2 = (char*) desempilhaOperando(ae->pFrame)->elementos[0].tipo_referencia;
 
 		strstr_char = strstr(string1, string2);
 		bool_return = (strstr_char - string1 == 0) ? 1 : 0;
@@ -698,9 +662,7 @@ int invokevirtual(AmbienteExecucao *ae) {
 
 		argumento = retornaContadorArgumentos(dadosMetodo->tipo) + 1;
 
-
-		iniciaExecucaoMetodo(dadosMetodo->nomeClasse, ae,
-				dadosMetodo->nomeMetodo, dadosMetodo->tipo, argumento);
+		iniciaExecucaoMetodo(dadosMetodo->nomeClasse, ae, dadosMetodo->nomeMetodo, dadosMetodo->tipo, argumento);
 	}
 
 	return 0;
@@ -795,19 +757,16 @@ int ldc(AmbienteExecucao *ae) {
 		indice = (int) leU2doPC(ae->pFrame);
 		break;
 	case LDC2_W:
-		indice = (int) leU2doPC(ae->pFrame);
+		indice = (unsigned short int) leU2doPC(ae->pFrame);
 		break;
 	case LDC:
-		indice = (int) leU1doPC(ae->pFrame);
+		indice = (unsigned char) leU1doPC(ae->pFrame);
 		break;
 	}
 	switch ((signed int) (ae->pFrame->cf->constant_pool[indice - 1].tag)) {
 	case 8:
 		/* CONSTANT_String */
-		string =
-				(char *) retornaUtf8(
-						ae->pFrame->cf,
-						ae->pFrame->cf->constant_pool[indice - 1].u.String.string_index);
+		string = (char *) retornaUtf8(ae->pFrame->cf, ae->pFrame->cf->constant_pool[indice - 1].u.String.string_index);
 		empilhaOperando(ae->pFrame, "[", string);
 		break;
 	case 3:
@@ -818,8 +777,7 @@ int ldc(AmbienteExecucao *ae) {
 		break;
 	case 4:
 		/* CONSTANT_Float */
-		fvalue =
-				ae->pFrame->cf->constant_pool[indice - 1].u.Float.bytes.uf.valor;
+		fvalue = ae->pFrame->cf->constant_pool[indice - 1].u.Float.bytes.uf.valor;
 		empilhaOperando(ae->pFrame, "F", &fvalue);
 
 		break;
@@ -832,15 +790,13 @@ int ldc(AmbienteExecucao *ae) {
 	case 6:
 		/* CONSTANT_Double */
 
-		dvalue =
-				ae->pFrame->cf->constant_pool[indice - 1].u.Double.bytes.ud.valor;
+		dvalue = ae->pFrame->cf->constant_pool[indice - 1].u.Double.bytes.ud.valor;
 		empilhaOperando(ae->pFrame, "D", &dvalue);
 
 		break;
 
 	default:
-		printf("Erro em 'ldc' tag: %d\n",
-				(signed int) ae->pFrame->cf->constant_pool[indice - 1].tag);
+		printf("Erro em 'ldc' tag: %d\n", (signed int) ae->pFrame->cf->constant_pool[indice - 1].tag);
 		exit(1);
 		break;
 	}
@@ -905,6 +861,7 @@ int f2l(AmbienteExecucao *ae) {
 	a = desempilhaOperando(ae->pFrame)->elementos[0].tipo_float;
 	b = (long long) a;
 
+	empilhaOperando(ae->pFrame, "J", &b);
 	return 0;
 }
 
@@ -1063,8 +1020,7 @@ int pop(AmbienteExecucao *ae) {
 }
 
 int pop2(AmbienteExecucao *ae) {
-	if ((*(ae->pFrame->pilhaOperandos->tipo)[0] == 'D')
-			|| (*(ae->pFrame->pilhaOperandos->tipo)[0] == 'J')) {
+	if ((*(ae->pFrame->pilhaOperandos->tipo)[0] == 'D') || (*(ae->pFrame->pilhaOperandos->tipo)[0] == 'J')) {
 		desempilhaOperando(ae->pFrame);
 	} else {
 		desempilhaOperando(ae->pFrame);
@@ -1268,8 +1224,7 @@ int getstatic(AmbienteExecucao *ae) {
 
 	dadosField = retornaDadosField(ae->pFrame->cf, indiceDF);
 
-	if (strcmp(dadosField->nomeClasse, "java/lang/System") == 0
-			&& strcmp(dadosField->nomeField, "out") == 0
+	if (strcmp(dadosField->nomeClasse, "java/lang/System") == 0 && strcmp(dadosField->nomeField, "out") == 0
 			&& strcmp(dadosField->tipo, "Ljava/io/PrintStream;") == 0) {
 
 		empilhaOperando(ae->pFrame, "#", NULL);
@@ -1279,21 +1234,17 @@ int getstatic(AmbienteExecucao *ae) {
 			if (strcmp((char *) p1->class_name, dadosField->nomeClasse) == 0) {
 				fieldRet = retornaFieldObjeto(p1->obj, dadosField->nomeField);
 				if (fieldRet != NULL) {
-					empilhaOperandoTipo(ae->pFrame, fieldRet->tipo,
-							fieldRet->elemento);
+					empilhaOperandoTipo(ae->pFrame, fieldRet->tipo, fieldRet->elemento);
 					return 0;
 				} else {
 					superClasses = retornaSuperClasses(ae, p1->cf);
 					p2 = superClasses;
 					while (p2 != NULL) {
 						while (p3 != NULL) {
-							if (strcmp((char *) p2->class_name,
-									(char *) p3->class_name) == 0) {
-								fieldRet = retornaFieldObjeto(p3->obj,
-										dadosField->nomeField);
+							if (strcmp((char *) p2->class_name, (char *) p3->class_name) == 0) {
+								fieldRet = retornaFieldObjeto(p3->obj, dadosField->nomeField);
 								if (fieldRet != NULL) {
-									empilhaOperandoTipo(ae->pFrame,
-											fieldRet->tipo, fieldRet->elemento);
+									empilhaOperandoTipo(ae->pFrame, fieldRet->tipo, fieldRet->elemento);
 									return 0;
 								}
 							}
@@ -1603,6 +1554,7 @@ int drem_(AmbienteExecucao *ae) {
 	double a, b, rem;
 	b = desempilhaOperando(ae->pFrame)->elementos[0].tipo_double;
 	a = desempilhaOperando(ae->pFrame)->elementos[0].tipo_double;
+
 	rem = fmod(a, b);
 
 	empilhaOperando(ae->pFrame, "D", &rem);
@@ -1714,13 +1666,12 @@ int lushr(AmbienteExecucao *ae) {
  * @author Daniel
  */
 int swap(AmbienteExecucao *ae) {
-
 	PilhaOperandos *a, *b;
 	a = desempilhaOperando(ae->pFrame);
 	b = desempilhaOperando(ae->pFrame);
 
 	empilhaOperando(ae->pFrame, a->tipo[a->sp], a->elementos);
-	empilhaOperando(ae->pFrame, b->tipo[a->sp], b->elementos);
+	empilhaOperando(ae->pFrame, b->tipo[b->sp], b->elementos);
 
 	return 0;
 }
@@ -1729,25 +1680,23 @@ int dup2(AmbienteExecucao *ae) {
 	PilhaOperandos *a, *b;
 
 	a = desempilhaOperando(ae->pFrame);
-	if ((*(a->tipo)[0] == 'J') || (*(a->tipo)[0] == 'D')) {
+	if ((a->tipo[a->sp][0] == 'J') || (a->tipo[a->sp][0] == 'D')) {
 		/*float type e double type*/
-		empilhaOperandoTipo(ae->pFrame, (a->tipo)[0], a->elementos[a->sp]);
-		empilhaOperandoTipo(ae->pFrame, (a->tipo)[0], a->elementos[a->sp]);
+		empilhaOperandoTipo(ae->pFrame, a->tipo[a->sp], a->elementos[a->sp]);
+		empilhaOperandoTipo(ae->pFrame, a->tipo[a->sp], a->elementos[a->sp]);
 		return 0;
 	}
 
 	b = desempilhaOperando(ae->pFrame);
 	if ((*(b->tipo)[0] == 'J') || (*(b->tipo)[0] == 'D')) {
-		fprintf(
-				stderr,
-				"Operacao 'dup2' nao permitida para value2 'float' ou 'double' type.\n");
+		fprintf(stderr, "Operacao 'dup2' nao permitida para value2 'float' ou 'double' type.\n");
 		exit(1);
 	}
 
-	empilhaOperandoTipo(ae->pFrame, (b->tipo)[0], b->elementos[b->sp]);
-	empilhaOperandoTipo(ae->pFrame, (a->tipo)[0], a->elementos[a->sp]);
-	empilhaOperandoTipo(ae->pFrame, (b->tipo)[0], b->elementos[b->sp]);
-	empilhaOperandoTipo(ae->pFrame, (a->tipo)[0], a->elementos[a->sp]);
+	empilhaOperandoTipo(ae->pFrame, b->tipo[b->sp], b->elementos[b->sp]);
+	empilhaOperandoTipo(ae->pFrame, a->tipo[a->sp], a->elementos[a->sp]);
+	empilhaOperandoTipo(ae->pFrame, b->tipo[b->sp], b->elementos[b->sp]);
+	empilhaOperandoTipo(ae->pFrame, a->tipo[a->sp], a->elementos[a->sp]);
 
 	return 0;
 }
@@ -1756,13 +1705,9 @@ int dup_x1(AmbienteExecucao *ae) {
 
 	PilhaOperandos *a = desempilhaOperando(ae->pFrame);
 	PilhaOperandos *b = desempilhaOperando(ae->pFrame);
-	if ((strchr((b->tipo)[0], 'J') != NULL)
-			|| (strchr((b->tipo)[0], 'D') != NULL)
-			|| (strchr((a->tipo)[0], 'J') != NULL)
+	if ((strchr((b->tipo)[0], 'J') != NULL) || (strchr((b->tipo)[0], 'D') != NULL) || (strchr((a->tipo)[0], 'J') != NULL)
 			|| (strchr((a->tipo)[0], 'D') != NULL)) {
-		fprintf(
-				stderr,
-				"Instrucao 'dup_x1' nao permitida para 'float' ou 'double' type.\n");
+		fprintf(stderr, "Instrucao 'dup_x1' nao permitida para 'float' ou 'double' type.\n");
 		exit(1);
 	}
 
@@ -1775,16 +1720,13 @@ int dup_x1(AmbienteExecucao *ae) {
 int dup_x2(AmbienteExecucao *ae) {
 
 	PilhaOperandos *a = desempilhaOperando(ae->pFrame);
-	if ((strchr((a->tipo)[0], 'J') != NULL)
-			|| (strchr((a->tipo)[0], 'D') != NULL)) {
-		fprintf(stderr,
-				"Instrucao 'dup_x2' nao permitida para 'double' ou 'long'1.\n");
+	if ((strchr(a->tipo[0], 'J') != NULL) || (strchr(a->tipo[0], 'D') != NULL)) {
+		fprintf(stderr, "Instrucao 'dup_x2' nao permitida para 'double' ou 'long'1.\n");
 		exit(1);
 	}
 
 	PilhaOperandos *b = desempilhaOperando(ae->pFrame);
-	if ((strchr((b->tipo)[0], 'J') != NULL)
-			|| (strchr((b->tipo)[0], 'D') != NULL)) {
+	if ((strchr(b->tipo[0], 'J') != NULL) || (strchr(b->tipo[0], 'D') != NULL)) {
 		/*form 2*/
 		empilhaOperandoTipo(ae->pFrame, (a->tipo)[a->sp], a->elementos[a->sp]);
 		empilhaOperandoTipo(ae->pFrame, (b->tipo)[b->sp], b->elementos[b->sp]);
@@ -1793,17 +1735,15 @@ int dup_x2(AmbienteExecucao *ae) {
 	}
 
 	PilhaOperandos *c = desempilhaOperando(ae->pFrame);
-	if ((strchr((c->tipo)[0], 'J') != NULL)
-			|| (strchr((c->tipo)[0], 'D') != NULL)) {
-		fprintf(stderr,
-				"Instrucao 'dup_x2' nao permitida para 'double' ou 'long'2.\n");
+	if ((strchr(c->tipo[0], 'J') != NULL) || (strchr(c->tipo[0], 'D') != NULL)) {
+		fprintf(stderr, "Instrucao 'dup_x2' nao permitida para 'double' ou 'long'2.\n");
 		exit(1);
 	}
 
-	empilhaOperandoTipo(ae->pFrame, (a->tipo)[a->sp], a->elementos[a->sp]);
+	empilhaOperandoTipo(ae->pFrame, a->tipo[a->sp], a->elementos[a->sp]);
 	empilhaOperandoTipo(ae->pFrame, c->tipo[c->sp], c->elementos[c->sp]);
-	empilhaOperandoTipo(ae->pFrame, (b->tipo)[b->sp], b->elementos[b->sp]);
-	empilhaOperandoTipo(ae->pFrame, (a->tipo)[a->sp], a->elementos[a->sp]);
+	empilhaOperandoTipo(ae->pFrame, b->tipo[b->sp], b->elementos[b->sp]);
+	empilhaOperandoTipo(ae->pFrame, a->tipo[a->sp], a->elementos[a->sp]);
 
 	return 0;
 }
@@ -1812,34 +1752,27 @@ int dup2_x1(AmbienteExecucao *ae) {
 
 	PilhaOperandos *a = desempilhaOperando(ae->pFrame);
 	PilhaOperandos *b = desempilhaOperando(ae->pFrame);
-	if ((strchr((b->tipo)[0], 'J') != NULL)
-			|| (strchr((b->tipo)[0], 'D') != NULL)) {
-		fprintf(
-				stderr,
-				"Instrucao 'dup2_x1' nao permitida para value2 of 'double' ou 'float'.\n");
+	if ((strchr((b->tipo)[0], 'J') != NULL) || (strchr((b->tipo)[0], 'D') != NULL)) {
+		fprintf(stderr, "Instrucao 'dup2_x1' nao permitida para value2 of 'double' ou 'float'.\n");
 		exit(1);
 	}
-	if ((strchr((a->tipo)[0], 'J') != NULL)
-			|| (strchr((a->tipo)[0], 'D') != NULL)) {
-		empilhaOperandoTipo(ae->pFrame, (a->tipo)[a->sp], a->elementos[a->sp]);
-		empilhaOperandoTipo(ae->pFrame, (b->tipo)[b->sp], b->elementos[b->sp]);
-		empilhaOperandoTipo(ae->pFrame, (a->tipo)[a->sp], a->elementos[a->sp]);
+	if ((strchr((a->tipo)[0], 'J') != NULL) || (strchr((a->tipo)[0], 'D') != NULL)) {
+		empilhaOperandoTipo(ae->pFrame, a->tipo[a->sp], a->elementos[a->sp]);
+		empilhaOperandoTipo(ae->pFrame, b->tipo[b->sp], b->elementos[b->sp]);
+		empilhaOperandoTipo(ae->pFrame, a->tipo[a->sp], a->elementos[a->sp]);
 		return 0;
 	}
 	PilhaOperandos *c = desempilhaOperando(ae->pFrame);
-	if ((strchr((c->tipo)[0], 'J') != NULL)
-			|| (strchr((c->tipo)[0], 'D') != NULL)) {
-		fprintf(
-				stderr,
-				"Instrucao 'dup2_x1' nao permitida para value3 ou 'double' ou 'float'.\n");
+	if ((strchr((c->tipo)[0], 'J') != NULL) || (strchr((c->tipo)[0], 'D') != NULL)) {
+		fprintf(stderr, "Instrucao 'dup2_x1' nao permitida para value3 ou 'double' ou 'float'.\n");
 		exit(1);
 	}
 
-	empilhaOperandoTipo(ae->pFrame, (b->tipo)[b->sp], b->elementos[b->sp]);
-	empilhaOperandoTipo(ae->pFrame, (a->tipo)[a->sp], a->elementos[a->sp]);
+	empilhaOperandoTipo(ae->pFrame, b->tipo[b->sp], b->elementos[b->sp]);
+	empilhaOperandoTipo(ae->pFrame, a->tipo[a->sp], a->elementos[a->sp]);
 	empilhaOperandoTipo(ae->pFrame, c->tipo[c->sp], c->elementos[c->sp]);
-	empilhaOperandoTipo(ae->pFrame, (b->tipo)[b->sp], b->elementos[b->sp]);
-	empilhaOperandoTipo(ae->pFrame, (a->tipo)[a->sp], a->elementos[a->sp]);
+	empilhaOperandoTipo(ae->pFrame, b->tipo[b->sp], b->elementos[b->sp]);
+	empilhaOperandoTipo(ae->pFrame, a->tipo[a->sp], a->elementos[a->sp]);
 
 	return 0;
 }
@@ -1849,48 +1782,37 @@ int dup2_x2(AmbienteExecucao *ae) {
 	PilhaOperandos *a = desempilhaOperando(ae->pFrame);
 	PilhaOperandos *b = desempilhaOperando(ae->pFrame);
 	PilhaOperandos *c, *d;
-	if (((strchr((a->tipo)[0], 'J') != NULL)
-			|| (strchr((a->tipo)[0], 'D') != NULL))) {
+	if (((strchr((a->tipo)[0], 'J') != NULL) || (strchr((a->tipo)[0], 'D') != NULL))) {
 
-		if (((strchr((b->tipo)[0], 'J') != NULL)
-				|| (strchr((b->tipo)[0], 'D') != NULL))) {
-			empilhaOperandoTipo(ae->pFrame, (a->tipo)[a->sp],
-					a->elementos[a->sp]);
-			empilhaOperandoTipo(ae->pFrame, (b->tipo)[b->sp],
-					b->elementos[b->sp]);
-			empilhaOperandoTipo(ae->pFrame, (a->tipo)[a->sp],
-					a->elementos[a->sp]);
+		if (((strchr((b->tipo)[0], 'J') != NULL) || (strchr((b->tipo)[0], 'D') != NULL))) {
+			empilhaOperandoTipo(ae->pFrame, (a->tipo)[a->sp], a->elementos[a->sp]);
+			empilhaOperandoTipo(ae->pFrame, (b->tipo)[b->sp], b->elementos[b->sp]);
+			empilhaOperandoTipo(ae->pFrame, (a->tipo)[a->sp], a->elementos[a->sp]);
 			return 0;
 		}
 
 		c = desempilhaOperando(ae->pFrame);
-		if ((strchr((c->tipo)[0], 'J') != NULL)
-				|| (strchr((c->tipo)[0], 'D') != NULL)) {
-			fprintf(
-					stderr,
+		if ((strchr((c->tipo)[0], 'J') != NULL) || (strchr((c->tipo)[0], 'D') != NULL)) {
+			fprintf(stderr,
 					"Instrucao 'dup2_x2' nao permitida para value3 de 'double' ou 'float' e value1 de 'double' ou 'float'.\n");
 			exit(1);
 		}
 
-		empilhaOperandoTipo(ae->pFrame, (a->tipo)[a->sp], a->elementos[a->sp]);
+		empilhaOperandoTipo(ae->pFrame, a->tipo[a->sp], a->elementos[a->sp]);
 		empilhaOperandoTipo(ae->pFrame, c->tipo[c->sp], c->elementos[c->sp]);
-		empilhaOperandoTipo(ae->pFrame, (b->tipo)[b->sp], b->elementos[b->sp]);
-		empilhaOperandoTipo(ae->pFrame, (a->tipo)[a->sp], a->elementos[a->sp]);
+		empilhaOperandoTipo(ae->pFrame, b->tipo[b->sp], b->elementos[b->sp]);
+		empilhaOperandoTipo(ae->pFrame, a->tipo[a->sp], a->elementos[a->sp]);
 		return 0;
 
 	}
 
-	if ((strchr((b->tipo)[0], 'J') != NULL)
-			|| (strchr((b->tipo)[0], 'D') != NULL)) {
-		fprintf(
-				stderr,
-				"Operacao 'dup2_x2' nao permitida para value1 of type 1 e value2 d tipo 'float' ou 'double'.\n");
+	if ((strchr((b->tipo)[0], 'J') != NULL) || (strchr((b->tipo)[0], 'D') != NULL)) {
+		fprintf(stderr, "Operacao 'dup2_x2' nao permitida para value1 of type 1 e value2 d tipo 'float' ou 'double'.\n");
 		exit(1);
 	}
 
 	c = desempilhaOperando(ae->pFrame);
-	if ((strchr((c->tipo)[0], 'J') != NULL)
-			|| (strchr((c->tipo)[0], 'D') != NULL)) {
+	if ((strchr((c->tipo)[0], 'J') != NULL) || (strchr((c->tipo)[0], 'D') != NULL)) {
 		empilhaOperandoTipo(ae->pFrame, b->tipo[b->sp], b->elementos[b->sp]);
 		empilhaOperandoTipo(ae->pFrame, a->tipo[a->sp], a->elementos[a->sp]);
 		empilhaOperandoTipo(ae->pFrame, c->tipo[c->sp], c->elementos[c->sp]);
@@ -1900,11 +1822,8 @@ int dup2_x2(AmbienteExecucao *ae) {
 	}
 
 	d = desempilhaOperando(ae->pFrame);
-	if ((strchr((d->tipo)[0], 'J') != NULL)
-			|| (strchr((d->tipo)[0], 'D') != NULL)) {
-		fprintf(
-				stderr,
-				"Operacao 'dup2_x2' nao permitida para value4 do tipo 'float' ou 'double'.\n");
+	if ((strchr((d->tipo)[0], 'J') != NULL) || (strchr((d->tipo)[0], 'D') != NULL)) {
+		fprintf(stderr, "Operacao 'dup2_x2' nao permitida para value4 do tipo 'float' ou 'double'.\n");
 		exit(1);
 	}
 
@@ -1932,7 +1851,7 @@ int goto_w(AmbienteExecucao *ae) {
  * @author Bruno Capu
  */
 int jsr(AmbienteExecucao *ae) {
-	int branchOffset;
+	short int branchOffset;
 	branchOffset = leU2doPC(ae->pFrame);
 	empilhaOperando(ae->pFrame, "tipo_retorno", ae->pFrame->pc);
 	ae->pFrame->pc += branchOffset;
@@ -1998,8 +1917,7 @@ int newarray(AmbienteExecucao *ae) {
 		empilhaOperando(ae->pFrame, "[J", vetor);
 		break;
 	default:
-		fprintf(stderr,
-				"Problema em 'anewarray', tipo de array nao reconhecido\n");
+		fprintf(stderr, "Problema em 'anewarray', tipo de array nao reconhecido\n");
 		exit(1);
 		break;
 	}
@@ -2012,12 +1930,11 @@ int newarray(AmbienteExecucao *ae) {
  */
 int aaload(AmbienteExecucao *ae) {
 	int index;
-	PilhaOperandos *lista;
+	Array *lista;
 	void *ref;
 
 	index = desempilhaOperando(ae->pFrame)->elementos[0].tipo_int;
-	lista =
-			(PilhaOperandos*) desempilhaOperando(ae->pFrame)->elementos[0].tipo_referencia;
+	lista = (PilhaOperandos*) desempilhaOperando(ae->pFrame)->elementos[0].tipo_referencia;
 	ref = lista->elementos[index].tipo_referencia;
 
 	empilhaOperando(ae->pFrame, lista->tipo[index], ref);
@@ -2029,11 +1946,10 @@ int aaload(AmbienteExecucao *ae) {
  */
 int iaload(AmbienteExecucao *ae) {
 	int integer, index;
-	PilhaOperandos *lista;
+	Array *lista;
 
 	index = desempilhaOperando(ae->pFrame)->elementos[0].tipo_int;
-	lista =
-			(PilhaOperandos*) desempilhaOperando(ae->pFrame)->elementos[0].tipo_referencia;
+	lista = (PilhaOperandos*) desempilhaOperando(ae->pFrame)->elementos[0].tipo_referencia;
 	integer = lista->elementos[index].tipo_int;
 
 	empilhaOperando(ae->pFrame, "I", &integer);
@@ -2046,16 +1962,15 @@ int iaload(AmbienteExecucao *ae) {
 int aastore(AmbienteExecucao *ae) {
 	int index;
 	char *tipo;
-	PilhaOperandos *opvalor, *lista;
+	PilhaOperandos *opvalor;
+	Array *lista;
 
 	opvalor = desempilhaOperando(ae->pFrame);
-	tipo = *(opvalor->tipo);
+	tipo = opvalor->tipo[opvalor->sp];
 	index = desempilhaOperando(ae->pFrame)->elementos[0].tipo_int;
-	lista =
-			(PilhaOperandos*) desempilhaOperando(ae->pFrame)->elementos->tipo_referencia;
+	lista = (PilhaOperandos*) desempilhaOperando(ae->pFrame)->elementos[0].tipo_referencia;
 
-	adicionaValorArray(lista, index, tipo,
-			opvalor->elementos[0].tipo_referencia);
+	adicionaValorArray(lista, index, tipo, opvalor->elementos[0].tipo_referencia);
 
 	return 0;
 }
@@ -2064,7 +1979,7 @@ int aastore(AmbienteExecucao *ae) {
  */
 int iastore(AmbienteExecucao *ae) {
 	int valor, index;
-	PilhaOperandos *lista;
+	Array *lista;
 
 	valor = desempilhaOperando(ae->pFrame)->elementos[0].tipo_int;
 	index = desempilhaOperando(ae->pFrame)->elementos[0].tipo_int;
@@ -2078,12 +1993,14 @@ int iastore(AmbienteExecucao *ae) {
  */
 int idiv_(AmbienteExecucao *ae) {
 	int a, b, div;
-
 	a = desempilhaOperando(ae->pFrame)->elementos[0].tipo_int;
 	b = desempilhaOperando(ae->pFrame)->elementos[0].tipo_int;
-
-	div = b / a;
-
+	if (a == 0) {
+		printf("Divisao de int por zero, retornando valor nulo\n");
+		div = 0;
+	} else {
+		div = b / a;
+	}
 	empilhaOperando(ae->pFrame, "I", &div);
 	return 0;
 }
@@ -2097,8 +2014,7 @@ int ldiv_(AmbienteExecucao *ae) {
 	b = desempilhaOperando(ae->pFrame)->elementos->tipo_long;
 
 	if (a == 0) {
-		printf(
-				"\nDivisao de long por zero requisitada, retornando valor nulo.\n");
+		printf("\nDivisao de long por zero requisitada, retornando valor nulo.\n");
 		div = 0;
 	} else {
 		div = b / a;
@@ -2109,6 +2025,7 @@ int ldiv_(AmbienteExecucao *ae) {
 /*
  * @author Fernando
  */
+//TODO Continuar daqui
 int if_acmpeq(AmbienteExecucao *ae) {
 	void *a, *b;
 	int offset;
@@ -2221,9 +2138,9 @@ int ifeq(AmbienteExecucao *ae) {
 	offset = leU2doPC(ae->pFrame);
 	a = desempilhaOperando(ae->pFrame)->elementos[0].tipo_int;
 
-	if (a == 0){
-		ae->pFrame->pc += offset -3;
-		ae->pFrame->enderecoPC += offset -3;
+	if (a == 0) {
+		ae->pFrame->pc += offset - 3;
+		ae->pFrame->enderecoPC += offset - 3;
 	}
 
 	return 0;
@@ -2236,9 +2153,9 @@ int iflt(AmbienteExecucao *ae) {
 	offset = leU2doPC(ae->pFrame);
 	a = desempilhaOperando(ae->pFrame)->elementos[0].tipo_int;
 
-	if (a < 0){
-		ae->pFrame->pc += offset -3;
-		ae->pFrame->enderecoPC += offset -3;
+	if (a < 0) {
+		ae->pFrame->pc += offset - 3;
+		ae->pFrame->enderecoPC += offset - 3;
 	}
 
 	return 0;
@@ -2250,9 +2167,9 @@ int ifle(AmbienteExecucao *ae) {
 	offset = leU2doPC(ae->pFrame);
 	a = desempilhaOperando(ae->pFrame)->elementos[0].tipo_int;
 
-	if (a <= 0){
-		ae->pFrame->pc += offset -3;
-		ae->pFrame->enderecoPC += offset -3;
+	if (a <= 0) {
+		ae->pFrame->pc += offset - 3;
+		ae->pFrame->enderecoPC += offset - 3;
 	}
 
 	return 0;
@@ -2264,9 +2181,9 @@ int ifgt(AmbienteExecucao *ae) {
 	offset = leU2doPC(ae->pFrame);
 	a = desempilhaOperando(ae->pFrame)->elementos[0].tipo_int;
 
-	if (a > 0){
-		ae->pFrame->pc += offset -3;
-		ae->pFrame->enderecoPC += offset -3;
+	if (a > 0) {
+		ae->pFrame->pc += offset - 3;
+		ae->pFrame->enderecoPC += offset - 3;
 	}
 
 	return 0;
@@ -2278,9 +2195,9 @@ int ifge(AmbienteExecucao *ae) {
 	offset = leU2doPC(ae->pFrame);
 	a = desempilhaOperando(ae->pFrame)->elementos[0].tipo_int;
 
-	if (a >= 0){
-		ae->pFrame->pc += offset -3;
-		ae->pFrame->enderecoPC += offset -3;
+	if (a >= 0) {
+		ae->pFrame->pc += offset - 3;
+		ae->pFrame->enderecoPC += offset - 3;
 	}
 
 	return 0;
@@ -2293,8 +2210,8 @@ int ifnonnull(AmbienteExecucao *ae) {
 
 	a = desempilhaOperando(ae->pFrame)->elementos[0].tipo_referencia;
 	if (a != NULL) {
-		ae->pFrame->pc += branchOffset -3;
-		ae->pFrame->enderecoPC += branchOffset-3;
+		ae->pFrame->pc += branchOffset - 3;
+		ae->pFrame->enderecoPC += branchOffset - 3;
 	}
 	return 0;
 }
@@ -2323,11 +2240,10 @@ int ifnull(AmbienteExecucao *ae) {
 int faload(AmbienteExecucao *ae) {
 	int index;
 	float valor;
-	PilhaOperandos *lista;
+	Array *lista;
 
 	index = desempilhaOperando(ae->pFrame)->elementos[0].tipo_int;
-	lista =
-			(PilhaOperandos*) desempilhaOperando(ae->pFrame)->elementos[0].tipo_referencia;
+	lista = (Array *) desempilhaOperando(ae->pFrame)->elementos[0].tipo_referencia;
 	valor = lista->elementos[index].tipo_float;
 
 	empilhaOperando(ae->pFrame, "F", &valor);
@@ -2341,12 +2257,11 @@ int faload(AmbienteExecucao *ae) {
 int fastore(AmbienteExecucao *ae) {
 	int index;
 	float valor;
-	PilhaOperandos *lista;
+	Array *lista;
 
 	valor = desempilhaOperando(ae->pFrame)->elementos[0].tipo_float;
 	index = desempilhaOperando(ae->pFrame)->elementos[0].tipo_int;
-	lista =
-			(PilhaOperandos*) desempilhaOperando(ae->pFrame)->elementos->tipo_referencia;
+	lista = (Array *) desempilhaOperando(ae->pFrame)->elementos->tipo_referencia;
 
 	adicionaValorArray(lista, index, "F", &valor);
 
@@ -2359,12 +2274,11 @@ int fastore(AmbienteExecucao *ae) {
 int dastore(AmbienteExecucao *ae) {
 	int index;
 	double valor;
-	PilhaOperandos *lista;
+	Array *lista;
 
 	valor = desempilhaOperando(ae->pFrame)->elementos[0].tipo_double;
 	index = desempilhaOperando(ae->pFrame)->elementos[0].tipo_int;
-	lista =
-			(PilhaOperandos*) desempilhaOperando(ae->pFrame)->elementos->tipo_referencia;
+	lista = (Array *) desempilhaOperando(ae->pFrame)->elementos->tipo_referencia;
 
 	adicionaValorArray(lista, index, "D", &valor);
 
@@ -2377,11 +2291,10 @@ int dastore(AmbienteExecucao *ae) {
 int daload(AmbienteExecucao *ae) {
 	int index;
 	double valor;
-	PilhaOperandos *lista;
+	Array *lista;
 
 	index = desempilhaOperando(ae->pFrame)->elementos[0].tipo_int;
-	lista =
-			(PilhaOperandos*) desempilhaOperando(ae->pFrame)->elementos[0].tipo_referencia;
+	lista = (Array *) desempilhaOperando(ae->pFrame)->elementos[0].tipo_referencia;
 	valor = lista->elementos[index].tipo_double;
 
 	empilhaOperando(ae->pFrame, "D", &valor);
@@ -2395,12 +2308,11 @@ int daload(AmbienteExecucao *ae) {
 int castore(AmbienteExecucao *ae) {
 	int index;
 	char valor;
-	PilhaOperandos *lista;
+	Array *lista;
 
 	valor = desempilhaOperando(ae->pFrame)->elementos[0].tipo_char;
 	index = desempilhaOperando(ae->pFrame)->elementos[0].tipo_int;
-	lista =
-			(PilhaOperandos*) desempilhaOperando(ae->pFrame)->elementos->tipo_referencia;
+	lista = (Array *) desempilhaOperando(ae->pFrame)->elementos->tipo_referencia;
 
 	adicionaValorArray(lista, index, "C", &valor);
 
@@ -2413,11 +2325,10 @@ int castore(AmbienteExecucao *ae) {
 int caload(AmbienteExecucao *ae) {
 	int index;
 	char valor;
-	PilhaOperandos *lista;
+	Array *lista;
 
 	index = desempilhaOperando(ae->pFrame)->elementos[0].tipo_int;
-	lista =
-			(PilhaOperandos*) desempilhaOperando(ae->pFrame)->elementos[0].tipo_referencia;
+	lista = (Array *) desempilhaOperando(ae->pFrame)->elementos[0].tipo_referencia;
 	valor = lista->elementos[index].tipo_char;
 
 	empilhaOperando(ae->pFrame, "D", &valor);
@@ -2431,12 +2342,11 @@ int caload(AmbienteExecucao *ae) {
 int lastore(AmbienteExecucao *ae) {
 	int index;
 	long long valor;
-	PilhaOperandos *lista;
+	Array *lista;
 
 	valor = desempilhaOperando(ae->pFrame)->elementos[0].tipo_long;
 	index = desempilhaOperando(ae->pFrame)->elementos[0].tipo_int;
-	lista =
-			(PilhaOperandos*) desempilhaOperando(ae->pFrame)->elementos->tipo_referencia;
+	lista = (Array *) desempilhaOperando(ae->pFrame)->elementos->tipo_referencia;
 
 	adicionaValorArray(lista, index, "J", &valor);
 
@@ -2449,11 +2359,10 @@ int lastore(AmbienteExecucao *ae) {
 int laload(AmbienteExecucao *ae) {
 	int index;
 	long long valor;
-	PilhaOperandos *lista;
+	Array *lista;
 
 	index = desempilhaOperando(ae->pFrame)->elementos[0].tipo_int;
-	lista =
-			(PilhaOperandos*) desempilhaOperando(ae->pFrame)->elementos[0].tipo_referencia;
+	lista = (Array *) desempilhaOperando(ae->pFrame)->elementos[0].tipo_referencia;
 	valor = lista->elementos[index].tipo_long;
 
 	empilhaOperando(ae->pFrame, "J", &valor);
@@ -2467,12 +2376,11 @@ int laload(AmbienteExecucao *ae) {
 int sastore(AmbienteExecucao *ae) {
 	int index;
 	short valor;
-	PilhaOperandos *lista;
+	Array *lista;
 
 	valor = desempilhaOperando(ae->pFrame)->elementos[0].tipo_short;
 	index = desempilhaOperando(ae->pFrame)->elementos[0].tipo_int;
-	lista =
-			(PilhaOperandos*) desempilhaOperando(ae->pFrame)->elementos->tipo_referencia;
+	lista = (PilhaOperandos*) desempilhaOperando(ae->pFrame)->elementos->tipo_referencia;
 
 	adicionaValorArray(lista, index, "S", &valor);
 
@@ -2485,11 +2393,10 @@ int sastore(AmbienteExecucao *ae) {
 int saload(AmbienteExecucao *ae) {
 	int index;
 	short valor;
-	PilhaOperandos *lista;
+	Array *lista;
 
 	index = desempilhaOperando(ae->pFrame)->elementos[0].tipo_int;
-	lista =
-			(PilhaOperandos*) desempilhaOperando(ae->pFrame)->elementos[0].tipo_referencia;
+	lista = (PilhaOperandos*) desempilhaOperando(ae->pFrame)->elementos[0].tipo_referencia;
 	valor = lista->elementos[index].tipo_short;
 
 	empilhaOperando(ae->pFrame, "S", &valor);
@@ -2510,10 +2417,9 @@ int baload(AmbienteExecucao *ae) {
 	tamanhoVetor = 0;
 
 	indice = desempilhaOperando(ae->pFrame)->elementos[0].tipo_int;
-	vetorRef =
-			(Array*) desempilhaOperando(ae->pFrame)->elementos[0].tipo_referencia;
+	vetorRef = (Array*) desempilhaOperando(ae->pFrame)->elementos[0].tipo_referencia;
 
-	while (vetorRef->tipo[vetorRef->sp][tamanhoVetor] == '['){
+	while (vetorRef->tipo[vetorRef->sp][tamanhoVetor] == '[') {
 		tamanhoVetor++;
 	}
 	if (vetorRef->tipo[vetorRef->sp][tamanhoVetor] == 'B') {
@@ -2544,8 +2450,7 @@ int bastore(AmbienteExecucao *ae) {
 
 	valor = desempilhaOperando(ae->pFrame)->elementos[0].tipo_int;
 	indice = desempilhaOperando(ae->pFrame)->elementos[0].tipo_int;
-	referencias =
-			(Array*) desempilhaOperando(ae->pFrame)->elementos[0].tipo_referencia;
+	referencias = (Array*) desempilhaOperando(ae->pFrame)->elementos[0].tipo_referencia;
 	while (referencias->tipo[referencias->sp][tamanho] == '[') {
 		tamanho++;
 	}
@@ -2567,8 +2472,7 @@ int arraylength(AmbienteExecucao *ae) {
 	Array *array;
 	int length;
 
-	array =
-			(Array*) desempilhaOperando(ae->pFrame)->elementos[0].tipo_referencia;
+	array = (Array*) desempilhaOperando(ae->pFrame)->elementos[0].tipo_referencia;
 
 	length = (int) array->sp;
 
@@ -2604,18 +2508,18 @@ int ret(AmbienteExecucao *ae) {
 	int indice;
 	indice = leU1doPC(ae->pFrame);
 	VariaveisLocais localvar = (ae->pFrame->pilhaVariaveisLocais)[indice];
-	if ((localvar.tipo)[localvar.sp][0] != 'r') {
+	if (localvar.tipo[localvar.sp][0] != 'r') {
 		printf("Endereco de retorno invalido, tipo errado.\n");
 		exit(1);
 	}
-	ae->pFrame->pc = (u1 *)localvar.elementos->tipo_retorno;
+	ae->pFrame->pc = (u1 *) localvar.elementos->tipo_retorno;
 	return 0;
 }
 
 int multianewarray(AmbienteExecucao *ae) {
 	char *tipox, *p1, *p2, *tipo;
 	int cont, i;
-	int *tamanhos, *pi;
+	int *dimensao, *pi;
 	Array *arr;
 	int indice = leU2doPC(ae->pFrame);
 	int tamanho = leU1doPC(ae->pFrame);
@@ -2638,15 +2542,15 @@ int multianewarray(AmbienteExecucao *ae) {
 
 		p2 = '\0';
 
-		tamanhos = calloc(tamanho, sizeof(int));
-		pi = tamanhos + tamanho - 1;
+		dimensao = calloc(tamanho, sizeof(int));
+		pi = dimensao + tamanho - 1;
 
 		for (i = 0; i < tamanho; i++) {
 			*pi = desempilhaOperando(ae->pFrame)->elementos[0].tipo_int;
 			pi--;
 		}
 
-		arr = alocarVetor__(tipo, tamanho, tamanhos);
+		arr = alocarVetor__(tipo, tamanho, dimensao);
 		/* TODO: arrumar o tipo abaixo */
 		empilhaOperando(ae->pFrame, "[", arr);
 
@@ -2661,9 +2565,10 @@ int anewarray(AmbienteExecucao *ae) {
 	int i;
 	Array *array;
 	char *tipo;
+	int valor = leU2doPC(ae->pFrame);
 
 	i = desempilhaOperando(ae->pFrame)->elementos[0].tipo_int;
-	tipo = (char *) retornaClassInfo(ae->pFrame->cf, leU2doPC(ae->pFrame));
+	tipo = (char *) retornaClassInfo(ae->pFrame->cf, valor);
 
 	tipo++;
 	if (i == 0) {
@@ -2742,8 +2647,7 @@ int putfield(AmbienteExecucao *ae) {
 	pilhaOp = desempilhaOperando(ae->pFrame);
 	obj = (Objeto*) desempilhaOperando(ae->pFrame)->elementos->tipo_referencia;
 
-	defineFieldObjeto(obj, dadosField->nomeField, pilhaOp->tipo[0],
-			pilhaOp->elementos[0]);
+	defineFieldObjeto(obj, dadosField->nomeField, pilhaOp->tipo[0], pilhaOp->elementos[0]);
 
 	return 0;
 }
@@ -2751,6 +2655,7 @@ int putfield(AmbienteExecucao *ae) {
 /*
  * @autor Fernando
  */
+//TODO Continuar Daqui
 int getfield(AmbienteExecucao *ae) {
 	Objeto *obj;
 	DadosField *dadosField;
@@ -2809,8 +2714,7 @@ int checkcast(AmbienteExecucao *ae) {
 	if (ref->elementos->tipo_referencia == NULL) {
 		return 0;
 	}
-	int tag =
-			(signed int) (ae->pFrame->cf->constant_pool[indice - 1].u.Utf8.bytes);
+	int tag = (signed int) (ae->pFrame->cf->constant_pool[indice - 1].u.Utf8.bytes);
 
 	if (tag != 7) {
 		printf("Falha em 'checkcast', tipo do objeto na pilha inadequado.\n");
@@ -2893,12 +2797,10 @@ int invokestatic(AmbienteExecucao *ae) {
 
 	arg_cont = retornaContadorArgumentos(dadosMetodo->tipo);
 
-	if (strcmp(dadosMetodo->nomeClasse, "Object") == 0
-			&& strcmp(dadosMetodo->nomeMetodo, "<init>") == 0) {
+	if (strcmp(dadosMetodo->nomeClasse, "Object") == 0 && strcmp(dadosMetodo->nomeMetodo, "<init>") == 0) {
 		return 0;
 	}
-	iniciaExecucaoMetodo(dadosMetodo->nomeClasse, ae, dadosMetodo->nomeMetodo,
-			dadosMetodo->tipo, arg_cont);
+	iniciaExecucaoMetodo(dadosMetodo->nomeClasse, ae, dadosMetodo->nomeMetodo, dadosMetodo->tipo, arg_cont);
 
 	return 0;
 }
@@ -2918,19 +2820,15 @@ int putstatic(AmbienteExecucao *ae) {
 
 	while (lista1 != NULL) {
 		if (strcmp((char *) lista1->class_name, dadosField->nomeClasse) == 0) {
-			erro = defineFieldObjeto(lista1->obj, dadosField->nomeField,
-					pilha->tipo[pilha->sp], pilha->elementos[pilha->sp]);
+			erro = defineFieldObjeto(lista1->obj, dadosField->nomeField, pilha->tipo[pilha->sp], pilha->elementos[pilha->sp]);
 			if (erro == -1) {
 				superClasses = retornaSuperClasses(ae, lista1->cf);
 				lista2 = superClasses;
 				while (lista2 != NULL) {
 					lista3 = ae->pClassHeap;
 					while (lista3 != NULL) {
-						if (strcmp((char *) lista3->class_name,
-								(char *) lista2->class_name) == 0) {
-							erro2 = defineFieldObjeto(lista3->obj,
-									dadosField->nomeField,
-									pilha->tipo[pilha->sp],
+						if (strcmp((char *) lista3->class_name, (char *) lista2->class_name) == 0) {
+							erro2 = defineFieldObjeto(lista3->obj, dadosField->nomeField, pilha->tipo[pilha->sp],
 									pilha->elementos[pilha->sp]);
 							if (erro2 != -1)
 								return 0;
@@ -2946,9 +2844,7 @@ int putstatic(AmbienteExecucao *ae) {
 
 	}
 
-	fprintf(
-			stderr,
-			"Falha em 'putstatic'. Nao acho o elemento buscado na lista de classes.");
+	fprintf(stderr, "Falha em 'putstatic'. Nao acho o elemento buscado na lista de classes.");
 	exit(1);
 
 	return 0;
@@ -2980,15 +2876,12 @@ int lookupswitch(AmbienteExecucao *ae) {
 	case_value = objref->elementos[objref->sp].tipo_int;
 
 	if (objref->tipo[objref->sp][0] != 'I') {
-		printf(
-				"Falha em 'tableswitch', elemento de switch diferente de inteiro.\n");
+		printf("Falha em 'tableswitch', elemento de switch diferente de inteiro.\n");
 		exit(1);
 	} else {
 		/* Recuando para o endereco original da funcao */
-		ae->pFrame->pc += -(2 * sizeof(int) + npairs * sizeof(int) * 2 + 1
-				+ bytepads);
-		ae->pFrame->enderecoPC += -(3 * sizeof(int) + npairs * sizeof(int) * 2
-				+ 1 + bytepads);
+		ae->pFrame->pc += -(2 * sizeof(int) + npairs * sizeof(int) * 2 + 1 + bytepads);
+		ae->pFrame->enderecoPC += -(3 * sizeof(int) + npairs * sizeof(int) * 2 + 1 + bytepads);
 		for (i = 0; i < npairs; i++) {
 			if (offsets[i][1] == case_value)
 				foundInPairs = i + 1;
@@ -3037,22 +2930,18 @@ int tableswitch(AmbienteExecucao *ae) {
 	case_value = objref->elementos->tipo_int;
 
 	if (objref->tipo[objref->sp][0] != 'I') {
-		printf(
-				"Falha em 'tableswitch', elemento de switch diferente de inteiro.\n");
+		printf("Falha em 'tableswitch', elemento de switch diferente de inteiro.\n");
 		exit(1);
 	} else {
 		/* Recuando para o endereco original da funcao */
-		ae->pFrame->pc += -(3 * sizeof(int) + switchsize * sizeof(int) + 1
-				+ bytepads);
-		ae->pFrame->enderecoPC += -(3 * sizeof(int) + switchsize * sizeof(int)
-				+ 1 + bytepads);
+		ae->pFrame->pc += -(3 * sizeof(int) + switchsize * sizeof(int) + 1 + bytepads);
+		ae->pFrame->enderecoPC += -(3 * sizeof(int) + switchsize * sizeof(int) + 1 + bytepads);
 		if ((case_value > (int) highbyte) || (case_value < (int) lowbyte)) {
 			ae->pFrame->pc += defaultbyte;
 			ae->pFrame->enderecoPC += defaultbyte;
 		} else {
 			ae->pFrame->pc += offsets[objref->elementos->tipo_int - lowbyte];
-			ae->pFrame->enderecoPC += offsets[objref->elementos->tipo_int
-					- lowbyte];
+			ae->pFrame->enderecoPC += offsets[objref->elementos->tipo_int - lowbyte];
 		}
 	}
 
