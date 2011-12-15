@@ -1934,7 +1934,7 @@ int aaload(AmbienteExecucao *ae) {
 	void *ref;
 
 	index = desempilhaOperando(ae->pFrame)->elementos[0].tipo_int;
-	lista = (PilhaOperandos*) desempilhaOperando(ae->pFrame)->elementos[0].tipo_referencia;
+	lista = (Array*) desempilhaOperando(ae->pFrame)->elementos[0].tipo_referencia;
 	ref = lista->elementos[index].tipo_referencia;
 
 	empilhaOperando(ae->pFrame, lista->tipo[index], ref);
@@ -2419,14 +2419,14 @@ int baload(AmbienteExecucao *ae) {
 	indice = desempilhaOperando(ae->pFrame)->elementos[0].tipo_int;
 	vetorRef = (Array*) desempilhaOperando(ae->pFrame)->elementos[0].tipo_referencia;
 
-	while (vetorRef->tipo[vetorRef->sp][tamanhoVetor] == '[') {
+	while (vetorRef->tipo[0][tamanhoVetor] == '[') {
 		tamanhoVetor++;
 	}
-	if (vetorRef->tipo[vetorRef->sp][tamanhoVetor] == 'B') {
+	if (vetorRef->tipo[0][tamanhoVetor] == 'B') {
 		valorChar = vetorRef->elementos[indice].tipo_byte;
 		valorInt = (int) valorChar;
 		empilhaOperando(ae->pFrame, "I", &valorInt);
-	} else if ((vetorRef->tipo)[vetorRef->sp][tamanhoVetor] == 'Z') {
+	} else if ((vetorRef->tipo)[0][tamanhoVetor] == 'Z') {
 		valorChar = vetorRef->elementos[indice].tipo_boolean;
 		valorInt = (zero | valorChar);
 		empilhaOperando(ae->pFrame, "I", &valorInt);
@@ -2451,13 +2451,13 @@ int bastore(AmbienteExecucao *ae) {
 	valor = desempilhaOperando(ae->pFrame)->elementos[0].tipo_int;
 	indice = desempilhaOperando(ae->pFrame)->elementos[0].tipo_int;
 	referencias = (Array*) desempilhaOperando(ae->pFrame)->elementos[0].tipo_referencia;
-	while (referencias->tipo[referencias->sp][tamanho] == '[') {
+	while (referencias->tipo[0][tamanho] == '[') {
 		tamanho++;
 	}
-	if ((referencias->tipo[referencias->sp])[tamanho] == 'B') {
+	if ((referencias->tipo[0])[tamanho] == 'B') {
 		valorChar = (int) valor;
 		adicionaValorArray(referencias, indice, "B", &valorChar);
-	} else if ((referencias->tipo)[referencias->sp][tamanho] == 'Z') {
+	} else if ((referencias->tipo)[0][tamanho] == 'Z') {
 		valorChar = (valor & mascara);
 		adicionaValorArray(referencias, indice, "Z", &valorChar);
 	} else {
@@ -2524,6 +2524,7 @@ int multianewarray(AmbienteExecucao *ae) {
 	int indice = leU2doPC(ae->pFrame);
 	int tamanho = leU1doPC(ae->pFrame);
 
+
 	if ((signed int) ae->pFrame->cf->constant_pool[indice - 1].tag == 7) {
 		tipox = (char *) retornaClassInfo(ae->pFrame->cf, indice);
 		p1 = tipox;
@@ -2551,6 +2552,7 @@ int multianewarray(AmbienteExecucao *ae) {
 		}
 
 		arr = alocarVetor__(tipo, tamanho, dimensao);
+
 		/* TODO: arrumar o tipo abaixo */
 		empilhaOperando(ae->pFrame, "[", arr);
 
@@ -2820,7 +2822,7 @@ int putstatic(AmbienteExecucao *ae) {
 
 	while (lista1 != NULL) {
 		if (strcmp((char *) lista1->class_name, dadosField->nomeClasse) == 0) {
-			erro = defineFieldObjeto(lista1->obj, dadosField->nomeField, pilha->tipo[pilha->sp], pilha->elementos[pilha->sp]);
+			erro = defineFieldObjeto(lista1->obj, dadosField->nomeField, pilha->tipo[0], pilha->elementos[0]);
 			if (erro == -1) {
 				superClasses = retornaSuperClasses(ae, lista1->cf);
 				lista2 = superClasses;
