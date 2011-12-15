@@ -137,6 +137,8 @@ Objeto * instanciaObjeto(ClassFile *cf, AmbienteExecucao *ae) {
 	return newObjeto;
 }
 
+
+
 int RetornaFrame(AmbienteExecucao *ae, int n_return) {
 	int i;
 	PilhaOperandos *pilhaoperandos;

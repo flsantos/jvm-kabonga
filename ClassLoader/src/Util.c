@@ -330,7 +330,7 @@ Array *iniciarArray(char *tipo, int n) {
 			vetorList->tipo[i] = tipo;
 		}
 	} else {
-		fprintf(stderr, "Erro no localvar_init_structure\n");
+		printf("Erro no iniciarArray\n");
 		exit(1);
 	}
 
@@ -338,7 +338,7 @@ Array *iniciarArray(char *tipo, int n) {
 }
 
 Array *alocarVetor__(char* tipo, int dimensao, int *tamanhos) {
-	Array *vet, *p1;
+	Array *vet, *vet2;
 	int i, *sub_tamanhos;
 
 	if (dimensao == 1) {
@@ -350,9 +350,12 @@ Array *alocarVetor__(char* tipo, int dimensao, int *tamanhos) {
 		for (i = 1; i < dimensao; i++) {
 			sub_tamanhos[i - 1] = tamanhos[i];
 		}
-		for(p1 = vet, i=0; i< tamanhos[0]; i++, p1 = p1+sizeof(p1)) {
-			p1->elementos[p1->sp].tipo_referencia = alocarVetor__(tipo, dimensao - 1, sub_tamanhos);
+		for(i=0; i< tamanhos[0]; i++) {
+			vet2 = alocarVetor__(tipo, dimensao - 1, sub_tamanhos);
+			vet->elementos[i].tipo_referencia = vet2;
+			vet->tipo[i] = "[";
 		}
+			vet->sp = tamanhos[0];
 	}
 
 	return vet;
@@ -385,35 +388,35 @@ Array *alocarVetor(char *tipo, int dimensao, ...) {
 }
 
 int defineFieldObjeto(Objeto *object, char *nomeField, char *tipo, Tipo info) {
-	tipo_info *p1;
 	int n, i;
 	n = object->numeroTipos;
-	for (i = 0, p1 = object->tipos; i < n; i++, p1++) {
-		if (strcmp(p1->nome, nomeField) == 0) {
-			p1->tipo = tipo;
+	for (i = 0; i < n; i++) {
+		if (strcmp(object->tipos[i].nome, nomeField) == 0) {
+			object->tipos[i].tipo = tipo;
 			if (tipo[0] == 'B') {
-				p1->elemento.tipo_byte = info.tipo_byte;
+				object->tipos[i].elemento.tipo_byte = info.tipo_byte;
 			} else if (tipo[0] == 'C') {
-				p1->elemento.tipo_char = info.tipo_char;
+				object->tipos[i].elemento.tipo_char = info.tipo_char;
 			} else if (tipo[0] == 'D') {
-				p1->elemento.tipo_double = info.tipo_double;
+				object->tipos[i].elemento.tipo_double = info.tipo_double;
 			} else if (tipo[0] == 'F') {
-				p1->elemento.tipo_float = info.tipo_float;
+				object->tipos[i].elemento.tipo_float = info.tipo_float;
 			} else if (tipo[0] == 'I') {
-				p1->elemento.tipo_int = info.tipo_int;
+				object->tipos[i].elemento.tipo_int = info.tipo_int;
 			} else if (tipo[0] == 'J') {
-				p1->elemento.tipo_long = info.tipo_long;
+				object->tipos[i].elemento.tipo_long = info.tipo_long;
 			} else if (tipo[0] == 'L') {
-				p1->elemento.tipo_referencia = info.tipo_referencia;
+				object->tipos[i].elemento.tipo_referencia = info.tipo_referencia;
 			} else if (tipo[0] == 'S') {
-				p1->elemento.tipo_short = info.tipo_short;
+				object->tipos[i].elemento.tipo_short = info.tipo_short;
 			} else if (tipo[0] == 'Z') {
-				p1->elemento.tipo_boolean = info.tipo_boolean;
+				object->tipos[i].elemento.tipo_boolean = info.tipo_boolean;
 			} else if (tipo[0] == '[') {
-				p1->elemento.tipo_referencia = info.tipo_referencia;
+				object->tipos[i].elemento.tipo_referencia = info.tipo_referencia;
 			} else if (tipo[0] == 'r') {
-				p1->elemento.tipo_retorno = info.tipo_retorno;
+				object->tipos[i].elemento.tipo_retorno = info.tipo_retorno;
 			}
+
 			return 1;
 		}
 	}

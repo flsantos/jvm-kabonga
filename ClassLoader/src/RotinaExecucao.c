@@ -267,14 +267,22 @@ u4 leU4doPC(Frame *frame) {
 }
 
 int execute_iteration(AmbienteExecucao *ae) {
-	int i = 0;
+	int i = 0, j = 0;
 	while (1) {
+
+		int f;
+		Objeto *object_statics =ae->pClassHeap->obj;
 		instrucao = leU1doPC(ae->pFrame);
 		debugPrintLinha();
 		debugPrintInstrucoes(mnemonicos[instrucao], i++);
 		if(vetFunc[instrucao](ae) == -1 && instrucao == RETURN){
 			break;
 		}
+/*		if (j == 50){
+			getchar();
+			j=0;
+		}
+		j++;*/
 	}
 	return 0;
 }
