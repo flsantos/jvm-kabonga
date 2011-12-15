@@ -61,10 +61,11 @@ u2 retornaTamanhoVariaveisLocais(attribute_info *ai) {
 u1 *retornaClassInfo(ClassFile *cf, int indice) {
 	return retornaUtf8(cf, cf->constant_pool[indice - 1].u.Class.name_index);
 }
-
+//TODO VERIFICAR
 DadosNameAndType *retornaDadosNameAndTypeInfo(ClassFile *cf, int n) {
 	int indiceNome, indiceTipo;
 	DadosNameAndType *dadosNameAndType;
+
 	dadosNameAndType = malloc(sizeof(DadosNameAndType));
 
 	indiceNome = (cf->constant_pool + n - 1)->u.NameAndType.name_index;
@@ -288,7 +289,9 @@ int retornaContadorArgumentos(char *descriptor) {
 	return count;
 }
 
+//TODO: VERIFICAR
 void adicionaValorArray(Array *array, int posicao, char *tipo, void *info) {
+
 	if (tipo[0] == 'B') {
 		array->elementos[posicao].tipo_byte = *((char *) info);
 	} else if (tipo[0] == 'C') {
@@ -344,7 +347,7 @@ Array *alocarVetor__(char* tipo, int dimensao, int *tamanhos) {
 		vet = iniciarArray("[", tamanhos[0]);
 
 		sub_tamanhos = calloc(dimensao - 1, sizeof(int));
-		for (i = 0; i < dimensao; i++) {
+		for (i = 1; i < dimensao; i++) {
 			sub_tamanhos[i - 1] = tamanhos[i];
 		}
 		for(p1 = vet, i=0; i< tamanhos[0]; i++, p1 = p1+sizeof(p1)) {
@@ -417,11 +420,11 @@ int defineFieldObjeto(Objeto *object, char *nomeField, char *tipo, Tipo info) {
 	return -1;
 }
 
-tipo_info *retornaFieldObjeto(Objeto *object, char *nomeField) {
+tipo_info *retornaFieldObjeto(Objeto *objeto, char *nomeField) {
 	tipo_info *p1;
 	int n, i;
-	n = object->numeroTipos;
-	for (i = 0, p1 = object->tipos; i < n; i++, p1++) {
+	n = objeto->numeroTipos;
+	for (i = 0, p1 = objeto->tipos; i < n; i++, p1++) {
 		if (strcmp(p1->nome, nomeField) == 0) {
 			return p1;
 		}

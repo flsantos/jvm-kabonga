@@ -26,6 +26,7 @@ ClassFile * verificarClassFile(AmbienteExecucao *ae, char *nomeClasse) {
 		strcat(nomeArquivo, ".class");
 		cf = malloc(sizeof(ClassFile));
 		cf[0] = lerClassFile(nomeArquivo);
+		//TODO ERRO DO FIELD ESTA AQUI
 		Objeto *obj = instanciaObjeto(cf, ae);
 		adicionaClasse(cf, &(ae->pClassHeap), obj);
 		if (ae->pFrame == NULL) {
@@ -135,18 +136,8 @@ Objeto * instanciaObjeto(ClassFile *cf, AmbienteExecucao *ae) {
 
 	return newObjeto;
 }
-/**
- * Jumpback faz o contrario do jump - ele retorna o ambiente de execucao para o frame que esta no topo da pilha
- * de frames, ou seja, o frame anterior.
- *
- * A funcao jumpback tem como objetivo retornar o ambiente de execucao para o frame que esta no topo da pilha de frames, alem de
- * passar a variavel de retorno para o frame do topo da pilha, se houver.
- *
- * @param ae a variavel do ambiente de execucao
- * @param n_return o numero de retorno. Pode ser 0 ou 1 (ainda que a funcao seja generica e aceite n retornos)
- */
 
-int jumpback(AmbienteExecucao *ae, int n_return) {
+int RetornaFrame(AmbienteExecucao *ae, int n_return) {
 	int i;
 	PilhaOperandos *pilhaoperandos;
 	Frame *frame;
