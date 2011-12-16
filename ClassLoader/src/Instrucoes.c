@@ -340,7 +340,6 @@ int invokespecial(AmbienteExecucao *ae) {
 		desempilhaOperando(ae->pFrame);
 		return 0;
 	}
-
 	argumento = retornaContadorArgumentos(dadosMetodo->tipo) + 1;
 	iniciaExecucaoMetodo(dadosMetodo->nomeClasse, ae, dadosMetodo->nomeMetodo, dadosMetodo->tipo, argumento);
 
@@ -365,12 +364,12 @@ int dup(AmbienteExecucao *ae) {
 int new_(AmbienteExecucao *ae) {
 	int indice = leU2doPC(ae->pFrame);
 	char *nomeClasse;
+	char *strvazia;
 	Objeto *objeto;
 	ClassFile *cf;
 	nomeClasse = (char *) retornaClassInfo(ae->pFrame->cf, indice);
 	/* ajustando para o caso da StringBuffer */
 	if ((strcmp(nomeClasse, "java/lang/StringBuffer") == 0 || strcmp(nomeClasse, "java/lang/StringBuilder") == 0)) {
-		char * strvazia;
 		strvazia = calloc(1, sizeof(char));
 		*strvazia = '\0';
 
@@ -405,7 +404,6 @@ int if_icmplt(AmbienteExecucao *ae) {
 	return 0;
 }
 
-//TODO: VERIFICAR
 int iinc(AmbienteExecucao *ae) {
 	int indice = leU1doPC(ae->pFrame);
 	int const_ = leU1doPC(ae->pFrame);
@@ -516,7 +514,6 @@ int invokevirtual(AmbienteExecucao *ae) {
 	char *string_to_append, *string_appended, *string_append;
 
 	dadosMetodo = retornaDadosMetodo(ae->pFrame->cf, cp_indice);
-
 	if (strcmp(dadosMetodo->nomeClasse, "java/io/PrintStream") == 0
 			&& (strcmp(dadosMetodo->nomeMetodo, "println") == 0 || strcmp(dadosMetodo->nomeMetodo, "print") == 0)) {
 		/* realiza o println */
@@ -565,8 +562,8 @@ int invokevirtual(AmbienteExecucao *ae) {
 			empilhaOperando(ae->pFrame, "I", &result_strcmp);
 			return 0;
 		}
-	} else if ((strcmp(dadosMetodo->nomeMetodo, "java/lang/StringBuffer") == 0
-			|| strcmp(dadosMetodo->nomeMetodo, "java/lang/StringBuilder") == 0)
+	} else if ((strcmp(dadosMetodo->nomeClasse, "java/lang/StringBuffer") == 0
+			|| strcmp(dadosMetodo->nomeClasse, "java/lang/StringBuilder") == 0)
 			&& strcmp(dadosMetodo->nomeMetodo, "append") == 0) {
 		string_append = calloc(50, sizeof(char));
 		data = desempilhaOperando(ae->pFrame);
@@ -655,7 +652,6 @@ int invokevirtual(AmbienteExecucao *ae) {
 		return 0;
 
 	} else {
-		DadosMetodo *dadosMetodo;
 		int argumento;
 
 		dadosMetodo = retornaDadosMetodo(ae->pFrame->cf, cp_indice);
