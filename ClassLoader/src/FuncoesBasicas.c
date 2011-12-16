@@ -35,7 +35,7 @@ ClassFile * verificarClassFile(AmbienteExecucao *ae, char *nomeClasse) {
 						&& strcmp(nomeClasse, "java/lang/Class") != 0 && strcmp(nomeClasse, "Class") != 0
 						&& strcmp(nomeClasse, "java/lang/Long") != 0 && strcmp(nomeClasse, "Long") != 0
 						&& strcmp(nomeClasse, "java/lang/String") != 0 && strcmp(nomeClasse, "String") != 0) {
-					ae->pFrame = criaFrame(ae->pClassHeap, cf, "<clinit>", "()V", frame);
+					ae->pFrame  = criaFrame(ae->pClassHeap, cf, "<clinit>", "()V", frame);
 					ae->pFrame->frameAnterior = NULL;
 					execute_iteration(ae);
 					frame = ae->pFrame;
@@ -113,10 +113,8 @@ Objeto * instanciaObjeto(ClassFile *cf, AmbienteExecucao *ae) {
 
 		index = cf->fields[i].name_index;
 		newObjeto->tipos[tiposIndex].nome = (char *) retornaUtf8(cf, index);
-
 		index = cf->fields[i].descriptor_index;
 		newObjeto->tipos[tiposIndex].tipo = (char *) retornaUtf8(cf, index);
-
 		tiposIndex++;
 	}
 	p1 = superClasses;
@@ -124,10 +122,9 @@ Objeto * instanciaObjeto(ClassFile *cf, AmbienteExecucao *ae) {
 		count = p1->cf->fields_count;
 		for (i = 0; i < count; i++) {
 			index = p1->cf->fields[i].name_index;
-			newObjeto->tipos[tiposIndex].nome = (char *) retornaUtf8(cf, index);
-
+			newObjeto->tipos[tiposIndex].nome = (char *) retornaUtf8(p1->cf, index);
 			index = p1->cf->fields[i].descriptor_index;
-			newObjeto->tipos[tiposIndex].tipo = (char *) retornaUtf8(cf, index);
+			newObjeto->tipos[tiposIndex].tipo = (char *) retornaUtf8(p1->cf, index);
 
 			tiposIndex++;
 		}
