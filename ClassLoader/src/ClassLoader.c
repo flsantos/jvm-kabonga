@@ -14,6 +14,7 @@
 #include <string.h>
 
 #include "ClassLoader.h"
+#include "Util.h"
 
 /* Definicao das co nstantes */
 #define CONSTANT_Class 7
@@ -247,10 +248,13 @@ void readThisClass(ClassFile *cf) {
  */
 void readSuperClass(ClassFile *cf) {
 	cf->super_class = u2Read();
-	/*printf("\nsuper_class: %d", cf->super_class);*/
-	if(cf->super_class != 0){
-		/*printf("\n%s", cf->constant_pool[cf->constant_pool[cf->super_class - 1].u.Class.name_index - 1].u.Utf8.bytes);*/
+	if(strcmp((char *)retornaClassInfo(cf, cf->super_class), "java/lang/Object") == 0){
+		cf->super_class = 0;
 	}
+	/*printf("\nsuper_class: %d", cf->super_class);*/
+	/*if(cf->super_class != 0){
+		printf("\n%s", cf->constant_pool[cf->constant_pool[cf->super_class - 1].u.Class.name_index - 1].u.Utf8.bytes);
+	}*/
 }
 
 /*

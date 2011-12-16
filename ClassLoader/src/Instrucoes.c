@@ -342,8 +342,9 @@ int invokespecial(AmbienteExecucao *ae) {
 		return 0;
 	}
 	argumento = retornaContadorArgumentos(dadosMetodo->tipo) + 1;
-	iniciaExecucaoMetodo(dadosMetodo->nomeClasse, ae, dadosMetodo->nomeMetodo, dadosMetodo->tipo, argumento);
-
+	if(strcmp(dadosMetodo->nomeClasse, "java/lang/Object") != 0){
+		iniciaExecucaoMetodo(dadosMetodo->nomeClasse, ae, dadosMetodo->nomeMetodo, dadosMetodo->tipo, argumento);
+	}
 	return 0;
 }
 
@@ -377,7 +378,6 @@ int new_(AmbienteExecucao *ae) {
 		empilhaOperando(ae->pFrame, "[C", strvazia);
 		return 0;
 	}
-
 	cf = verificarClassFile(ae, nomeClasse); //TODO: Criar metodo
 	objeto = instanciaObjeto(cf, ae);
 	empilhaOperando(ae->pFrame, "L", objeto);
@@ -658,8 +658,9 @@ int invokevirtual(AmbienteExecucao *ae) {
 		dadosMetodo = retornaDadosMetodo(ae->pFrame->cf, cp_indice);
 
 		argumento = retornaContadorArgumentos(dadosMetodo->tipo) + 1;
-
-		iniciaExecucaoMetodo(dadosMetodo->nomeClasse, ae, dadosMetodo->nomeMetodo, dadosMetodo->tipo, argumento);
+		if(strcmp(dadosMetodo->nomeClasse, "java/lang/Object") != 0){
+			iniciaExecucaoMetodo(dadosMetodo->nomeClasse, ae, dadosMetodo->nomeMetodo, dadosMetodo->tipo, argumento);
+		}
 	}
 
 	return 0;
@@ -2801,8 +2802,9 @@ int invokestatic(AmbienteExecucao *ae) {
 	if (strcmp(dadosMetodo->nomeClasse, "Object") == 0 && strcmp(dadosMetodo->nomeMetodo, "<init>") == 0) {
 		return 0;
 	}
-	iniciaExecucaoMetodo(dadosMetodo->nomeClasse, ae, dadosMetodo->nomeMetodo, dadosMetodo->tipo, arg_cont);
-
+	if(strcmp(dadosMetodo->nomeClasse, "java/lang/Object") != 0){
+		iniciaExecucaoMetodo(dadosMetodo->nomeClasse, ae, dadosMetodo->nomeMetodo, dadosMetodo->tipo, arg_cont);
+	}
 	return 0;
 }
 
