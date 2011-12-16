@@ -332,12 +332,13 @@ int invokespecial(AmbienteExecucao *ae) {
 	int indice = leU2doPC(ae->pFrame);
 	DadosMetodo *dadosMetodo;
 	int argumento;
-
+	char *string;
 	dadosMetodo = retornaDadosMetodo(ae->pFrame->cf, indice);
 	if ((strcmp(dadosMetodo->nomeClasse, "java/lang/StringBuffer") == 0
 			|| strcmp(dadosMetodo->nomeClasse, "java/lang/StringBuilder") == 0)
 			&& strcmp(dadosMetodo->nomeMetodo, "<init>") == 0) {
-		desempilhaOperando(ae->pFrame);
+		string = desempilhaOperando(ae->pFrame)->elementos[0].tipo_referencia;
+		printf("%s", string);
 		return 0;
 	}
 	argumento = retornaContadorArgumentos(dadosMetodo->tipo) + 1;
@@ -2750,7 +2751,7 @@ int instanceof(AmbienteExecucao *ae) {
 	Objeto *obj;
 	Array *array;
 	int resultado = 0;
-	char *S, *T;
+	char *T;
 	int indice;
 
 	indice = leU2doPC(ae->pFrame);
@@ -2767,7 +2768,6 @@ int instanceof(AmbienteExecucao *ae) {
 	}
 
 	T = (char *) retornaClassInfo(ae->pFrame->cf, indice);
-	S = refObjeto->tipo[0];
 	if (refObjeto->tipo[refObjeto->sp][0] == 'L') {
 		obj = (Objeto *) refObjeto->elementos[0].tipo_referencia;
 		if (strcmp(T, obj->nomeClasse)) {
