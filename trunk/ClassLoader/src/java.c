@@ -14,6 +14,7 @@
 #include "RotinaExecucao.h"
 #include "FuncoesBasicas.h"
 #include "Debug.h"
+
 void iniciaExecucaoMetodo(char nomeClassFile[], AmbienteExecucao *ae,
 		char *nomeMetodo, char *descritor, u1 argumentos) {
 	Frame *frame = NULL;
@@ -60,6 +61,44 @@ void checkDebugFlag(char *flag) {
 	}
 }
 
+void procuraPath(char *nomeClassFile) {
+	char *p;
+	int i;
+	p = nomeClassFile;
+	caminhoArquivo = NULL;
+	primeiraVez = 0;
+
+	if ((strrchr(nomeClassFile, '\\') == NULL) && (strrchr(nomeClassFile, '/') == NULL)) {
+		caminhoArquivo = NULL;
+	}
+	else {
+		if ((strrchr(nomeClassFile, '\\') != NULL) && (strrchr(nomeClassFile, '/') != NULL)) {
+			char *p1, *p2;
+			p1 = strrchr(nomeClassFile, '\\');
+			p2 = strrchr(nomeClassFile, '/');
+			if (p1 > p2) {
+				caminhoArquivo = malloc(p1-nomeClassFile+1);
+				i = 0;
+				for (p = nomeClassFile; p<=p1; p++) {
+					caminhoArquivo[i] = *p;
+					i++;
+				}
+				caminhoArquivo[i] = '\0';
+			}
+			else {
+				caminhoArquivo = malloc(sizeof(p2-nomeClassFile+1));
+				i = 0;
+				for (p = nomeClassFile; p<=p2; p++) {
+					caminhoArquivo[i] = *p;
+					i++;
+				}
+				caminhoArquivo[i] = '\0';
+			}
+
+		}
+	}
+}
+
 /*
  * Funcao inicial da JVM
  *
@@ -68,10 +107,13 @@ int main(int argc, char *argv[]) {
 	AmbienteExecucao ae;
 	char *nomeClassFile;
 
+
 	ae.pClassHeap = NULL;
 	ae.pFrame = NULL;
 	if (argc >= 2) {
 		nomeClassFile = argv[1];
+		procuraPath(nomeClassFile);
+		printf("\nVALOR AKAAII : %s\n", caminhoArquivo);
 		if (argc >= 3) {
 			checkDebugFlag(argv[2]);
 		}

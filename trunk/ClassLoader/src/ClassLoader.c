@@ -471,10 +471,19 @@ void readAttributesCount(ClassFile *cf) {
 ClassFile lerClassFile(char *nomeArquivo) {
 	ClassFile cf;
 	int i;
+	char *nomeCompleto;
 
-	fp = fopen(nomeArquivo, "rb");
+	nomeCompleto = NULL;
+	nomeCompleto = nomeArquivo;
+	if (caminhoArquivo != NULL && primeiraVez != 0) {
+		nomeCompleto = malloc(sizeof(char) * (strlen(nomeArquivo) + strlen(caminhoArquivo) + 1));
+		strcpy(nomeCompleto, caminhoArquivo);
+		strcat(nomeCompleto, nomeArquivo);
+	}
+	primeiraVez = 1;
+	fp = fopen(nomeCompleto, "rb");
 	if (fp == NULL) {
-		printf("\nArquivo nao encontrado: %s\n", nomeArquivo);
+		printf("\nArquivo nao encontrado: %s\n", nomeCompleto);
 		exit(1);
 	}
 
