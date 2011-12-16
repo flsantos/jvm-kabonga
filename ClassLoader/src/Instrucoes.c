@@ -1109,7 +1109,7 @@ int i2f(AmbienteExecucao *ae) {
 	float b;
 
 	a = desempilhaOperando(ae->pFrame);
-	b = (char) a->elementos->tipo_int;
+	b = (float) a->elementos->tipo_int;
 
 	empilhaOperando(ae->pFrame, "F", &b);
 
