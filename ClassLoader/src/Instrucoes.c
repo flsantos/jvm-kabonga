@@ -673,10 +673,13 @@ int nop(AmbienteExecucao *ae) {
 	return 0;
 }
 int bipush(AmbienteExecucao *ae) {
-	int valor;
-	valor = leU1doPC(ae->pFrame);
+	i1 valor;
+	int casted;
 
-	empilhaOperando(ae->pFrame, "I", (&valor));
+	valor = leU1doPC(ae->pFrame);
+	casted = (int) valor;
+
+	empilhaOperando(ae->pFrame, "I", (&casted));
 	return 0;
 }
 
@@ -2331,7 +2334,7 @@ int caload(AmbienteExecucao *ae) {
 	lista = (Array *) desempilhaOperando(ae->pFrame)->elementos[0].tipo_referencia;
 	valor = lista->elementos[index].tipo_char;
 
-	empilhaOperando(ae->pFrame, "D", &valor);
+	empilhaOperando(ae->pFrame, "C", &valor);
 
 	return 0;
 }
@@ -2392,14 +2395,14 @@ int sastore(AmbienteExecucao *ae) {
  */
 int saload(AmbienteExecucao *ae) {
 	int index;
-	short valor;
-	Array *lista;
+	short  valor;
+	PilhaOperandos *lista;
 
 	index = desempilhaOperando(ae->pFrame)->elementos[0].tipo_int;
 	lista = (PilhaOperandos*) desempilhaOperando(ae->pFrame)->elementos[0].tipo_referencia;
 	valor = lista->elementos[index].tipo_short;
 
-	empilhaOperando(ae->pFrame, "S", &valor);
+	empilhaOperando(ae->pFrame, "S", (&valor));
 
 	return 0;
 }
