@@ -407,7 +407,7 @@ int if_icmplt(AmbienteExecucao *ae) {
 
 int iinc(AmbienteExecucao *ae) {
 	int indice = leU1doPC(ae->pFrame);
-	int const_ = leU1doPC(ae->pFrame);
+	i1 const_ = leU1doPC(ae->pFrame);
 
 	ae->pFrame->pilhaVariaveisLocais->elementos[indice].tipo_int += const_;
 	return 0;
