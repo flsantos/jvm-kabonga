@@ -366,6 +366,7 @@ int new_(AmbienteExecucao *ae) {
 	int indice = leU2doPC(ae->pFrame);
 	char *nomeClasse;
 	Objeto *objeto;
+	ClassFile *cf;
 	nomeClasse = (char *) retornaClassInfo(ae->pFrame->cf, indice);
 	/* ajustando para o caso da StringBuffer */
 	if ((strcmp(nomeClasse, "java/lang/StringBuffer") == 0 || strcmp(nomeClasse, "java/lang/StringBuilder") == 0)) {
@@ -377,9 +378,8 @@ int new_(AmbienteExecucao *ae) {
 		return 0;
 	}
 
-	verificarClassFile(ae, nomeClasse); //TODO: Criar metodo
-	objeto = ae->pClassHeap->obj;
-
+	cf = verificarClassFile(ae, nomeClasse); //TODO: Criar metodo
+	objeto = instanciaObjeto(cf, ae);
 	empilhaOperando(ae->pFrame, "L", objeto);
 
 	return 0;
@@ -540,9 +540,9 @@ int invokevirtual(AmbienteExecucao *ae) {
 			} else if (tipo[0] == 'S') {
 				printf("%d", data->elementos[data->sp].tipo_short);
 			} else if (tipo[0] == 'Z') {
-				printf("\nboolean %d", data->elementos[data->sp].tipo_boolean);
+				printf("boolean %d", data->elementos[data->sp].tipo_boolean);
 			} else if (tipo[0] == '[') {
-				printf("\n%s", (char*) data->elementos[data->sp].tipo_referencia);
+				printf("%s", (char*) data->elementos[data->sp].tipo_referencia);
 			} else if (tipo[0] == 'r') {
 				printf("\nImpressao de uma referencia. Nao implementado.");
 			}
@@ -2230,8 +2230,8 @@ int ifnull(AmbienteExecucao *ae) {
 
 	a = desempilhaOperando(ae->pFrame)->elementos[0].tipo_referencia;
 	if (a == NULL) {
-		ae->pFrame->pc += branchOffset;
-		ae->pFrame->enderecoPC += branchOffset;
+		ae->pFrame->pc += branchOffset - 3;
+		ae->pFrame->enderecoPC += branchOffset - 3;
 	}
 
 	return 0;

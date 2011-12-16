@@ -432,6 +432,7 @@ tipo_info *retornaFieldObjeto(Objeto *objeto, char *nomeField) {
 			return p1;
 		}
 	}
+
 	return NULL;
 
 }
