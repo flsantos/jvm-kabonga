@@ -138,10 +138,10 @@ void empilhaOperando(Frame *frame, char *tipo, void *operando) {
 		frame->pilhaOperandos->elementos[sp].tipo_referencia = operando;
 		/*printf("\n\n%d\n\n", frame->pilhaOperandos->elementos[sp].tipo_referencia[0]);*/
 	} else if (tipo[0] == 'S') {
-		frame->pilhaOperandos->elementos[sp].tipo_short = *((short *) operando);
+		frame->pilhaOperandos->elementos[sp].tipo_short = *((i2 *) operando);
 		/*printf("\n\nshort %d\n\n", frame->pilhaOperandos->elementos[sp].tipo_short);*/
 	} else if (tipo[0] == 'Z') {
-		frame->pilhaOperandos->elementos[sp].tipo_boolean = *((char *) operando);
+		frame->pilhaOperandos->elementos[sp].tipo_boolean = *((short *) operando);
 		/*printf("\n\nboolean %c\n\n", frame->pilhaOperandos->elementos[sp].tipo_boolean);*/
 	} else if (tipo[0] == '[') {
 		frame->pilhaOperandos->elementos[sp].tipo_referencia = operando;
